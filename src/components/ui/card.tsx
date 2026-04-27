@@ -1,18 +1,12 @@
-import * as React from "react"
 
+import * as React from "react"
 import { cn } from "@/lib/utils"
 
-function Card({
-  className,
-  size = "default",
-  ...props
-}: React.ComponentProps<"div"> & { size?: "default" | "sm" }) {
+function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      data-slot="card"
-      data-size={size}
       className={cn(
-        "group/card flex flex-col gap-4 overflow-hidden rounded-xl bg-card py-4 text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
+        "rounded-2xl bg-white shadow-md p-4",
         className
       )}
       {...props}
@@ -21,59 +15,22 @@ function Card({
 }
 
 function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="card-header"
-      className={cn(
-        "group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-4 group-data-[size=sm]/card:px-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-4 group-data-[size=sm]/card:[.border-b]:pb-3",
-        className
-      )}
-      {...props}
-    />
-  )
+  return <div className={cn("mb-2", className)} {...props} />
 }
 
 function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      data-slot="card-title"
-      className={cn(
-        "font-heading text-base leading-snug font-medium group-data-[size=sm]/card:text-sm",
-        className
-      )}
-      {...props}
-    />
-  )
-}
-
-function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="card-description"
-      className={cn("text-sm text-muted-foreground", className)}
-      {...props}
-    />
-  )
-}
-
-function CardAction({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="card-action"
-      className={cn(
-        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
-        className
-      )}
-      {...props}
-    />
+    <h3 className={cn("text-sm font-semibold", className)} {...props} />
   )
 }
 
 function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+  return <div className={cn("", className)} {...props} />
+}
+function CardDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
-    <div
-      data-slot="card-content"
-      className={cn("px-4 group-data-[size=sm]/card:px-3", className)}
+    <p
+      className={cn("text-sm text-gray-500", className)}
       {...props}
     />
   )
@@ -82,22 +39,78 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      data-slot="card-footer"
-      className={cn(
-        "flex items-center rounded-b-xl border-t bg-muted/50 p-4 group-data-[size=sm]/card:p-3",
-        className
-      )}
+      className={cn("mt-4 flex items-center", className)}
       {...props}
     />
   )
 }
 
-export {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardAction,
-  CardDescription,
-  CardContent,
+
+export { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter }
+
+type GaugeProps = {
+  value: number // 0 - 100
+  color?: string
+}
+
+
+export function Gauge({ value, color = "#f59e0b" }: GaugeProps) {
+  const radius = 80
+  const stroke = 12
+  const normalizedRadius = radius - stroke / 2
+  const circumference = normalizedRadius * Math.PI
+
+  const strokeDashoffset =
+    circumference - (value / 100) * circumference
+
+  return (
+    <svg
+      height={radius}
+      width={radius * 2}
+      viewBox={`0 0 ${radius * 2} ${radius}`}
+    >
+      {/* background */}
+      <path
+        d={`
+          M ${stroke} ${radius}
+          A ${normalizedRadius} ${normalizedRadius} 0 0 1 ${
+          radius * 2 - stroke
+        } ${radius}
+        `}
+        fill="none"
+        stroke="#e5e7eb"
+        strokeWidth={stroke}
+        strokeLinecap="round"
+      />
+
+      {/* progress */}
+      <path
+        d={`
+          M ${stroke} ${radius}
+          A ${normalizedRadius} ${normalizedRadius} 0 0 1 ${
+          radius * 2 - stroke
+        } ${radius}
+        `}
+        fill="none"
+        stroke={color}
+        strokeWidth={stroke}
+        strokeDasharray={circumference}
+        strokeDashoffset={strokeDashoffset}
+        strokeLinecap="round"
+        style={{ transition: "stroke-dashoffset 0.6s ease" }}
+      />
+
+      {/* value */}
+      <text
+        x="50%"
+        y="85%"
+        textAnchor="middle"
+        fontSize="20"
+        fontWeight="600"
+        fill={color}
+      >
+        {value}%
+      </text>
+    </svg>
+  )
 }

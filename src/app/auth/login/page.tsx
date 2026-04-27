@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Loader2, Lock, Mail, ShieldCheck } from "lucide-react"
+import { Eye, EyeClosed, Loader2, Lock, Mail, ShieldCheck } from "lucide-react"
 
 import api from "@/lib/axios"
 import { useAppDispatch } from "@/lib/hooks"
@@ -16,6 +16,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
   const dispatch = useAppDispatch()
@@ -29,6 +30,8 @@ export default function LoginPage() {
     try {
       const res = await api.post("/auth/login", { email, password });
       const { user } = res.data.data;
+      const loginTime = Date.now();
+localStorage.setItem("loginTime", loginTime.toString());
       dispatch(setCredentials({ user }));
       switch (user.role) {
         case 'admin':
@@ -100,17 +103,26 @@ export default function LoginPage() {
                   Forgot password?
                 </a>
               </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                <Input 
-                  id="password"
-                  type="password" 
-                  placeholder="••••••••"
-                  className="pl-10 h-11 focus-visible:ring-[#1A2517]"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
+             <div className="relative">
+  <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+
+  <Input 
+    id="password"
+    type={showPassword ? "text" : "password"}
+    placeholder="••••••••"
+    className="pl-10 pr-10 h-11 focus-visible:ring-[#1A2517]"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+  />
+
+  <button
+    type="button"
+    onClick={() => setShowPassword((prev) => !prev)}
+    className="absolute right-3 top-2.5 text-slate-400 hover:text-[#1A2517]"
+  >
+    {showPassword ? <Eye /> : <EyeClosed />}
+  </button>
+</div>
             </div>
 
             <Button 

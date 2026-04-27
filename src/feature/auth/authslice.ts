@@ -10,6 +10,7 @@ interface UserProfile {
   avatar?: string;
   profile_url?: string;
   department?: string;
+  loginTime?: number;
 }
 
 interface AuthState {
@@ -31,11 +32,15 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action: PayloadAction<{ user: UserProfile }>) => {
-      state.user = action.payload.user;
-      state.isAuthenticated = true;
-      state.isInitialized = true;
-      state.loading = false;
-    },
+  state.user = {
+    ...action.payload.user,
+    loginTime: Date.now() 
+  };
+  state.isAuthenticated = true;
+  state.isInitialized = true;
+  state.loading = false;
+},
+
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;

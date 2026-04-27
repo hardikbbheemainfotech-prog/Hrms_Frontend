@@ -1,4 +1,5 @@
 "use client"
+import React from "react"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -25,9 +26,27 @@ export default function Navbar({ role }: Props) {
   const { duration } = useSelector((state: any) => state.employeeSession)
   const logoutAction = useLogout()
 
+
+  const [, setTick] = React.useState(0)
+
+React.useEffect(() => {
+  const interval = setInterval(() => {
+    setTick((prev) => prev + 1)
+  }, 1000)
+
+  return () => clearInterval(interval)
+}, [])
+     
+
+  const storedLoginTime = localStorage.getItem("loginTime");
+
+const loginTime =
+  user?.loginTime ||
+  (storedLoginTime ? Number(storedLoginTime) : Date.now());
   // --- REVERSE TIMER LOGIC ---
   const TOTAL_SHIFT_MS = 8 * 60 * 60 * 1000; 
-  const remainingTime = Math.max(0, TOTAL_SHIFT_MS - (duration || 0));
+const elapsed = Date.now() - loginTime;
+const remainingTime = Math.max(0, TOTAL_SHIFT_MS - elapsed);
 
   const formatTime = (ms: number) => {
     const sec = Math.floor(ms / 1000) % 60
@@ -37,6 +56,8 @@ export default function Navbar({ role }: Props) {
       .toString()
       .padStart(2, "0")}:${sec.toString().padStart(2, "0")}`
   }
+
+
 
   const navItems = {
     hr: [
