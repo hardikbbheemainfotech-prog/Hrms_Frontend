@@ -32,7 +32,7 @@ export default function LoginPage() {
       const { user } = res.data.data;
       const loginTime = Date.now();
 localStorage.setItem("loginTime", loginTime.toString());
-      dispatch(setCredentials({ user }));
+      dispatch(setCredentials({user:{ ...user, loginTime }}));
       switch (user.role) {
         case 'admin':
           router.push("/dashboard/admin");
