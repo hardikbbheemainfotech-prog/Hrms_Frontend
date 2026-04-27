@@ -40,13 +40,14 @@ React.useEffect(() => {
 
   const storedLoginTime = localStorage.getItem("loginTime");
 
-const loginTime =
-  user?.loginTime ||
-  (storedLoginTime ? Number(storedLoginTime) : Date.now());
+const loginTime = user?.loginTime
   // --- REVERSE TIMER LOGIC ---
-  const TOTAL_SHIFT_MS = 8 * 60 * 60 * 1000; 
-const elapsed = Date.now() - loginTime;
-const remainingTime = Math.max(0, TOTAL_SHIFT_MS - elapsed);
+    const elapsed = loginTime ? Date.now() - loginTime : 0
+  const TOTAL_SHIFT_MS = 8 * 60 * 60 * 1000;
+
+const remainingTime = Math.max(0, TOTAL_SHIFT_MS - elapsed)
+
+console.log("persisted loginTime:", user?.loginTime)
 
   const formatTime = (ms: number) => {
     const sec = Math.floor(ms / 1000) % 60

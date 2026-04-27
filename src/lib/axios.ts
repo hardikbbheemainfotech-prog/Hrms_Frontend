@@ -33,8 +33,6 @@ api.interceptors.response.use(
       originalRequest.url?.includes("/auth/login") ||
       originalRequest.url?.includes("/auth/refresh") ||
       originalRequest.url?.includes("/auth/logout");
-
-    // 🚫 IMPORTANT: auth routes pe refresh logic mat chalao
     if (isAuthRoute) {
       return Promise.reject(error);
     }
@@ -46,10 +44,7 @@ api.interceptors.response.use(
         await axios.get("/api/auth/refresh", { withCredentials: true });
         return api(originalRequest);
       } catch (err) {
-        // ❌ Avoid hard reload
         localStorage.removeItem("accessToken");
-
-        // better: just reject and handle in UI
         return Promise.reject(err);
       }
     }
