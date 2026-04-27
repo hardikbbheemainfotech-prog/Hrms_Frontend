@@ -11,7 +11,7 @@ export default function DateRangePicker({ range , setRange }:any) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-[260px] justify-between text-xs">
+        <Button variant="outline" className="w-[260px] bg-white justify-between text-xs">
           {range?.from && range?.to
             ? `${format(range.from, "dd MMM")} → ${format(range.to, "dd MMM")}`
             : "Select date range"}

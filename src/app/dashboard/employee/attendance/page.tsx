@@ -77,17 +77,20 @@ export default function Page() {
   return (
     <>
     <RoleGuard allowedRoles={["employee"]}>
-    <div className="p-8 space-y-6">
+  <div className="bg-[#ACC8A2]/70 p-6">
+  <div className="bg-[#ACC8A2]/90 rounded-2xl shadow-lg p-6 space-y-6 h-full flex flex-col">
+    
+    <LeaveSummarySection data={leaveSummary} />
 
-      <LeaveSummarySection data={leaveSummary} />
+    <DateRangePicker range={range} setRange={setRange} />
 
-      <DateRangePicker range={range} setRange={setRange} />
+      <div className="flex-1 no-scrollbar">
+    <AttendanceTable data={attendance} formatTime={formatTime} />
+  </div>
 
-      <AttendanceTable data={attendance} formatTime={formatTime} />
+      <div className="flex flex-col no-scrollbar lg:flex-row gap-6">
 
-      <div className="flex flex-col lg:flex-row gap-6">
-
-        <div className="w-full lg:w-1/3">
+        <div className="w-full no-scrollbar lg:w-1/3">
           <LeaveForm
             leaveSummary={leaveSummary}
             loading={loading}
@@ -100,12 +103,13 @@ export default function Page() {
           />
         </div>
 
-        <div className="w-full lg:w-2/3">
+        <div className="w-full no-scrollbar lg:w-2/3">
           <LeaveHistoryTable data={leaveStatus} />
         </div>
 
       </div>
 
+    </div>
     </div>
     </RoleGuard>
     </>

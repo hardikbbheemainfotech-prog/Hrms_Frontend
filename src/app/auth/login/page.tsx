@@ -22,37 +22,41 @@ export default function LoginPage() {
   const dispatch = useAppDispatch()
   const router = useRouter()
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const res = await api.post("/auth/login", { email, password });
-      const { user } = res.data.data;
-      const loginTime = Date.now();
-localStorage.setItem("loginTime", loginTime.toString());
-      dispatch(setCredentials({ user }));
-      switch (user.role) {
-        case 'admin':
-          router.push("/dashboard/admin");
-          break;
-        case 'hr':
-          router.push("/dashboard/humanresources");
-          break;
-        case 'founder':
-          router.push("/dashboard/founder");
-          break;
-        default:
-          router.push("/dashboard/employee");
-      }
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsLoading(true);
+  setError(null);
+  
+  try {
+    const res = await api.post("/auth/login", { email, password });
+    const { user } = res.data.data;
 
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Authentication failed. Please check your credentials.");
-    } finally {
-      setIsLoading(false);
+    // 1. Backend se aayi ISO string ko milliseconds mein convert karo
+    const loginTime = new Date(user.login_time).getTime();
+
+    // 2. IMPORTANT: Isse localStorage mein manually set karo
+    // Kyunki Navbar refresh hone par sabse pehle localStorage hi check karega
+    localStorage.setItem("loginTime", loginTime.toString());
+
+    // 3. Redux update
+    dispatch(setCredentials({
+      user: { ...user, loginTime }
+    }));
+
+    // ... baaki redirection logic same rahega
+    switch (user.role) {
+      case 'admin': router.push("/dashboard/admin"); break;
+      case 'hr': router.push("/dashboard/humanresources"); break;
+      case 'founder': router.push("/dashboard/founder"); break;
+      default: router.push("/dashboard/employee");
     }
-  };
+
+  } catch (err: any) {
+    setError(err.response?.data?.message || "Authentication failed.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-[#ACC8A2]/70 overflow-hidden font-sans">

@@ -2,62 +2,62 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { Home, ClipboardList, Clock, User, ChevronLeft, ChevronRight } from "lucide-react"
+import { useRouter, usePathname } from "next/navigation";
+
+  
+const navItems = [
+   {  href: "/dashboard/employee", icon: Home },
+    { href: "/dashboard/employee/tasks", icon: ClipboardList },
+    { href: "/dashboard/employee/attendance", icon: Clock },
+    {  href: "/dashboard/employee/profile", icon: User }
+];
 
 export default function Sidebar() {
-  const pathname = usePathname()
-  const [isCollapsed, setIsCollapsed] = useState(false)
-
-  const items = [
-    { label: "My Work", href: "/dashboard/employee", icon: Home },
-    { label: "Tasks", href: "/dashboard/employee/tasks", icon: ClipboardList },
-    { label: "Attendance", href: "/dashboard/employee/attendance", icon: Clock },
-    { label: "Profile", href: "/dashboard/employee/profile", icon: User }
-  ]
+  const router = useRouter();
+  const pathname = usePathname();
 
   return (
-    <aside 
-      className={`relative h-full bg-[#1A2517] text-[#ACC8A2] transition-all duration-300 ease-in-out border-r border-white/5 
-        ${isCollapsed ? "w-20" : "w-64"}`}
-    >
-      {/* Toggle Button */}
-      <button 
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -right-3 top-10 bg-[#ACC8A2] text-[#1A2517] rounded-full p-1 border-2 border-[#1A2517] z-50 hover:scale-110 transition-transform"
-      >
-        {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-      </button>
+    <div className="h-screen flex bg-[#ACC8A2]/70  items-center px-4">
+      <div className="w-20 bg-white/70 backdrop-blur-xl shadow-xl rounded-3xl flex flex-col items-center gap-6 border border-gray-200">
 
-      <nav className="space-y-2 p-4 mt-4">
-        {items.map((item, i) => {
-          const Icon = item.icon
-          const isActive = pathname === item.href
+        <div className="flex-1" />
 
-          return (
-            <Link
-              key={i}
-              href={item.href}
-              title={isCollapsed ? item.label : ""}
-              className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all group
-                ${isActive 
-                    ? "bg-[#ACC8A2] text-[#1A2517] font-bold shadow-lg shadow-[#ACC8A2]/20" 
-                    : "hover:bg-[#ACC8A2]/10 text-gray-400 hover:text-[#ACC8A2]"
-                }`}
-            >
-              <div className="min-w-[20px]">
-                <Icon size={20} className={`${isActive ? "animate-pulse" : ""}`} />
-              </div>
-              
-              <span className={`whitespace-nowrap transition-opacity duration-300 
-                ${isCollapsed ? "opacity-0 invisible w-0" : "opacity-100 visible"}`}
+        <div className="flex flex-col items-center gap-6">
+          {navItems.map((item, index) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+
+            return (
+              <button
+                key={index}
+                onClick={() => router.push(item.href)}
+                className="group relative w-12 h-12 flex items-center justify-center rounded-2xl overflow-hidden"
               >
-                {item.label}
-              </span>
-            </Link>
-          )
-        })}
-      </nav>
-    </aside>
-  )
+                {/* Ripple */}
+                <span className="absolute inset-0 rounded-2xl bg-blue-500/10 scale-0 group-hover:scale-150 transition-transform duration-500"></span>
+
+                {/* Liquid glow */}
+                <span className="absolute w-10 h-10 bg-white/90 rounded-full blur-md opacity-0 group-hover:opacity-100 group-hover:animate-pulse"></span>
+
+                {/* Icon */}
+                <div
+                  className={`relative z-10 flex items-center justify-center w-full h-full rounded-2xl transition-all duration-300
+                  ${
+                    isActive
+                      ? "bg-[#465e3e] text-white shadow-md"
+                      : "bg-[#ACC8A2]/30 group-hover:bg-[#1A2517]"
+                  }`}
+                >
+                  <Icon className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-900"} group-hover:text-white`} />
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex-1" />
+      </div>
+    </div>
+  );
 }

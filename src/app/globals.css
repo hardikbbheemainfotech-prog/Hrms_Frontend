@@ -97,6 +97,15 @@
   --ring: #1A2517;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;     
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -117,3 +126,4 @@
     transform: translateX(100%);
   }
 }
+

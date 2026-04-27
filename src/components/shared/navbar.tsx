@@ -7,9 +7,8 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu"
 import { useLogout } from "@/hooks/useLogout"
-// AvatarImage import kiya
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar" 
-import { useRouter, usePathname } from "next/navigation" 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useRouter, usePathname } from "next/navigation"
 import { useSelector } from "react-redux"
 import Link from "next/link"
 
@@ -20,34 +19,42 @@ type Props = {
 export default function Navbar({ role }: Props) {
   const router = useRouter()
   const pathname = usePathname()
-  
-  // Auth state se user data nikala
-  const { user } = useSelector((state: any) => state.auth)
-  const { duration } = useSelector((state: any) => state.employeeSession)
+  const { user, isInitialized } = useSelector((state: any) => state.auth)
   const logoutAction = useLogout()
 
-
+  const [remainingTime, setRemainingTime] = React.useState(0)
   const [, setTick] = React.useState(0)
+  const getSafeLoginTime = React.useCallback(() => {
+  if (typeof window === 'undefined') return null;
+  const rawTime = user?.login_time || user?.loginTime || localStorage.getItem("shift_start_time");
+  
+  if (!rawTime) return null;
+  const parsedTime = isNaN(Number(rawTime)) 
+    ? new Date(rawTime).getTime() 
+    : Number(rawTime);
 
-React.useEffect(() => {
-  const interval = setInterval(() => {
-    setTick((prev) => prev + 1)
-  }, 1000)
+  localStorage.setItem("shift_start_time", parsedTime.toString());
 
-  return () => clearInterval(interval)
-}, [])
-     
+  return parsedTime;
+}, [user]);
 
-  const storedLoginTime = localStorage.getItem("loginTime");
+  React.useEffect(() => {
+    if (role !== "employee") return;
 
-const loginTime = user?.loginTime
-  // --- REVERSE TIMER LOGIC ---
-    const elapsed = loginTime ? Date.now() - loginTime : 0
-  const TOTAL_SHIFT_MS = 8 * 60 * 60 * 1000;
+    const updateTimer = () => {
+      const safeTime = getSafeLoginTime();
+      if (safeTime) {
+        const TOTAL_SHIFT_MS = 8 * 60 * 60 * 1000;
+        const elapsed = Date.now() - safeTime;
+        setRemainingTime(Math.max(0, TOTAL_SHIFT_MS - elapsed));
+      }
+      setTick(t => t + 1);
+    };
 
-const remainingTime = Math.max(0, TOTAL_SHIFT_MS - elapsed)
-
-console.log("persisted loginTime:", user?.loginTime)
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [role, getSafeLoginTime]);
 
   const formatTime = (ms: number) => {
     const sec = Math.floor(ms / 1000) % 60
@@ -57,8 +64,13 @@ console.log("persisted loginTime:", user?.loginTime)
       .toString()
       .padStart(2, "0")}:${sec.toString().padStart(2, "0")}`
   }
-
-
+  if (!isInitialized) {
+    return (
+      <div className="w-full flex justify-center mt-3 sticky top-0 z-50">
+        <div className="w-[95%] h-16 bg-gray-50 animate-pulse rounded-2xl border border-gray-200" />
+      </div>
+    );
+  }
 
   const navItems = {
     hr: [
@@ -83,86 +95,70 @@ console.log("persisted loginTime:", user?.loginTime)
   const currentNav = navItems[role] || []
 
   return (
-    <nav className="w-full bg-[#1A2517] border-b border-white/10 px-6 py-3 flex items-center justify-between shadow-lg sticky top-0 z-50">
-      
-      {/* LEFT: Logo & Links */}
-      <div className="flex items-center gap-8">
-        <div className="text-lg font-bold text-[#ACC8A2] cursor-pointer" onClick={() => router.push("/")}>
+    <div className="w-full flex justify-center bg-[#ACC8A2]/70 p-3 sticky top-0 z-50">
+      <nav className="w-[95%] h-16 bg-white/70 backdrop-blur-xl border border-gray-200 rounded-2xl shadow-md flex items-center justify-between px-6">
+
+        {/* LEFT: Logo */}
+        <div className="text-sm font-bold text-gray-700 cursor-pointer" onClick={() => router.push("/")}>
           Bheema InfoTech
         </div>
 
-        {role !== "employee" && (
-          <div className="hidden md:flex items-center gap-6">
-            {currentNav.map((item) => (
-              <Link 
-                key={item.href} 
-                href={item.href}
-                className={`text-sm font-medium transition-colors hover:text-[#ACC8A2] ${
-                  pathname === item.href ? "text-[#ACC8A2] border-b-2 border-[#ACC8A2]" : "text-gray-300"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* CENTER: Countdown Timer */}
-      {role === "employee" && (
-        <div className="flex flex-col items-center">
-          <div className="text-[#ACC8A2] font-mono text-base bg-[#ACC8A2]/10 px-5 py-1.5 rounded-full border border-[#ACC8A2]/30 flex items-center gap-3 shadow-inner">
-            <span className="relative flex h-2 w-2">
-              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${remainingTime > 0 ? 'bg-green-400' : 'bg-red-400'}`}></span>
-              <span className={`relative inline-flex rounded-full h-2 w-2 ${remainingTime > 0 ? 'bg-green-500' : 'bg-red-500'}`}></span>
-            </span>
-            <span className="tracking-widest font-bold">{formatTime(remainingTime)}</span>
-          </div>
-          <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest">Time Remaining</p>
-        </div>
-      )}
-
-      {/* RIGHT: User Info & Avatar */}
-      <div className="flex items-center gap-4">
-        <div className="hidden sm:flex flex-col items-end mr-2 text-right">
-          <span className="text-sm font-bold text-white tracking-wide uppercase">
-            {user?.name || "User"}
-          </span>
-          <span className="text-[10px] font-medium text-[#ACC8A2] uppercase tracking-tighter">
-            {role}
-          </span>
-        </div>
-        
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Avatar className="cursor-pointer border-2 border-[#ACC8A2]/20 hover:border-[#ACC8A2]/50 transition-all">
-             
-              <AvatarImage 
-                src={ user?.profile_url} 
-                alt={user?.name || "User Avatar"} 
-                className="object-cover"
-              />
-              <AvatarFallback className="bg-[#ACC8A2] text-[#1A2517] font-bold">
-                {user?.name ? user.name.charAt(0).toUpperCase() : role.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" className="w-48 mt-2 bg-white">
-            <div className="px-2 py-1.5 text-[10px] font-bold text-gray-400 uppercase border-b mb-1">
-              Account Management
+        {/* CENTER: Timer OR Nav */}
+        <div className="flex items-center justify-center flex-1">
+          {role === "employee" ? (
+            <div className="flex flex-col items-center">
+              <div className="text-gray-700 font-mono text-sm bg-gray-100 px-4 py-1 rounded-full border flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${remainingTime > 0 ? "bg-green-400" : "bg-red-400"}`}></span>
+                  <span className={`relative inline-flex rounded-full h-2 w-2 ${remainingTime > 0 ? "bg-green-500" : "bg-red-500"}`}></span>
+                </span>
+                <span className="tracking-widest font-semibold">{formatTime(remainingTime)}</span>
+              </div>
             </div>
-            <DropdownMenuItem onClick={() => router.push("/profile")} className="cursor-pointer">
-              Profile Settings
-            </DropdownMenuItem>
+          ) : (
+            <div className="hidden md:flex items-center gap-6">
+              {currentNav.map((item) => (
+                <Link key={item.href} href={item.href} className={`text-xs font-medium transition-all ${pathname === item.href ? "text-blue-600" : "text-gray-500 hover:text-blue-500"}`}>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
 
-            <DropdownMenuItem onClick={logoutAction} className="text-red-600 cursor-pointer font-medium focus:bg-red-50">
-              Logout System
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+        {/* RIGHT: Profile */}
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex flex-col items-end text-right">
+            <span className="text-xs font-semibold text-gray-700 uppercase">
+              {/* Handles both Redux 'name' and API 'first_name' */}
+              {user?.name || user?.first_name || "User"}
+            </span>
+            <span className="text-[10px] text-gray-400 uppercase">{role}</span>
+          </div>
 
-    </nav>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar className="cursor-pointer border hover:scale-105 transition overflow-hidden">
+                <AvatarImage 
+                  src={user?.profile_image || user?.avatar} 
+                  alt={user?.first_name || "User"} 
+                  className="object-cover"
+                />
+                <AvatarFallback className="bg-blue-100 text-blue-600 font-bold">
+                  {(user?.first_name || user?.name || "U").charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end" className="w-48 mt-2 bg-white">
+              <div className="px-2 py-1 text-[10px] font-bold text-gray-400 uppercase border-b mb-1">Account</div>
+              <DropdownMenuItem onClick={() => router.push("/profile")} className="cursor-pointer">Profile</DropdownMenuItem>
+              <DropdownMenuItem onClick={logoutAction} className="text-red-600 cursor-pointer">Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+      </nav>
+    </div>
   )
 }

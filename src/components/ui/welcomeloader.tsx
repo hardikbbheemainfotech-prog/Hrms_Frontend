@@ -1,6 +1,10 @@
 "use client"
 
-import { useState, useEffect, use } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useDispatch } from "react-redux"
+import { setCredentials, setInitialized } from "@/feature/auth/authslice"
+import api from "@/lib/axios"
 
 const CRIMSON = "#1A2517"
 const CREAM = "#ACC8A2"
@@ -12,22 +16,52 @@ type Props = {
 export default function WelcomeLoader({ onFinish }: Props) {
   const [show, setShow] = useState(false)
   const [barW, setBarW] = useState(0)
+  const dispatch = useDispatch()
+  const router = useRouter()
+
   useEffect(() => {
     const showTimeout = setTimeout(() => setShow(true), 80)
     const barTimeout = setTimeout(() => setBarW(100), 220)
-      const finishTimeout = setTimeout(() => {
-        setShow(false)
+
+    const checkAuthAndFinish = async () => {
+      try {
+        const res = await api.get("/auth/refresh");
+        
+        if (res.data.success) {
+          const userData = res.data.data.user;
+          
+          // 1. Redux update karo
+          dispatch(setCredentials({ user: userData }));
+          dispatch(setInitialized());
+
+          setTimeout(() => {
+            setShow(false);
+            setTimeout(() => {
+              router.replace("/dashboard/employee");
+            }, 450);
+          }, 1500);
+          
+          return; 
+        }
+      } catch (err) {
+        console.log("Session dead, stay on login");
+        dispatch(setInitialized());
         setTimeout(() => {
-          onFinish?.()
-        }, 450)
-    }, 2100)
+          setShow(false);
+          setTimeout(() => {
+            onFinish?.();
+          }, 450);
+        }, 1000);
+      }
+    };
+
+    checkAuthAndFinish();
 
     return () => {
-      clearTimeout(showTimeout)
-      clearTimeout(barTimeout)
-      clearTimeout(finishTimeout)
-    }
-  }, [onFinish])
+      clearTimeout(showTimeout);
+      clearTimeout(barTimeout);
+    };
+  }, [onFinish, dispatch, router]);
 
   return (
     <div style={{
@@ -41,7 +75,6 @@ export default function WelcomeLoader({ onFinish }: Props) {
         zIndex: 9999,
       }}
     >
-
       <div
         style={{
           display: "flex",
@@ -54,70 +87,33 @@ export default function WelcomeLoader({ onFinish }: Props) {
           position: "relative",
         }}
       >
-        {/* Logo */}
         <div
           style={{
-            width: 60,
-            height: 60,
-            borderRadius: 14,
-            background: CRIMSON,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 28,
-            fontWeight: 800,
-            color: CREAM,
-            boxShadow: "0 0 30px #1A2517",
-            marginBottom: 4,
+            width: 60, height: 60, borderRadius: 14, background: CRIMSON,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 28, fontWeight: 800, color: CREAM,
+            boxShadow: "0 10px 30px rgba(26,37,23,0.3)", marginBottom: 4,
           }}
         >
           B
         </div>
 
-        <div
-          style={{
-            fontSize: 24,
-            fontWeight: 700,
-            color: CRIMSON,
-            letterSpacing: "0.03em",
-          }}
-        >
+        <div style={{ fontSize: 24, fontWeight: 700, color: CRIMSON, letterSpacing: "0.03em" }}>
           Bheema InfoTech
         </div>
 
-
-        {/* Progress Bar */}
-        <div
-          style={{
-            marginTop: 20,
-            width: 150,
-            height: 2,
-            background: "rgba(139,0,74,0.18)",
-            borderRadius: 4,
-            overflow: "hidden",
-          }}
-        >
+        <div style={{ marginTop: 20, width: 150, height: 2, background: "rgba(26,37,23,0.1)", borderRadius: 4, overflow: "hidden" }}>
           <div
             style={{
-              height: "100%",
-              borderRadius: 4,
+              height: "100%", borderRadius: 4,
               background: `linear-gradient(90deg, ${CRIMSON}, ${CRIMSON}AA)`,
-              width: `${barW}%`,
-              transition:
-                "width 1.65s cubic-bezier(.4,0,.2,1) 0.1s",
+              width: `${barW}%`, transition: "width 1.6s cubic-bezier(.4,0,.2,1) 0.1s",
             }}
           />
         </div>
 
-        <div
-          style={{
-            fontSize: 10,
-            color: "#1A2517",
-            letterSpacing: "0.15em",
-            marginTop: 5,
-          }}
-        >
-          INITIALIZING...
+        <div style={{ fontSize: 10, color: CRIMSON, letterSpacing: "0.15em", marginTop: 5, fontWeight: 600 }}>
+          SYNCHRONIZING SESSION...
         </div>
       </div>
     </div>
