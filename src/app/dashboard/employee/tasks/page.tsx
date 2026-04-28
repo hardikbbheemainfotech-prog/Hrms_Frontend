@@ -5,7 +5,7 @@ import api from "@/lib/axios"
 import { useToast } from "@/hooks/use_toast"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "../../../../components/ui/badge"
 import { 
   CheckCircle2, 
   Clock, 
@@ -58,14 +58,14 @@ export default function EmployeeTasksPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#ACC8A2]/10">
+      <div className="flex items-center justify-center min-h-screen bg-[#ACC8A2]/70">
         <Loader2 className="animate-spin text-[#1A2517]" size={40} />
       </div>
     )
   }
 
   return (
-    <div className="p-8 space-y-8 bg-[#ACC8A2]/10 min-h-screen">
+    <div className="p-8 space-y-8 bg-[#ACC8A2]/70 min-h-screen">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-[#1A2517] flex items-center gap-2">
           <ClipboardList /> My Tasks
@@ -78,12 +78,12 @@ export default function EmployeeTasksPage() {
       <div className="grid grid-cols-1 gap-4">
         {tasks.length > 0 ? (
           tasks.map((task) => (
-            <Card key={task.id} className="border-none shadow-sm hover:shadow-md transition-shadow bg-white overflow-hidden">
+            <Card key={task.id} className="border-none shadow-sm hover:shadow-md transition-shadow bg-[#ACC8A2]/70 overflow-hidden">
               <div className="flex flex-col md:flex-row">
                 {/* Status Indicator Sidebar */}
                 <div className={`w-2 ${task.status === 'completed' ? 'bg-green-500' : 'bg-orange-400'}`} />
                 
-                <CardContent className="flex-1 p-6">
+                <CardContent className="flex-1  p-6">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-3">
@@ -127,10 +127,10 @@ export default function EmployeeTasksPage() {
             </Card>
           ))
         ) : (
-          <div className="text-center py-20 bg-white rounded-xl border-2 border-dashed border-gray-200">
-            <AlertCircle className="mx-auto text-gray-300 mb-4" size={48} />
-            <h2 className="text-xl font-semibold text-gray-400">No tasks assigned yet.</h2>
-            <p className="text-gray-400 text-sm">Enjoy your free time!</p>
+          <div className="text-center py-20 bg-[#ACC8A2]/70 rounded-xl border-2 border-dashed border-gray-200">
+            <AlertCircle className="mx-auto text-black mb-4" size={48} />
+            <h2 className="text-xl font-semibold text-black">No tasks assigned yet.</h2>
+            <p className="text-black text-sm">Enjoy your free time!</p>
           </div>
         )}
       </div>

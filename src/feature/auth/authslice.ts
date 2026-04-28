@@ -9,6 +9,7 @@ interface UserProfile {
   role: UserRole;
   avatar?: string;
   profile_url?: string;
+  profile_image?: string; 
   department?: string;
   loginTime?: number;
 }
@@ -31,16 +32,19 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<{ user: UserProfile }>) => {
+   setCredentials: (state, action: PayloadAction<{ user: any }>) => {
+  const newUser = action.payload.user;
   state.user = {
-    ...action.payload.user,
-    loginTime: Date.now() 
+    ...state.user,
+    ...newUser,    
+    profile_image: newUser.profile_image || state.user?.profile_image,
+    loginTime: newUser.login_time ? new Date(newUser.login_time).getTime() : (state.user?.loginTime || Date.now())
   };
+
   state.isAuthenticated = true;
   state.isInitialized = true;
   state.loading = false;
 },
-
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
