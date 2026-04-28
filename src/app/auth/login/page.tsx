@@ -31,7 +31,7 @@ export default function LoginPage() {
       const res = await api.post("/auth/login", { email, password });
       const { user } = res.data.data;
       const loginTime = Date.now();
-localStorage.setItem("loginTime", loginTime.toString());
+       localStorage.setItem("loginTime", loginTime.toString());
       dispatch(setCredentials({user:{ ...user, loginTime }}));
       switch (user.role) {
         case 'admin':
@@ -52,13 +52,9 @@ localStorage.setItem("loginTime", loginTime.toString());
     } finally {
       setIsLoading(false);
     }
-
-  } catch (err: any) {
-    setError(err.response?.data?.message || "Authentication failed.");
-  } finally {
-    setIsLoading(false);
   }
-};
+
+
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-[#ACC8A2]/70 overflow-hidden font-sans">

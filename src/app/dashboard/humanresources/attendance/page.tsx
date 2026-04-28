@@ -1,26 +1,45 @@
 "use client"
 
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import dayjs from "dayjs"
+import api from "@/lib/axios"
 
 export default function FullCalendar() {
 
-  const employees = [
-    { id: "1", name: "Ethan", role: "Engineer" },
-    { id: "2", name: "Liam", role: "Designer" },
-    { id: "3", name: "Noah", role: "Backend" },
-    { id: "4", name: "Ava", role: "Manager" },
-    { id: "5", name: "Mia", role: "QA" },
-  ]
+  const ROW_HEIGHT = 56
 
-  const absences = [
-    { id: "1", employeeId: "1", startDate: "2025-01-10", endDate: "2025-01-12", type: "vacation" },
-    { id: "2", employeeId: "2", startDate: "2025-02-02", endDate: "2025-02-04", type: "paid" },
-    { id: "3", employeeId: "3", startDate: "2025-03-06", endDate: "2025-03-09", type: "sick" },
-    { id: "4", employeeId: "4", startDate: "2025-12-01", endDate: "2025-12-03", type: "vacation" },
-  ]
-
+  const [employees, setEmployees] = useState<any[]>([])
+  const [absences, setAbsences] = useState<any[]>([])
   const [currentMonth, setCurrentMonth] = useState(dayjs())
+
+  useEffect(() => {
+    const fetchLeaves = async () => {
+      try {
+        const res = await api.get("/core/leaves")
+
+        const employeesData = res.data?.data?.employees || []
+        const leavesData = res.data?.data?.leaves || []
+
+        const formattedLeaves = leavesData.map((l: any) => ({
+          id: String(l.id),
+          employeeId: String(l.employeeId),
+          startDate: dayjs(l.startDate).format("YYYY-MM-DD"),
+          endDate: dayjs(l.endDate).format("YYYY-MM-DD"),
+          type: (l.type || "").toLowerCase(),
+        }))
+
+        setEmployees(Array.isArray(employeesData) ? employeesData : [])
+        setAbsences(formattedLeaves)
+
+      } catch (err) {
+        console.error(err)
+        setEmployees([])
+        setAbsences([])
+      }
+    }
+
+    fetchLeaves()
+  }, [])
 
   const days = useMemo(() => {
     const total = currentMonth.daysInMonth()
@@ -35,6 +54,7 @@ export default function FullCalendar() {
     vacation: "bg-green-400",
     sick: "bg-blue-400",
     paid: "bg-purple-400",
+    "casual leave": "bg-green-400",
   }
 
   return (
@@ -43,14 +63,12 @@ export default function FullCalendar() {
       <div className="bg-white/70 backdrop-blur-xl border rounded-2xl p-5 shadow-xl">
 
         <div className="flex justify-between items-center mb-5">
-
           <h2 className="text-lg font-semibold">Planned Absences</h2>
 
           <div className="flex items-center gap-3">
-
             <button
               onClick={() => setCurrentMonth(currentMonth.subtract(1, "month"))}
-              className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200"
+              className="px-3 py-1 bg-gray-100 rounded"
             >
               ←
             </button>
@@ -61,100 +79,91 @@ export default function FullCalendar() {
 
             <button
               onClick={() => setCurrentMonth(currentMonth.add(1, "month"))}
-              className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200"
+              className="px-3 py-1 bg-gray-100 rounded"
             >
               →
             </button>
           </div>
         </div>
 
-        <div className="flex">
+        <div className="overflow-auto">
 
-          <div className="w-56 flex flex-col">
-            {employees.map((emp) => (
-              <div
-                key={emp.id}
-                className="h-14 flex items-center gap-3 px-3 border-b hover:bg-white/40"
-              >
-                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-400 to-purple-400" />
-                <div>
-                  <p className="text-sm">{emp.name}</p>
-                  <p className="text-xs text-gray-500">{emp.role}</p>
-                </div>
-              </div>
-            ))}
-          </div>
 
-          <div className="flex-1 overflow-x-auto">
+          <div className="flex">
+            <div className="w-56 shrink-0" />
 
             <div
               className="grid border-b"
               style={{ gridTemplateColumns: `repeat(${days.length}, 70px)` }}
             >
-              {days.map((d, i) => {
-                const isWeekend = d.day() === 0 || d.day() === 6
-                const isToday = d.isSame(today, "day")
-
-                return (
-                  <div
-                    key={i}
-                    className={`h-14 flex flex-col items-center justify-center text-xs border-r
-                    ${isWeekend ? "bg-red-50 text-red-500" : ""}
-                    ${isToday ? "bg-blue-100 text-blue-600 font-semibold" : ""}
-                    `}
-                  >
-                    <span>{d.format("dd")}</span>
-                    <span>{d.format("D")}</span>
-                  </div>
-                )
-              })}
+              {days.map((d, i) => (
+                <div key={i} className="h-[56px] flex flex-col items-center justify-center border-r text-xs">
+                  <span>{d.format("dd")}</span>
+                  <span>{d.format("D")}</span>
+                </div>
+              ))}
             </div>
+          </div>
 
 
-            {employees.map((emp) => (
+          {employees.map((emp) => (
+            <div key={emp.id} className="flex">
+
               <div
-                key={emp.id}
+                className="w-56 flex items-center  gap-3 px-3 border-b shrink-0"
+                style={{ height: ROW_HEIGHT }}
+              >
+                <div >
+                  <img src={emp.profile_img} alt="profile"  className="w-9 h-9 flex items-center rounded-full "/>
+                </div>
+                <div>
+                  <p className="text-sm">{emp.name}</p>
+                  <p className="text-xs text-gray-500">{emp.role}</p>
+                </div>
+              </div>
+
+              <div
                 className="grid relative"
                 style={{ gridTemplateColumns: `repeat(${days.length}, 70px)` }}
               >
+                {days.map((d, i) => (
+                  <div
+                    key={i}
+                    className="border-r border-b"
+                    style={{ height: ROW_HEIGHT }}
+                  />
+                ))}
 
-                {days.map((d, i) => {
-                  const isWeekend = d.day() === 0 || d.day() === 6
-
-                  return (
-                    <div
-                      key={i}
-                      className={`h-14 border-r border-b
-                      ${isWeekend ? "bg-red-50/60" : "bg-white"}
-                      `}
-                    />
-                  )
-                })}
-
-       
                 {absences
-                  .filter((a) =>
-                    dayjs(a.startDate).month() === currentMonth.month()
-                  )
-                  .filter((a) => a.employeeId === emp.id)
+                  .filter((a) => a.employeeId === String(emp.id))
                   .map((abs) => {
-                    const start = days.findIndex((d) =>
-                      d.isSame(dayjs(abs.startDate), "day")
-                    )
-                    const end = days.findIndex((d) =>
-                      d.isSame(dayjs(abs.endDate), "day")
-                    )
+                    const monthStart = currentMonth.startOf("month")
+                    const monthEnd = currentMonth.endOf("month")
 
-                    if (start === -1 || end === -1) return null
+                    const startDate = dayjs(abs.startDate)
+                    const endDate = dayjs(abs.endDate)
+
+                    if (endDate.isBefore(monthStart) || startDate.isAfter(monthEnd)) {
+                      return null
+                    }
+
+
+                    const start = Math.max(0, startDate.diff(monthStart, "day"))
+                    const end = Math.min(days.length - 1, endDate.diff(monthStart, "day"))
+
+                    const width = (end - start + 1) * 70
 
                     return (
                       <div
                         key={abs.id}
-                        className={`absolute h-10 rounded-full text-white text-xs flex items-center px-3 shadow ${colorMap[abs.type]}`}
+                        className={`absolute z-10 rounded-full text-white text-xs flex items-center px-3 shadow ${colorMap[abs.type] || "bg-gray-400"
+                          }`}
                         style={{
                           left: `${start * 70}px`,
-                          width: `${(end - start + 1) * 70}px`,
-                          top: "8px",
+                          width: `${width}px`,
+                          height: 36,
+                          top: "50%",
+                          transform: "translateY(-50%)",
                         }}
                       >
                         {abs.type}
@@ -162,8 +171,8 @@ export default function FullCalendar() {
                     )
                   })}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

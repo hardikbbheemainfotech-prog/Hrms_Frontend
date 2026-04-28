@@ -19,7 +19,7 @@ export default function EmployeeTable() {
   const fetchStaff = async () => {
     try {
       setLoading(true)
-      const res = await api.get("/admin/employees")
+      const res = await api.get("/core/employees")
       // Response structure ke hisaab se res.data.data access kar rahe hain
       setEmployees(res.data?.data || [])
     } catch (err) {

@@ -1,21 +1,19 @@
 "use client"
-
-import React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import {
   Home,
-  Calendar,
-  Users,
   Settings,
-  BarChart2,
+  CalendarCheck,
+  ClipboardList,
+  UserPlus,
 } from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard/humanresources/attendance", icon: Home },
-  { href: "/dashboard/humanresources/employees", icon: Users },
-  { href: "/dashboard/humanresources/leave_request", icon: Calendar  },
-  { href: "/dashboard/employee/profile", icon: BarChart2 },
-  { href: "/dashboard/employee/profile", icon: Settings },
+  { href: "/dashboard/humanresources/attendanceSummary", icon: Home },
+  { href: "/dashboard/humanresources/attendance", icon: CalendarCheck },
+  { href: "/dashboard/humanresources/leave_request", icon: ClipboardList  },
+  { href: "/dashboard/humanresources/employees", icon: UserPlus },
+  { href: "/dashboard/humanresources", icon: Settings },
 ];
 
 export default function Sidebar() {

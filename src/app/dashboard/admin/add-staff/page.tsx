@@ -29,7 +29,7 @@ const [publicId, setPublicId] = useState("")
   useEffect(() => {
     const fetchDeps = async () => {
       try {
-        const res = await api.get("/admin/departments")
+        const res = await api.get("/core/departments")
         const rawData = res.data?.data?.data || []
         setDepartments(Array.isArray(rawData) ? rawData : [])
       } catch (err) {

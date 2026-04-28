@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import dayjs from "dayjs"
+import { Ban } from "lucide-react"
 
 type Leave = {
   leave_id: number
@@ -112,8 +113,9 @@ export default function PendingLeaves() {
         ))}
 
         {leaves.length === 0 && (
-          <div className="text-center py-10 text-gray-500">
-            No pending requests 🎉
+          <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+            <Ban size={28} className="mb-2 opacity-70" />
+            <p className="text-sm">No pending requests</p>
           </div>
         )}
       </div>
