@@ -19,8 +19,7 @@ export default function EmployeeTable() {
   const fetchStaff = async () => {
     try {
       setLoading(true)
-      const res = await api.get("/admin/employees")
-      // Response structure ke hisaab se res.data.data access kar rahe hain
+      const res = await api.get("/core/employees")
       setEmployees(res.data?.data || [])
     } catch (err) {
       toast({ variant: "destructive", title: "Error", description: "Fetch fail ho gaya" })
@@ -49,7 +48,6 @@ export default function EmployeeTable() {
 
   return (
     <RoleGuard allowedRoles={["admin"]}>
-      <Navbar role="admin" />
       <div className="p-8 max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>

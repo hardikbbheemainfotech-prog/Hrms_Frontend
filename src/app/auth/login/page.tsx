@@ -22,41 +22,47 @@ export default function LoginPage() {
   const dispatch = useAppDispatch()
   const router = useRouter()
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const res = await api.post("/auth/login", { email, password });
-      const { user } = res.data.data;
-      const loginTime = Date.now();
-localStorage.setItem("loginTime", loginTime.toString());
-      dispatch(setCredentials({user:{ ...user, loginTime }}));
-      switch (user.role) {
-        case 'admin':
-          router.push("/dashboard/admin");
-          break;
-        case 'hr':
-          router.push("/dashboard/humanresources");
-          break;
-        case 'founder':
-          router.push("/dashboard/founder");
-          break;
-        default:
-          router.push("/dashboard/employee");
-      }
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault()
+  setIsLoading(true)
+  setError(null)
 
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Authentication failed. Please check your credentials.");
-    } finally {
-      setIsLoading(false);
+  try {
+    const res = await api.post("/auth/login", { email, password })
+    const { user } = res.data.data
+    const loginTime = Date.now()
+
+    localStorage.setItem("loginTime", loginTime.toString())
+
+    dispatch(
+      setCredentials({
+        user: { ...user, loginTime },
+      })
+    )
+
+    switch (user.role) {
+      case "admin":
+        router.push("/dashboard/admin")
+        break
+
+      case "hr":
+        router.push("/dashboard/humanresources")
+        break
+
+      case "founder":
+        router.push("/dashboard/founder")
+        break
+
+      default:
+        router.push("/dashboard/employee")
     }
-
   } catch (err: any) {
-    setError(err.response?.data?.message || "Authentication failed.");
+    setError(
+      err.response?.data?.message ||
+        "Authentication failed. Please check your credentials."
+    )
   } finally {
-    setIsLoading(false);
+    setIsLoading(false)
   }
 };
 

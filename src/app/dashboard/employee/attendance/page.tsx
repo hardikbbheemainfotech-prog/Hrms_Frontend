@@ -8,6 +8,7 @@ import AttendanceTable from "@/app/dashboard/employee/attendance/_components/Att
 import LeaveSummarySection from "./_components/LeaveSummarySection"
 import LeaveHistoryTable from "./_components/LeaveHistoryTable"
 import RoleGuard from "@/components/shared/RoleGuard"
+import { Loader2 } from "lucide-react"
 
 type LeavePayload = {
   leave_type_id: number
@@ -27,6 +28,7 @@ export default function Page() {
   const [leaveSummary, setLeaveSummary] = useState([])
   const [leaveStatus, setLeaveStatus] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
+  const [dataloading, setdataLoading] = useState(true)
 
   const fetchData = async () => {
     const res = await api.get("/employee/attendance", {
@@ -34,8 +36,11 @@ export default function Page() {
         from: range.from.toISOString().split("T")[0],
         to: range.to.toISOString().split("T")[0],
       }
+
     })
+
     setAttendance(res.data.data || [])
+     
   }
 
   const fetchLeaveSummary = async () => {
@@ -65,6 +70,11 @@ export default function Page() {
   useEffect(() => {
     fetchLeaveStatus()
   }, [])
+useEffect(() => {
+    setTimeout(() => {
+      setdataLoading(false)
+    }, 1500)
+  }, []) 
 
   const formatTime = (t?: string | null) =>
     t
@@ -74,11 +84,26 @@ export default function Page() {
       })
       : "--"
 
+
+ if (dataloading) {
+    return (
+       <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin text-[#1A2517]" size={40} />
+      </div>
+    )
+  }
+
+
   return (
     <>
     <RoleGuard allowedRoles={["employee"]}>
-  <div className="bg-[#ACC8A2]/70 p-6">
-  <div className="bg-[#ACC8A2]/90 rounded-2xl shadow-lg p-6 space-y-6 h-full flex flex-col">
+  {/* <div className="bg-[#ACC8A2]/70 p-6 overflow-x-auto no-scrollbar"> */}
+  <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
+     <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-bold text-gray-800 tracking-tight">Attendance logs</h1>
+          <p className="text-sm text-gray-500">Your attendance records and leave history</p>
+        </div>
+
     
     <LeaveSummarySection data={leaveSummary} />
 
@@ -110,7 +135,7 @@ export default function Page() {
       </div>
 
     </div>
-    </div>
+    {/* </div> */}
     </RoleGuard>
     </>
   )
