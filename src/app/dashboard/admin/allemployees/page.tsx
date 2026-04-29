@@ -20,6 +20,7 @@ export default function EmployeeTable() {
     try {
       setLoading(true)
       const res = await api.get("/core/employees")
+      // Response structure ke hisaab se res.data.data access kar rahe hain
       setEmployees(res.data?.data || [])
     } catch (err) {
       toast({ variant: "destructive", title: "Error", description: "Fetch fail ho gaya" })
