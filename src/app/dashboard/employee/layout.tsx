@@ -17,18 +17,15 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
   }, [dispatch, loginTime]) 
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#ACC8A2]/20">
+    <div className="flex flex-col h-screen overflow-x-auto no-scrollbar bg-[#ACC8A2]/20">
       {/* Navbar hamesha top par rahega */}
       <div className="z-50">
         <Navbar role="employee" />
       </div>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar Navbar ke niche start hoga */}
         <Sidebar />
-        
-        {/* Main Content Area scrollable hoga */}
-        <main className="flex-1 overflow-y-auto p-0">
+        <main className="flex-1 bg-[#ACC8A2]/70 overflow-y-auto p-0 no-scrollbar">
           {children}
         </main>
       </div>

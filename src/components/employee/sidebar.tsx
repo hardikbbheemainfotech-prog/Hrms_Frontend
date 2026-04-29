@@ -2,7 +2,7 @@
 
 import React from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { Home, ClipboardList, Clock, User, ShieldCheck } from "lucide-react"
+import { Home, ClipboardList, Clock, ShieldCheck } from "lucide-react"
 import IconTooltip from "@/components/ui/IconTooltip"
 
 const navItems = [
@@ -10,7 +10,6 @@ const navItems = [
   { href: "/dashboard/employee/post-activity", icon: ShieldCheck, label: "Post Activity" },
   { href: "/dashboard/employee/tasks", icon: ClipboardList, label: "Tasks" },
   { href: "/dashboard/employee/attendance", icon: Clock, label: "Attendance" },
-  { href: "/dashboard/employee/profile", icon: User, label: "Profile" },
 ]
 
 export default function Sidebar() {
@@ -29,6 +28,7 @@ export default function Sidebar() {
             const isActive = pathname === item.href
 
             return (
+              
               <IconTooltip
                 key={index}
                 label={item.label}
@@ -77,5 +77,4 @@ export default function Sidebar() {
       </div>
     </div>
   )
-
 }

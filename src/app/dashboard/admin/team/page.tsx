@@ -14,8 +14,8 @@ export default function AddTeamForm() {
   
   // States
   const [loading, setLoading] = useState(false)
-  const [teamId, setTeamId] = useState<string | null>(null) // API se aane wali ID
-  const [employees, setEmployees] = useState<any[]>([]) // For Dropdowns
+  const [teamId, setTeamId] = useState<string | null>(null) 
+  const [employees, setEmployees] = useState<any[]>([])
   
   // Team Form State
   const [teamData, setTeamData] = useState({
@@ -30,7 +30,7 @@ export default function AddTeamForm() {
   useEffect(() => {
     const fetchStaff = async () => {
       try {
-        const res = await api.get("/admin/employees") 
+        const res = await api.get("/core/employees") 
         setEmployees(res.data?.data || [])
       } catch (err) { console.error(err) }
     }
@@ -92,7 +92,6 @@ export default function AddTeamForm() {
   <option value="">Select Team Lead</option>
   {employees.map((emp) => (
     <option key={emp.employee_id} value={emp.employee_id}> 
-      {/* value me ID jayegi, bahar Naam dikhega */}
       {emp.first_name} {emp.last_name}
     </option>
   ))}

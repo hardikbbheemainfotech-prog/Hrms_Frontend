@@ -6,6 +6,7 @@ import {
   HoverCardTrigger,
   HoverCardContent,
 } from "@/components/ui/hover-card"
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -151,7 +152,6 @@ export default function Navbar({ role }: Props) {
         ? `${user.first_name} ${user.last_name || ""}`
         : user?.name || "User"}
     </span>
-
     <span className="text-[10px]">
       {user?.email}
     </span>
@@ -163,9 +163,10 @@ export default function Navbar({ role }: Props) {
 
     <HoverCard>
   <HoverCardTrigger asChild>
+
+   
      <Avatar
       className="cursor-pointer border hover:scale-105 transition"
-      onClick={() => router.push("/dashboard/employee/profile")}
     >
       <AvatarImage
         src={user?.profile_image || user?.profile_url || user?.avatar}
@@ -188,10 +189,6 @@ export default function Navbar({ role }: Props) {
   <EmployeeIDCard user={user} compact />
 </HoverCardContent>
 </HoverCard>
-
-
-
-
 
   </DropdownMenuTrigger>
 

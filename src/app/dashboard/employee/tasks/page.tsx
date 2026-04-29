@@ -15,6 +15,7 @@ import {
   ChevronRight,
   Loader2
 } from "lucide-react"
+import RoleGuard from "@/components/shared/RoleGuard"
 
 export default function EmployeeTasksPage() {
   const { toast } = useToast()
@@ -58,14 +59,16 @@ export default function EmployeeTasksPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#ACC8A2]/70">
+       <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex items-center justify-center">
         <Loader2 className="animate-spin text-[#1A2517]" size={40} />
       </div>
     )
   }
 
   return (
-    <div className="p-8 space-y-8 bg-[#ACC8A2]/70 min-h-screen">
+    <RoleGuard allowedRoles={['employee']}>
+      <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex flex-col">
+    {/* <div className="p-8 space-y-8 bg-[#ACC8A2]/70 min-h-screen"> */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-[#1A2517] flex items-center gap-2">
           <ClipboardList /> My Tasks
@@ -135,5 +138,6 @@ export default function EmployeeTasksPage() {
         )}
       </div>
     </div>
+    </RoleGuard>
   )
 }

@@ -23,7 +23,7 @@ export default function AttendanceTable({ data, formatTime }: Props) {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto ">
         <table className="w-full text-sm">
 
           {/* Head */}

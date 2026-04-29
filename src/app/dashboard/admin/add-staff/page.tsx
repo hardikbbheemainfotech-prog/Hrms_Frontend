@@ -175,7 +175,7 @@ const uploadImage = async (file: File) => {
               {uploading && (
                 <div className="flex items-center gap-2 text-blue-600">
                   <Loader2 className="animate-spin" size={20} />
-                  <span>Cloudinary pe upload ho raha hai...</span>
+                  <span>Please Wait...</span>
                 </div>
               )}
               {imageUrl && (
