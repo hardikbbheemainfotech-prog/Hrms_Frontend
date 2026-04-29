@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import api from "@/lib/axios"
 import { useToast } from "@/hooks/use_toast"
-import { Loader2, CheckCircle2 } from "lucide-react" // Icons for better UI
+import { Loader2, CheckCircle2 } from "lucide-react" 
 import { Input } from "@/components/ui/input"
 import RoleGuard from "@/components/shared/RoleGuard"
 import Navbar from "@/components/shared/navbar"
@@ -129,7 +129,6 @@ const uploadImage = async (file: File) => {
 
   return (
     <RoleGuard allowedRoles={["admin"]}>
-      <Navbar role="admin" />
       <div className="bg-white p-8 rounded-xl shadow-sm border max-w-4xl mx-auto mt-10">
         <h2 className="text-2xl font-bold mb-6">Onboard New Staff</h2>
 
@@ -176,7 +175,7 @@ const uploadImage = async (file: File) => {
               {uploading && (
                 <div className="flex items-center gap-2 text-blue-600">
                   <Loader2 className="animate-spin" size={20} />
-                  <span>Cloudinary pe upload ho raha hai...</span>
+                  <span>Please Wait...</span>
                 </div>
               )}
               {imageUrl && (

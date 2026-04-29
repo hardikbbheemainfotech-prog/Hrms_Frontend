@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Navbar from "@/components/shared/navbar"
-import Sidebar from "../../../components/employee/sidebar"
+import Sidebar from "./sidebar"
 import { setLoginTime, updateDuration } from "../../../feature/sessionSlice/employeeSessionSlice"
 
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
@@ -20,7 +20,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
     <div className="flex flex-col h-screen overflow-x-auto no-scrollbar bg-[#ACC8A2]/20">
       {/* Navbar hamesha top par rahega */}
       <div className="z-50">
-        <Navbar role="employee" />
+        <Navbar role="admin" />
       </div>
 
       <div className="flex flex-1 overflow-hidden">

@@ -23,38 +23,40 @@ export default function WelcomeLoader({ onFinish }: Props) {
     const showTimeout = setTimeout(() => setShow(true), 80)
     const barTimeout = setTimeout(() => setBarW(100), 220)
 
-    const checkAuthAndFinish = async () => {
-      try {
-        const res = await api.get("/auth/refresh");
-        
-        if (res.data.success) {
-          const userData = res.data.data.user;
-          
-          // 1. Redux update karo
-          dispatch(setCredentials({ user: userData }));
-          dispatch(setInitialized());
+const checkAuthAndFinish = async () => {
+  try {
+    const res = await api.get("/auth/refresh");
+    
+    if (res.data.success) {
+      const userData = res.data.data.user;
+      const userRole = userData.role; 
+      dispatch(setCredentials({ user: userData }));
+      dispatch(setInitialized());
 
-          setTimeout(() => {
-            setShow(false);
-            setTimeout(() => {
-              router.replace("/dashboard/employee");
-            }, 450);
-          }, 1500);
-          
-          return; 
-        }
-      } catch (err) {
-        console.log("Session dead, stay on login");
-        dispatch(setInitialized());
+      setTimeout(() => {
+        setShow(false);
         setTimeout(() => {
-          setShow(false);
-          setTimeout(() => {
-            onFinish?.();
-          }, 450);
-        }, 1000);
-      }
-    };
-
+          if (userRole) {
+            router.replace(`/dashboard/${userRole}`);
+          } else {
+            router.replace("/auth/login");
+          }
+        }, 450);
+      }, 1500);
+      
+      return; 
+    }
+  } catch (err) {
+    console.log("Session dead, stay on login");
+    dispatch(setInitialized());
+    setTimeout(() => {
+      setShow(false);
+      setTimeout(() => {
+        onFinish?.();
+      }, 450);
+    }, 1000);
+  }
+};
     checkAuthAndFinish();
 
     return () => {
@@ -62,6 +64,9 @@ export default function WelcomeLoader({ onFinish }: Props) {
       clearTimeout(barTimeout);
     };
   }, [onFinish, dispatch, router]);
+
+
+  
 
   return (
     <div style={{

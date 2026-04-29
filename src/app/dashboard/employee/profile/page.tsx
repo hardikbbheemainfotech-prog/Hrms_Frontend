@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect} from "react"
 import { useSelector } from "react-redux"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -8,7 +8,7 @@ import { User, Mail, ShieldCheck, Clock, Calendar } from "lucide-react"
 import RoleGuard from "@/components/shared/RoleGuard"
 
 export default function ProfilePage() {
-  // Redux se user data fetch karo
+  const [loading, setLoading] = React.useState(true)
   const { user } = useSelector((state: any) => state.auth)
 
   const details = [
@@ -17,6 +17,11 @@ export default function ProfilePage() {
     { label: "Designation", value: user?.role || "Employee", icon: ShieldCheck },
     { label: "Shift Started At", value: user?.loginTime ? new Date(user.loginTime).toLocaleTimeString() : "N/A", icon: Clock },
   ]
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 1500)
+  }, [])
 
   return (
     <>

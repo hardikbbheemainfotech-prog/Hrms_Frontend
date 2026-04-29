@@ -49,7 +49,6 @@ export default function EmployeeTable() {
 
   return (
     <RoleGuard allowedRoles={["admin"]}>
-      <Navbar role="admin" />
       <div className="p-8 max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>

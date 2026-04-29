@@ -15,7 +15,6 @@ export default function adminDashboard() {
   return (
     <>
     <RoleGuard allowedRoles={["admin"]} >
-      <Navbar role="admin" />
 
       <div className="p-8 bg-[#ACC8A2]/70 min-h-screen space-y-8">
         <h1 className="text-3xl font-bold">admin Dashboard</h1>

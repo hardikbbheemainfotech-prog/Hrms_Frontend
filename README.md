@@ -41,3 +41,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 /api/admin/create_team - post 
 /api/admin/add_team_member/:team_id - post
 /api/admin/remove_staff/:employee_id - delete
+
+
+/api/employee/daily_task
+/api/employee/should_be
