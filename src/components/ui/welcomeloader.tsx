@@ -36,9 +36,12 @@ const checkAuthAndFinish = async () => {
       setTimeout(() => {
         setShow(false);
         setTimeout(() => {
-          if (userRole) {
+          if (userRole == "employee") {
+            router.replace(`/dashboard/${userRole}/mywork`);
+          }if (userRole == "hr") {
             router.replace(`/dashboard/${userRole}`);
-          } else {
+          } 
+          else {
             router.replace("/auth/login");
           }
         }, 450);

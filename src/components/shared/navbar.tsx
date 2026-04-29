@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation"
 import { useSelector } from "react-redux"
 import { LogOut } from "lucide-react"
 import IconTooltip from "../ui/IconTooltip"
+import { navigate } from "next/dist/client/components/segment-cache/navigation"
 
 type Props = {
   role: "hr" | "founder" | "admin" | "employee"
@@ -153,7 +154,10 @@ export default function Navbar({ role }: Props) {
 
 <DropdownMenu>
   <DropdownMenuTrigger asChild>
-    <Avatar className="cursor-pointer border hover:scale-105 transition">
+    <Avatar
+      className="cursor-pointer border hover:scale-105 transition"
+      onClick={() => router.push("/dashboard/employee/profile")}
+    >
       <AvatarImage
         src={user?.profile_image || user?.profile_url || user?.avatar}
         className="object-cover"

@@ -2,18 +2,16 @@
 
 import React from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { Home, ClipboardList, Clock, User } from "lucide-react"
+import { Home, ClipboardList, Clock, User, ShieldCheck } from "lucide-react"
 import IconTooltip from "@/components/ui/IconTooltip"
 
 const navItems = [
-  { href: "/dashboard/employee/mywork", icon: Home, label: "Home" },
+   { href: "/dashboard/employee/mywork", icon: Home, label: "Home" },
+  { href: "/dashboard/employee/post-activity", icon: ShieldCheck, label: "Post Activity" },
   { href: "/dashboard/employee/tasks", icon: ClipboardList, label: "Tasks" },
   { href: "/dashboard/employee/attendance", icon: Clock, label: "Attendance" },
   { href: "/dashboard/employee/profile", icon: User, label: "Profile" },
-  
 ]
-
-
 
 export default function Sidebar() {
   const router = useRouter()
