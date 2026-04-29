@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/select"
 import AttendanceCharts from "@/components/shared/AttendanceChart"
 import CircleStat from "@/components/ui/Circle_Progress"
+import { Cake, CloudSun, Moon, PartyPopper, SunDim } from "lucide-react"
+import RoleGuard from "@/components/shared/RoleGuard"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Employee = {
@@ -75,9 +77,9 @@ const fillMonthData = (data: any[]) => {
 
 function getGreeting() {
   const h = dayjs().hour()
-  if (h < 12) return { text: "Good Morning", icon: "🌤️" }
-  if (h < 17) return { text: "Good Afternoon", icon: "☀️" }
-  return { text: "Good Evening", icon: "🌙" }
+  if (h < 12) return { text: "Good Morning", icon: <CloudSun /> }
+  if (h < 17) return { text: "Good Afternoon", icon: <SunDim />}
+  return { text: "Good Evening", icon: <Moon strokeWidth={3}  />}
 }
 
 function getInitials(first: string, last: string) {
@@ -113,7 +115,6 @@ function BirthdayCard({ emp }: { emp: any }) {
   )
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function AttendancePage() {
   const [employees, setEmployees]   = useState<Employee[]>([])
   const [attendance, setAttendance] = useState<AttendanceRow[]>([])
@@ -128,9 +129,8 @@ export default function AttendancePage() {
   })
 
   const debouncedFilters = useDebounce(filters, 400)
-  const greeting         = getGreeting()
+  const greeting = getGreeting()
 
-  // ── Fetch ─────────────────────────────────────────────────────────────────
   const fetchEmployees = async () => {
     try {
       const res = await api.get("/core/employees")
@@ -171,11 +171,10 @@ export default function AttendancePage() {
   const handleFilterChange = (key: string, value: string) =>
     setFilters((prev) => ({ ...prev, [key]: value }))
 
-  // ─────────────────────────────────────────────────────────────────────────
   return (
+    <RoleGuard allowedRoles={["hr"]}>
     <div className="p-4 md:p-6 min-h-screen space-y-5 m-3 md:m-5 rounded-2xl bg-white/60 backdrop-blur-md border border-[#ACC8A2]/30">
 
-      {/* ── 1. FILTER BAR ─────────────────────────────────────────────────── */}
       <div className="flex flex-wrap gap-3 bg-white/80 backdrop-blur p-4 rounded-xl shadow-sm border border-[#ACC8A2]/30">
         <Select
           value={filters.employee_id || "all"}
@@ -209,25 +208,24 @@ export default function AttendancePage() {
         </Select>
       </div>
 
-      {/* ── 2. HERO HEADER ────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden rounded-2xl bg-white border border-[#d4e8cc]/60 shadow-sm p-5 md:p-7">
-        {/* Decorative blobs */}
+
         <div className="pointer-events-none absolute -top-10 -right-10 w-52 h-52 rounded-full opacity-[0.06]"
              style={{ background: "radial-gradient(circle, #4e7740 0%, transparent 70%)" }} />
         <div className="pointer-events-none absolute -bottom-8 left-0 w-36 h-36 rounded-full opacity-[0.04]"
              style={{ background: "radial-gradient(circle, #1a3112 0%, transparent 70%)" }} />
 
-        {/* Top row */}
+
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-          {/* Left */}
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-2xl font-black tracking-tight text-[#1a3112]">
-                {greeting.icon} {greeting.text}
+              <h2 className=" flex items-baseline justify-between  text-[#cd5654]">
+                <span className="text-2xl ">{greeting.icon} </span><span className="text-2xl font-extrabold"> {greeting.text}</span>
+                
               </h2>
               {birthdays.length > 0 && (
                 <span className="text-[10px] px-2.5 py-1 rounded-full bg-pink-100 text-pink-600 font-semibold animate-pulse">
-                  🎂 {birthdays.length} Birthday{birthdays.length > 1 ? "s" : ""} Today
+                  <Cake/> {birthdays.length} Birthday{birthdays.length > 1 ? "s" : ""} Today
                 </span>
               )}
             </div>
@@ -236,7 +234,7 @@ export default function AttendancePage() {
               <span className="font-semibold text-[#2d6a4f]">{dayjs().format("MMMM YYYY")}</span>
               {birthdays.length > 0 && (
                 <span className="text-pink-500 font-medium">
-                  · Wish {birthdays[0].first_name} today 🎉
+                  · Wish {birthdays[0].first_name} today <PartyPopper />
                 </span>
               )}
             </p>
@@ -253,7 +251,7 @@ export default function AttendancePage() {
             </div>
             {birthdays.length > 0 && (
               <div className="flex items-center gap-2 text-sm font-semibold text-pink-600 bg-pink-50 px-4 py-2 rounded-xl border border-pink-200">
-                🎂 {birthdays.length} Today
+                <Cake /> {birthdays.length} Today
               </div>
             )}
           </div>
@@ -279,7 +277,6 @@ export default function AttendancePage() {
         </div>
       </div>
 
-      {/* ── 3. BIRTHDAY SECTION (only when birthdays exist) ───────────────── */}
       {birthdays.length > 0 && (
         <div className="relative overflow-hidden rounded-2xl bg-white border border-pink-100 shadow-sm p-5">
           <div className="pointer-events-none absolute -top-8 -right-8 w-40 h-40 rounded-full opacity-[0.08]"
@@ -287,14 +284,14 @@ export default function AttendancePage() {
 
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <span className="text-xl">🎂</span>
+              <span className="text-xl"><Cake/></span>
               <h3 className="text-sm font-black text-gray-800">Today's Birthdays</h3>
               <span className="text-[10px] bg-pink-100 text-pink-600 font-bold px-2 py-0.5 rounded-full">
                 {birthdays.length}
               </span>
             </div>
             <span className="text-[11px] text-gray-400 font-medium hidden sm:block">
-              Celebrate your team 🎉
+              Celebrate your team <PartyPopper />
             </span>
           </div>
 
@@ -306,10 +303,9 @@ export default function AttendancePage() {
         </div>
       )}
 
-      {/* ── 4. CHART ──────────────────────────────────────────────────────── */}
+   
       <AttendanceCharts trend={trend} />
 
-      {/* ── 5. TABLE ──────────────────────────────────────────────────────── */}
       <div className="bg-white/80 backdrop-blur rounded-xl shadow-sm border border-[#ACC8A2]/30 overflow-hidden">
         <div className="px-4 py-3 border-b border-[#ACC8A2]/30 flex items-center justify-between">
           <h3 className="text-sm font-bold text-[#1a3112]">Attendance Records</h3>
@@ -383,5 +379,6 @@ export default function AttendancePage() {
         </div>
       </div>
     </div>
+    </RoleGuard>
   )
 }
