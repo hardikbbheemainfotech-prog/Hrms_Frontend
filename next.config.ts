@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const nextConfig = {
   async rewrites() {
     return [
@@ -9,4 +10,17 @@ const nextConfig = {
   },
 };
 
+=======
+const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "http://10.25.155.145:7000/api/:path*",
+      },
+    ];
+  },
+};
+
+>>>>>>> 0958281 (hr)
 module.exports = nextConfig;

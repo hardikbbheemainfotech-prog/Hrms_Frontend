@@ -99,14 +99,6 @@ export default function EmployeeIDCard({
               {padId(user.employee_id || user.id)}
             </span>
           </div>
-
-          <div className="flex justify-between items-start gap-2">
-            <span className="font-medium text-gray-400">Email</span>
-            <span className="text-[#1a3112] font-medium text-right break-words flex-1 leading-tight">
-              {user.email}
-            </span>
-          </div>
-
           <div className="flex justify-between items-center">
             <span className="font-medium text-gray-400 whitespace-nowrap">
               Shift Started

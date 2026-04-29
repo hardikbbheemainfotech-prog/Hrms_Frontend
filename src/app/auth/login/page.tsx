@@ -44,7 +44,7 @@ export default function LoginPage() {
           router.push("/dashboard/founder");
           break;
         default:
-          router.push("/dashboard/employee/mywork");
+          router.push("/dashboard/employee");
       }
 
     } catch (err: any) {
