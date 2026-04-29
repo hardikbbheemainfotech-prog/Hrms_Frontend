@@ -10,22 +10,57 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader2, SendHorizontal, ClipboardCheck, MessageSquare } from "lucide-react"
+import { cn } from "@/lib/utils" // Shadcn helper for conditional classes
+import RoleGuard from "@/components/shared/RoleGuard"
 
 export default function PostActivity() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
+  
+  // Track which fields are invalid
+  const [errors, setErrors] = useState<Record<string, boolean>>({})
+
+  // Helper to validate form data
+  const validate = (data: Record<string, any>, fields: string[]) => {
+    const newErrors: Record<string, boolean> = {}
+    let isValid = true
+
+    fields.forEach((field) => {
+      if (!data[field] || data[field].toString().trim() === "") {
+        newErrors[field] = true
+        isValid = false
+      }
+    })
+
+    setErrors(newErrors)
+    return isValid
+  }
+
+  // Clear error when user interacts with the field
+  const clearError = (name: string) => {
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: false }))
+    }
+  }
 
   const handleTaskSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setLoading(true)
     const formData = new FormData(e.currentTarget)
     const data = Object.fromEntries(formData.entries())
 
+    // Validate specific fields for Task Form
+    if (!validate(data, ["project_name", "assigned_by", "task_title", "description"])) {
+      toast({ variant: "destructive", title: "Missing Fields", description: "Please fill in all required fields." })
+      return
+    }
+
+    setLoading(true)
     try {
-      const res = await api.post("/employee/daily_task", data) 
+      const res = await api.post("/employee/daily_task", data)
       if (res.data.success) {
         toast({ title: "Success", description: "Daily task added successfully!" })
         ;(e.target as HTMLFormElement).reset()
+        setErrors({})
       }
     } catch (err: any) {
       toast({ variant: "destructive", title: "Error", description: err.response?.data?.message || "Failed to add task" })
@@ -36,15 +71,22 @@ export default function PostActivity() {
 
   const handleRequestSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setLoading(true)
     const formData = new FormData(e.currentTarget)
     const data = Object.fromEntries(formData.entries())
 
+    // Validate specific fields for Request Form
+    if (!validate(data, ["type", "title", "description"])) {
+      toast({ variant: "destructive", title: "Missing Fields", description: "Please fill in all required fields." })
+      return
+    }
+
+    setLoading(true)
     try {
-      const res = await api.post("/employee/should_be", data) 
+      const res = await api.post("/employee/should_be", data)
       if (res.data.success) {
         toast({ title: "Submitted", description: "Your request has been sent to HR/Admin." })
         ;(e.target as HTMLFormElement).reset()
+        setErrors({})
       }
     } catch (err: any) {
       toast({ variant: "destructive", title: "Error", description: err.response?.data?.message || "Failed to send request" })
@@ -52,15 +94,19 @@ export default function PostActivity() {
       setLoading(false)
     }
   }
+  const errorClass = (name: string) => 
+    errors[name] ? "border-red-500 focus-visible:ring-red-500" : "border-gray-200"
 
   return (
+      <RoleGuard allowedRoles={['employee']}>
+          <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex flex-col">
     <Card className="border-none shadow-xl bg-white/90 backdrop-blur-md rounded-2xl overflow-hidden no-scrollbar">
       <CardHeader className="bg-[#1A2517] text-white p-6">
         <CardTitle className="text-xl flex items-center gap-2 font-bold tracking-tight">
           <SendHorizontal size={22} /> POST ACTIVITY
         </CardTitle>
       </CardHeader>
-      
+
       <CardContent className="p-6">
         <Tabs defaultValue="task" className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-8 bg-gray-100 rounded-xl p-1">
@@ -74,13 +120,33 @@ export default function PostActivity() {
 
           {/* DAILY TASK FORM */}
           <TabsContent value="task">
-            <form onSubmit={handleTaskSubmit} className="space-y-4">
+            <form onSubmit={handleTaskSubmit} className="space-y-4" noValidate>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input name="project_name" placeholder="Project Name" required className="rounded-xl border-gray-200" />
-                <Input name="assigned_by" placeholder="Assigned By (Manager Name)" required className="rounded-xl border-gray-200" />
+                <Input 
+                  name="project_name" 
+                  placeholder="Project Name" 
+                  className={cn("rounded-xl", errorClass("project_name"))}
+                  onChange={() => clearError("project_name")}
+                />
+                <Input 
+                  name="assigned_by" 
+                  placeholder="Assigned By (Manager Name)" 
+                  className={cn("rounded-xl", errorClass("assigned_by"))}
+                  onChange={() => clearError("assigned_by")}
+                />
               </div>
-              <Input name="task_title" placeholder="Task Title" required className="rounded-xl border-gray-200" />
-              <Textarea name="description" placeholder="Describe what you did today..." required className="rounded-xl border-gray-200 min-h-[120px]" />
+              <Input 
+                name="task_title" 
+                placeholder="Task Title" 
+                className={cn("rounded-xl", errorClass("task_title"))}
+                onChange={() => clearError("task_title")}
+              />
+              <Textarea 
+                name="description" 
+                placeholder="Describe what you did today..." 
+                className={cn("rounded-xl min-h-[120px]", errorClass("description"))}
+                onChange={() => clearError("description")}
+              />
               <Button type="submit" disabled={loading} className="w-full bg-[#465e3e] hover:bg-[#1A2517] rounded-xl py-6 font-bold text-lg transition-all">
                 {loading ? <Loader2 className="animate-spin" /> : "Post Daily Task"}
               </Button>
@@ -89,10 +155,10 @@ export default function PostActivity() {
 
           {/* EMPLOYEE REQUEST FORM */}
           <TabsContent value="request">
-            <form onSubmit={handleRequestSubmit} className="space-y-4">
+            <form onSubmit={handleRequestSubmit} className="space-y-4" noValidate>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Select name="type" required>
-                  <SelectTrigger className="rounded-xl border-gray-200">
+                <Select name="type" onValueChange={() => clearError("type")}>
+                  <SelectTrigger className={cn("rounded-xl", errorClass("type"))}>
                     <SelectValue placeholder="Request Type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -101,10 +167,20 @@ export default function PostActivity() {
                     <SelectItem value="complaint">Complaint</SelectItem>
                   </SelectContent>
                 </Select>
-                <Input name="title" placeholder="Request Subject" required className="rounded-xl border-gray-200" />
+                <Input 
+                  name="title" 
+                  placeholder="Request Subject" 
+                  className={cn("rounded-xl", errorClass("title"))}
+                  onChange={() => clearError("title")}
+                />
               </div>
-              <Textarea name="description" placeholder="Explain your request in detail..." required className="rounded-xl border-gray-200 min-h-[120px]" />
-              <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl py-6 font-bold text-lg transition-all">
+              <Textarea 
+                name="description" 
+                placeholder="Explain your request in detail..." 
+                className={cn("rounded-xl min-h-[120px]", errorClass("description"))}
+                onChange={() => clearError("description")}
+              />
+              <Button type="submit" disabled={loading} className="w-full bg-[#465e3e] hover:bg-[#1A2517] rounded-xl py-6 font-bold text-lg transition-all">
                 {loading ? <Loader2 className="animate-spin" /> : "Submit Request"}
               </Button>
             </form>
@@ -112,5 +188,7 @@ export default function PostActivity() {
         </Tabs>
       </CardContent>
     </Card>
+    </div>
+    </RoleGuard>
   )
 }
