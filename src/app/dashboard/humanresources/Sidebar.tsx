@@ -22,7 +22,7 @@ export default function Sidebar() {
 
   return (
     <div className="h-screen flex items-center px-4">
-      <div className="w-20 bg-white/70 backdrop-blur-xl shadow-xl rounded-3xl flex flex-col items-center gap-6 border border-gray-200">
+      <div className="w-20  backdrop-blur-xl shadow-xl rounded-3xl flex flex-col items-center gap-6 border border-gray-200">
 
         <div className="flex-1" />
 
