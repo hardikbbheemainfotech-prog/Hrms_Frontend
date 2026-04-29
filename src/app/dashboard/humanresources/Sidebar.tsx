@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard/humanresources/attendanceSummary", icon: Home },
+  { href: "/dashboard/humanresources/Home", icon: Home },
   { href: "/dashboard/humanresources/attendance", icon: CalendarCheck },
   { href: "/dashboard/humanresources/leave_request", icon: ClipboardList  },
   { href: "/dashboard/humanresources/employees", icon: UserPlus },
@@ -49,7 +49,7 @@ export default function Sidebar() {
                   ${
                     isActive
                       ? "bg-[#465e3e] text-white shadow-md"
-                      : "bg-[#ACC8A2]/30 group-hover:bg-[#1A2517]"
+                      : "bg-[#ACC8A2]/30 group-hover:bg-[#394934]"
                   }`}
                 >
                   <Icon className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-900"} group-hover:text-white`} />

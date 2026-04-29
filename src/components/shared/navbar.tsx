@@ -2,6 +2,11 @@
 
 import React from "react"
 import {
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from "@/components/ui/hover-card"
+import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
@@ -13,6 +18,7 @@ import { useRouter } from "next/navigation"
 import { useSelector } from "react-redux"
 import { LogOut } from "lucide-react"
 import IconTooltip from "../ui/IconTooltip"
+import EmployeeIDCard from "../shared/EmployeeIDCard"
 
 type Props = {
   role: "hr" | "founder" | "admin" | "employee"
@@ -146,14 +152,21 @@ export default function Navbar({ role }: Props) {
         : user?.name || "User"}
     </span>
 
-    <span className="text-[10px] text-gray-400 uppercase">
-      {role}
+    <span className="text-[10px]">
+      {user?.email}
     </span>
   </div>
 
 <DropdownMenu>
   <DropdownMenuTrigger asChild>
-    <Avatar className="cursor-pointer border hover:scale-105 transition">
+   
+
+    <HoverCard>
+  <HoverCardTrigger asChild>
+     <Avatar
+      className="cursor-pointer border hover:scale-105 transition"
+      onClick={() => router.push("/dashboard/employee/profile")}
+    >
       <AvatarImage
         src={user?.profile_image || user?.profile_url || user?.avatar}
         className="object-cover"
@@ -165,6 +178,21 @@ export default function Navbar({ role }: Props) {
           .toUpperCase()}
       </AvatarFallback>
     </Avatar>
+  </HoverCardTrigger>
+
+ <HoverCardContent
+  align="end"
+  sideOffset={10}
+  className="w-auto border-none bg-transparent shadow-none -translate-x-6"
+>
+  <EmployeeIDCard user={user} compact />
+</HoverCardContent>
+</HoverCard>
+
+
+
+
+
   </DropdownMenuTrigger>
 
   {(role === "founder" || role === "admin") && (
