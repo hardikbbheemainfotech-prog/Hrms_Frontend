@@ -2,13 +2,17 @@
 "use client"
 import Navbar from "@/components/shared/navbar"
 import RoleGuard from "@/components/shared/RoleGuard"
+import AnnouncementsPanel from "./components/Announcement"
 
 export default function EmployeeDashboard() {
   return (
     <RoleGuard allowedRoles={["employee"]}>
-<div className=" no-scrollbar overflow-hidden  p-6">
+<div className=" no-scrollbar overflow-hidden p-6">
   <div className="h-full overflow-y-auto no-scrollbar">
+    <div className="bg-[#ACC8A2]/90 h-screen rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 flex flex-col">
+    <AnnouncementsPanel/>
    
+  </div>
   </div>
 </div>
     </RoleGuard>

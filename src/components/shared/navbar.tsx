@@ -28,7 +28,7 @@ type Props = {
 export default function Navbar({ role }: Props) {
   const router = useRouter()
   const { user, isInitialized } = useSelector((state: any) => state.auth)
-  const logoutAction = useLogout()
+  const logoutAction = useLogout();
 
   const [, setTick] = React.useState(0)
 
@@ -39,6 +39,28 @@ export default function Navbar({ role }: Props) {
 
     return () => clearInterval(interval)
   }, [])
+
+  React.useEffect(() => {
+    const today = new Date().toDateString()
+
+    if (user?.loginDate && user.loginDate !== today) {
+      logoutAction()
+      return
+    }
+
+    const now = new Date()
+    const nextMidnight = new Date()
+
+    nextMidnight.setHours(24, 0, 0, 0)
+
+    const msUntilMidnight = nextMidnight.getTime() - now.getTime()
+
+    const midnightTimer = setTimeout(() => {
+      logoutAction()
+    }, msUntilMidnight)
+
+    return () => clearTimeout(midnightTimer)
+  }, [user?.loginDate, logoutAction])
 
   const loginTime = user?.loginTime
   const elapsed = loginTime ? Date.now() - loginTime : 0
@@ -86,7 +108,6 @@ export default function Navbar({ role }: Props) {
     <div className="w-full flex justify-center bg-[#ACC8A2]/70 p-3 sticky top-0 z-50">
       <nav className="w-[95%] h-16 bg-white/60 backdrop-blur-2xl border border-white/30 rounded-2xl shadow-lg flex items-center justify-between px-6">
         
-        {/* LEFT */}
         <div
           className="text-sm font-bold text-gray-700 cursor-pointer tracking-wide"
           onClick={() => router.push("/")}
@@ -94,10 +115,7 @@ export default function Navbar({ role }: Props) {
           Bheema InfoTech
         </div>
 
-        {/* CENTER */}
         <div className="flex items-center justify-center flex-1">
-          
-          {/* Employee + HR Timer */}
           {(role === "employee" || role === "hr") ? (
             <div className="flex flex-col items-center">
               <div className="text-gray-700 font-mono text-sm bg-white/40 backdrop-blur px-4 py-1 rounded-full border flex items-center gap-2 shadow-sm">
@@ -117,94 +135,101 @@ export default function Navbar({ role }: Props) {
                 <span className="tracking-widest font-semibold">
                   {formatTime(remainingTime)}
                 </span>
-                  <IconTooltip
-  label="Logout"
-  icon={
-    <span
-      onClick={logoutAction}
-      className="ripple cursor-pointer px-3 py-2 rounded-xl text-sm text-red-500 border border-transparent hover:bg-red-50 hover:border-red-500 transition-all duration-300 flex items-center justify-center"
-    >
-      <LogOut size={16} />
-    </span>
-  }
-/>
+
+                <IconTooltip
+                  label="Logout"
+                  icon={
+                    <span
+                      onClick={()=> {
+                        logoutAction();
+                      }}
+                      className="ripple cursor-pointer px-3 py-2 rounded-xl text-sm text-red-500 border border-transparent hover:bg-red-50 hover:border-red-500 transition-all duration-300 flex items-center justify-center"
+                    >
+                      <LogOut size={16} />
+                    </span>
+                  }
+                />
               </div>
             </div>
           ) : (
-            /* Founder + Admin DateTime */
             <div className="flex flex-col items-center leading-tight">
               <span className="text-xs font-semibold text-gray-700 bg-white/40 px-4 py-1 rounded-full backdrop-blur border">
                 {date}
               </span>
-              <span className="text-xs text-gray-500 mt-1 font-mono tracking-wide">
+              <span className="text-xs mt-1 font-mono tracking-wide">
                 {time}
               </span>
             </div>
           )}
         </div>
 
-        {/* RIGHT */}
-       <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex flex-col items-end text-right">
+            <span className="text-xs font-semibold text-gray-700 uppercase">
+              {user?.first_name
+                ? `${user.first_name} ${user.last_name || ""}`
+                : user?.name || "User"}
+            </span>
+            <span className="text-[10px]">{user?.email}</span>
+            <span className="text-[10px] uppercase">{user?.role}</span>
+          </div>
 
-  <div className="hidden sm:flex flex-col items-end text-right">
-    <span className="text-xs font-semibold text-gray-700 uppercase">
-      {user?.first_name
-        ? `${user.first_name} ${user.last_name || ""}`
-        : user?.name || "User"}
-    </span>
-    <span className="text-[10px]">
-      {user?.email}
-    </span>
-  </div>
-
-<DropdownMenu>
-  <DropdownMenuTrigger asChild>
-   
-
+        <DropdownMenu>
+  {(role === "employee" || role === "hr") ? (
     <HoverCard>
-  <HoverCardTrigger asChild>
+      <HoverCardTrigger asChild>
+        <Avatar className="cursor-pointer border hover:scale-105 transition">
+          <AvatarImage
+            src={user?.profile_image || user?.profile_url || user?.avatar}
+            className="object-cover"
+          />
+          <AvatarFallback>
+            {(user?.first_name || user?.name || role)
+              .charAt(0)
+              .toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+      </HoverCardTrigger>
 
-   
-     <Avatar
-      className="cursor-pointer border hover:scale-105 transition"
-    >
-      <AvatarImage
-        src={user?.profile_image || user?.profile_url || user?.avatar}
-        className="object-cover"
-      />
-
-      <AvatarFallback>
-        {(user?.first_name || user?.name || role)
-          .charAt(0)
-          .toUpperCase()}
-      </AvatarFallback>
-    </Avatar>
-  </HoverCardTrigger>
-
- <HoverCardContent
-  align="end"
-  sideOffset={10}
-  className="w-auto border-none bg-transparent shadow-none -translate-x-6"
->
-  <EmployeeIDCard user={user} compact />
-</HoverCardContent>
-</HoverCard>
-
-  </DropdownMenuTrigger>
-
-  {(role === "founder" || role === "admin") && (
-    <DropdownMenuContent align="end" className="w-40">
-      <DropdownMenuItem
-        onClick={logoutAction}
-        className="cursor-pointer text-red-500 focus:text-red-600"
+      <HoverCardContent
+        align="end"
+        sideOffset={10}
+        className="w-auto border-none bg-transparent shadow-none -translate-x-6"
       >
-        <LogOut className="mr-2 h-4 w-4" />
-        Logout
-      </DropdownMenuItem>
-    </DropdownMenuContent>
+        <EmployeeIDCard user={user} compact />
+      </HoverCardContent>
+    </HoverCard>
+  ) : (
+    <>
+      <DropdownMenuTrigger asChild>
+        <Avatar className="cursor-pointer border hover:scale-105 transition">
+          <AvatarImage
+            src={user?.profile_image || user?.profile_url || user?.avatar}
+            className="object-cover"
+          />
+          <AvatarFallback>
+            {(user?.first_name || user?.name || role)
+              .charAt(0)
+              .toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent align="end" className="w-40">
+        <DropdownMenuItem
+          onClick={() => {
+            logoutAction()
+          }}
+          className="cursor-pointer text-red-500 focus:text-red-600"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          Logout
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </>
   )}
 </DropdownMenu>
-</div>
+        </div>
       </nav>
     </div>
   )

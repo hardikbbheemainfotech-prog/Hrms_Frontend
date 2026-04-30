@@ -38,7 +38,7 @@ export default function LoginPage() {
           router.push("/dashboard/admin");
           break;
         case 'hr':
-          router.push("/dashboard/humanresources");
+          router.push("/dashboard/humanresources/Home");
           break;
         case 'founder':
           router.push("/dashboard/founder");

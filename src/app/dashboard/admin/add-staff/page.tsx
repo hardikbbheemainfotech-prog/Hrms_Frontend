@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import api from "@/lib/axios"
-import { useToast } from "@/hooks/use_toast"
+import { useToast } from "@/hooks/use-toast"
 import { Loader2, CheckCircle2 } from "lucide-react" 
 import { Input } from "@/components/ui/input"
 import RoleGuard from "@/components/shared/RoleGuard"
@@ -71,7 +71,7 @@ const uploadImage = async (file: File) => {
     toast({
       variant: "destructive",
       title: "Upload Failed",
-      description: "Cloudinary check karo bhai",
+      description: "upload failed",
     })
     return null
   } finally {
@@ -129,6 +129,7 @@ const uploadImage = async (file: File) => {
 
   return (
     <RoleGuard allowedRoles={["admin"]}>
+      <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
       <div className="bg-white p-8 rounded-xl shadow-sm border max-w-4xl mx-auto mt-10">
         <h2 className="text-2xl font-bold mb-6">Onboard New Staff</h2>
 
@@ -200,6 +201,7 @@ const uploadImage = async (file: File) => {
             {loading ? <><Loader2 className="mr-2 animate-spin" /> Adding Employee...</> : "Add Employee"}
           </Button>
         </form>
+      </div>
       </div>
     </RoleGuard>
   )
