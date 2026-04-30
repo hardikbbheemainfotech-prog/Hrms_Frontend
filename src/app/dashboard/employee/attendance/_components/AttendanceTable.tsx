@@ -1,15 +1,5 @@
-type AttendanceLog = {
-  attendance_date?: string
-  check_in?: string | null
-  check_out?: string | null
-  total_hours?: string | number
-  status?: string
-}
+import { Props } from "@/types/employeeTypes";
 
-type Props = {
-  data: AttendanceLog[]
-  formatTime: (t?: string | null) => string
-}
 
 export default function AttendanceTable({ data, formatTime }: Props) {
   return (

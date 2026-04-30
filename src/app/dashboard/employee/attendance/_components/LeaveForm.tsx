@@ -7,30 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2 } from "lucide-react"
 import DateRangePicker from "./DateRangePicker"
 import { DateRange } from "react-day-picker"
+import { LeaveProps } from "@/types/employeeTypes"
 
-type LeaveSummaryItem = {
-  leave_type_id: number
-  leave_type: string
-  total_days?: number
-  remaining_days?: number
-  taken_days?: number
-}
 
-type LeavePayload = {
-  leave_type_id: number
-  start_date: string
-  end_date: string
-  total_days: number
-  reason: string
-}
 
-type Props = {
-  leaveSummary: LeaveSummaryItem[]
-  onSubmit: (data: LeavePayload) => void
-  loading: boolean
-}
-
-export default function LeaveForm({ leaveSummary, onSubmit, loading }: Props) {
+export default function LeaveForm({ leaveSummary, onSubmit, loading }: LeaveProps) {
   const [range, setRange] = useState<DateRange | undefined>()
   const [leaveType, setLeaveType] = useState<string>("1")
   const [reason, setReason] = useState("")
