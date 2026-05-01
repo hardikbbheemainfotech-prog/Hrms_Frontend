@@ -126,21 +126,24 @@ export default function LoginPage() {
   </button>
 </div>
             </div>
-
-            <Button 
-              type="submit" 
-              className="w-full h-12 font-bold bg-[#5A0F2E] hover:bg-[#2a3b26] shadow-xl shadow-[#5A0F2E]/20 transition-all active:scale-[0.98]" 
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Authenticating...
-                </>
-              ) : (
-                "Sign In"
-              )}
-            </Button>
+<Button 
+  type="submit" 
+  className="w-full h-12 font-bold bg-[#5A0F2E] hover:bg-[#5A0F2E]/90 shadow-xl shadow-[#5A0F2E]/20 transition-all active:scale-[0.98]" 
+  disabled={
+    isLoading ||
+    !email.trim() ||
+    !password.trim()
+  }
+>
+  {isLoading ? (
+    <>
+      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+      Authenticating...
+    </>
+  ) : (
+    "Sign In"
+  )}
+</Button>
           </form>
         </CardContent>
 

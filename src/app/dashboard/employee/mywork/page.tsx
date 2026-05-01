@@ -1,116 +1,125 @@
 "use client"
 
-import React, { useEffect } from "react"
-import { useSelector } from "react-redux"
+import React, { useState } from "react"
+import api from "@/lib/axios"
+import { useToast } from "@/hooks/use-toast"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Clock, CheckCircle2, Timer, Briefcase, Loader2 } from "lucide-react"
+import { Tabs, TabsContent} from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Loader2, SendHorizontal, ClipboardCheck, MessageSquare } from "lucide-react"
+import { cn } from "@/lib/utils"
 import RoleGuard from "@/components/shared/RoleGuard"
+import EmployeeTasks from "../components/employeeTasks"
 
-export default function MyWorkPage() {
- const [loading, setLoading] = React.useState(true)
-  const { user } = useSelector((state: any) => state.auth)
-  const { duration } = useSelector((state: any) => state.employeeSession)
+export default function PostActivity() {
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<Record<string, boolean>>({})
 
-  const formatDuration = (ms: number) => {
-    const hours = Math.floor(ms / 3600000)
-    const minutes = Math.floor((ms % 3600000) / 60000)
-    const seconds = Math.floor((ms % 60000) / 1000)
-    return `${hours}h ${minutes}m ${seconds}s`
+
+  const validate = (data: Record<string, any>, fields: string[]) => {
+    const newErrors: Record<string, boolean> = {}
+    let isValid = true
+
+    fields.forEach((field) => {
+      if (!data[field] || data[field].toString().trim() === "") {
+        newErrors[field] = true
+        isValid = false
+      }
+    })
+
+    setErrors(newErrors)
+    return isValid
   }
 
-  const fetchSessionData = () => {
-    setTimeout(() => {
+  const clearError = (name: string) => {
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: false }))
+    }
+  }
+
+  const handleTaskSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const data = Object.fromEntries(formData.entries())
+    if (!validate(data, ["project_name", "task_title", "description"])) {
+      toast({ variant: "destructive", title: "Missing Fields", description: "Please fill in all required fields." })
+      return
+    }
+
+    setLoading(true)
+    try {
+      const res = await api.post("/employee/daily_task", data)
+      if (res.data.success) {
+        toast({ title: "Success", description: "Daily task added successfully!" })
+        ;(e.target as HTMLFormElement).reset()
+        setErrors({})
+      }
+    } catch (err: any) {
+      toast({ variant: "destructive", title: "Error", description: err.response?.data?.message || "Failed to add task" })
+    } finally {
       setLoading(false)
-    }, 1500)
+    }
   }
-   
-  useEffect(() => {
-    fetchSessionData()
-  }, [])
-  const stats = [
-    {
-      title: "Current Session",
-      value: formatDuration(duration || 0),
-      icon: Timer,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
-    },
-    {
-      title: "Shift Started",
-      value: user?.loginTime ? new Date(user.loginTime).toLocaleTimeString() : "--:--",
-      icon: Clock,
-      color: "text-green-600",
-      bg: "bg-green-50",
-    },
-    {
-      title: "Designation",
-      value: user?.role || "Employee",
-      icon: Briefcase,
-      color: "text-purple-600",
-      bg: "bg-purple-50",
-    },
-  ]
-  if (loading) {
-    return (
-       <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin text-[#5A0F2E]" size={40} />
-      </div>
-    )
-  }
+
+  const errorClass = (name: string) => 
+    errors[name] ? "border-red-500 focus-visible:ring-red-500" : "border-gray-200"
 
   return (
-    <RoleGuard allowedRoles={["employee"]}>
-        <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex flex-col">
-      <div className="p-6 space-y-6 no-scrollbar">
-        {/* Header Section */}
-        <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold text-gray-800 tracking-tight">MY WORK DESK</h1>
-          <p className="text-sm text-gray-500">Track your daily progress and active session details.</p>
-        </div>
+      <RoleGuard allowedRoles={['employee']}>
+          <div className="bg-[#f0e5df] rounded-2xl p-6 overflow-x-auto shadow-2xl p-6 space-y-6 min-h-screen flex flex-col">
+    <Card className="border-none shadow-xl bg-white/90 backdrop-blur-md rounded-2xl overflow-hidden no-scrollbar">
+      <CardHeader className="bg-[#5A0F2E] text-white p-6">
+        <CardTitle className="text-xl flex items-center gap-2 font-bold tracking-tight">
+         <ClipboardCheck className="w-5 h-5" /> Today's Activity 
+        </CardTitle>
+      </CardHeader>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {stats.map((stat, i) => (
-            <Card key={i} className="border-none shadow-md bg-white/80 backdrop-blur-sm">
-              <CardContent className="flex items-center gap-4 p-6">
-                <div className={`p-3 rounded-2xl ${stat.bg} ${stat.color}`}>
-                  <stat.icon size={24} />
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">{stat.title}</p>
-                  <p className="text-lg font-bold text-gray-700">{stat.value}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Main Content Area */}
-        <Card className="border-none shadow-lg bg-white/90 backdrop-blur-md no-scrollbar">
-          <CardHeader className="border-b border-gray-100">
-            <div className="flex justify-between items-center">
-              <CardTitle className="text-lg font-bold text-gray-700 flex items-center gap-2">
-                <CheckCircle2 className="text-green-500" size={20} />
-                Today's Tasks
-              </CardTitle>
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                Active Session
-              </Badge>
-            </div>
-          </CardHeader>
-          <CardContent className="p-12 flex flex-col items-center justify-center text-center space-y-4">
-            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
-              <Briefcase className="text-gray-300" size={40} />
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-600">No active tasks assigned yet</h3>
-              <p className="text-sm text-gray-400">Your manager will assign tasks here shortly.</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      </div>
+      <CardContent className="p-6">
+        <Tabs defaultValue="task" className="w-full">
+          {/* DAILY TASK FORM */}
+          <TabsContent value="task">
+            <form onSubmit={handleTaskSubmit} className="space-y-4" noValidate>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                Project Name
+              </label>
+                <Input 
+                  name="project_name" 
+                  placeholder="Project Name" 
+                  className={cn("rounded-xl", errorClass("project_name"))}
+                  onChange={() => clearError("project_name")}
+                />
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                Role
+              </label>
+              <Input 
+                name="task_title" 
+                placeholder="Task Title" 
+                className={cn("rounded-xl", errorClass("task_title"))}
+                onChange={() => clearError("task_title")}
+              />
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                Describe Your Work
+              </label>
+              <Textarea 
+                name="description" 
+                placeholder="Describe what you did today..." 
+                className={cn("rounded-xl min-h-[120px]", errorClass("description"))}
+                onChange={() => clearError("description")}
+              />
+              <Button type="submit" disabled={loading} className="w-full bg-[#5A0F2E] hover:bg-[#5A0F2E] rounded-xl py-6 font-bold text-lg transition-all">
+                {loading ? <Loader2 className="animate-spin" /> : "Post Daily Task"}
+              </Button>
+            </form>
+          </TabsContent>
+         
+        </Tabs>
+      </CardContent>
+    </Card>
+     <EmployeeTasks/>
+    </div>
     </RoleGuard>
   )
 }

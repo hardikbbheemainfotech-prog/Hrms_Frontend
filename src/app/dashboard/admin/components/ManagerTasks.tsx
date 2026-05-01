@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react"
 import api from "@/lib/axios"
-import { Loader2, CalendarDays, Briefcase, ClipboardList, User } from "lucide-react"
+import {  CalendarDays, Briefcase, ClipboardList, User } from "lucide-react"
+import CompanySpinner from "@/components/shared/loader/spinner"
 
 export default function ManagerTasksPage() {
   const [tasks, setTasks] = useState<any[]>([])
@@ -50,7 +51,7 @@ export default function ManagerTasksPage() {
       {/* Loading */}
       {loading ? (
         <div className="flex justify-center items-center h-60">
-          <Loader2 className="animate-spin" size={40} />
+          <CompanySpinner />
         </div>
       ) : (
         <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-gray-100 shadow-sm overflow-hidden no-scrollbar">

@@ -5,6 +5,8 @@ import api from "@/lib/axios"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { Bell, BellOff, ChevronDown, Megaphone, Plus, X } from "lucide-react"
+import BheemaLoader from "@/components/shared/loader/loader"
+import CompanySpinner from "@/components/shared/loader/spinner"
 
 dayjs.extend(relativeTime)
 
@@ -143,26 +145,27 @@ export default function AnnouncementsPanel() {
   const toggleExpand = (id: number) =>
     setExpandedId((prev) => (prev === id ? null : id))
 
-  const active  = announcements.filter((a) => !a.expires_at || dayjs(a.expires_at).isAfter(dayjs()))
-  const expired = announcements.filter((a) => a.expires_at && dayjs(a.expires_at).isBefore(dayjs()))
+  const active = announcements.filter(
+  (a) => !a.expires_at || dayjs(a.expires_at).isAfter(dayjs())
+)
 
   return (
     <>
      
       <div className="relative overflow-hidden rounded-2xl bg-white border border-[#F1E9E4]/40 shadow-sm p-5">
-        {/* Decorative bg blob */}
+  
         <div
           className="pointer-events-none absolute -top-10 -right-10 w-48 h-48 rounded-full opacity-[0.05]"
-          style={{ background: "radial-gradient(circle, #4e7740 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, #5A0F2E 0%, transparent 70%)" }}
         />
 
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Bell className="w-4 h-4 text-[#2d6a4f]" />
-            <h3 className="text-sm font-black text-gray-800">Announcements</h3>
+            <Bell className="w-4 h-4 text-[#5A0F2E]" />
+            <h3 className="text-sm font-black text-[#5A0F2E]">Announcements</h3>
             {active.length > 0 && (
-              <span className="text-[10px] bg-[#e8f5e9] text-[#2d6a4f] font-bold px-2 py-0.5 rounded-full">
+              <span className="text-[10px] bg-[#e8f5e9] text-[#5A0F2E] font-bold px-2 py-0.5 rounded-full">
                 {active.length} active
               </span>
             )}
@@ -174,50 +177,24 @@ export default function AnnouncementsPanel() {
         {/* Content */}
         {loading ? (
           <div className="flex justify-center gap-1.5 py-6">
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className="w-2 h-2 rounded-full bg-[#4e7740] animate-bounce"
-                style={{ animationDelay: `${i * 0.15}s` }}
-              />
-            ))}
+       
+            <BheemaLoader/>
           </div>
-        ) : announcements.length === 0 ? (
+        ) : active.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 gap-2">
-            <BellOff className="w-8 h-8 text-gray-200" />
-            <p className="text-sm text-gray-400">No announcements yet.</p>
+            <BellOff className="w-8 h-8 text-[#5A0F2E]" />
+            <p className="text-sm text-[#5A0F2E]">No announcements yet.</p>
           </div>
         ) : (
           <div className="space-y-2">
-            {/* Active */}
             {active.map((a) => (
-              <AnnouncementCard
-                key={a.announcement_id}
-                a={a}
-                expanded={expandedId === a.announcement_id}
-                onToggle={() => toggleExpand(a.announcement_id)}
-              />
-            ))}
-
-            {/* Expired (collapsed section) */}
-            {expired.length > 0 && (
-              <details className="group mt-3">
-                <summary className="text-xs text-gray-400 font-semibold cursor-pointer list-none flex items-center gap-1.5 hover:text-gray-600 transition-colors select-none">
-                  <ChevronDown className="w-3.5 h-3.5 group-open:rotate-180 transition-transform" />
-                  {expired.length} expired announcement{expired.length > 1 ? "s" : ""}
-                </summary>
-                <div className="mt-2 space-y-2">
-                  {expired.map((a) => (
-                    <AnnouncementCard
-                      key={a.announcement_id}
-                      a={a}
-                      expanded={expandedId === a.announcement_id}
-                      onToggle={() => toggleExpand(a.announcement_id)}
-                    />
-                  ))}
-                </div>
-              </details>
-            )}
+  <AnnouncementCard
+    key={a.announcement_id}
+    a={a}
+    expanded={expandedId === a.announcement_id}
+    onToggle={() => toggleExpand(a.announcement_id)}
+  />
+))} 
           </div>
         )}
       </div>

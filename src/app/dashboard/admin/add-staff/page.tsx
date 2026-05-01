@@ -6,8 +6,14 @@ import { useToast } from "@/hooks/use-toast"
 import { Loader2, CheckCircle2 } from "lucide-react" 
 import { Input } from "@/components/ui/input"
 import RoleGuard from "@/components/shared/RoleGuard"
-import Navbar from "@/components/shared/navbar"
 import { Button } from "@/components/ui/button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function AddStaffForm() {
   const { toast } = useToast()
@@ -143,18 +149,27 @@ const uploadImage = async (file: File) => {
           <Input name="job_title" placeholder="Job Title" value={formData.job_title} onChange={handleChange} />
           <Input name="salary" type="number" placeholder="Salary" value={formData.salary} onChange={handleChange} />
           
-          <select
-            name="department_id"
-            value={formData.department_id}
-            onChange={handleChange}
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-            required
-          >
-            <option value="">Select Department</option>
-            {departments.map((dep) => (
-              <option key={dep.department_id} value={dep.department_id}>{dep.name}</option>
-            ))}
-          </select>
+          <Select
+  value={formData.department_id}
+  onValueChange={(value) =>
+    setFormData({ ...formData, department_id: value })
+  }
+>
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder="Select Department" />
+  </SelectTrigger>
+
+  <SelectContent>
+    {departments.map((dep) => (
+      <SelectItem
+        key={dep.department_id}
+        value={String(dep.department_id)}
+      >
+        {dep.name}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
 
           <div className="flex flex-col gap-1">
             <label className="text-xs text-gray-500">Hire Date</label>
@@ -174,7 +189,7 @@ const uploadImage = async (file: File) => {
 
             <div className="mt-4">
               {uploading && (
-                <div className="flex items-center gap-2 text-blue-600">
+                <div className="flex items-center gap-2 text-[#5A0F2E]">
                   <Loader2 className="animate-spin" size={20} />
                   <span>Please Wait...</span>
                 </div>
@@ -198,7 +213,7 @@ const uploadImage = async (file: File) => {
             disabled={loading || uploading || !imageUrl}
             className="md:col-span-2 w-full h-12 text-lg font-bold bg-black hover:bg-gray-800"
           >
-            {loading ? <><Loader2 className="mr-2 animate-spin" /> Adding Employee...</> : "Add Employee"}
+            {loading ? <><Loader2 className="mr-2 animate-spin text-[#5A0F2E]" /> Adding Employee...</> : "Add Employee"}
           </Button>
         </form>
       </div>

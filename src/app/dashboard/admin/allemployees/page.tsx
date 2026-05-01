@@ -3,12 +3,11 @@
 import { useState, useEffect } from "react"
 import api from "@/lib/axios"
 import { useToast } from "@/hooks/use-toast"
-import { Loader2, Trash2, Mail, Briefcase, Calendar, MapPin, PhoneCall, ShieldMinus, UserKey } from "lucide-react"
+import { Loader2, Mail, Briefcase, Calendar, PhoneCall, ShieldMinus, UserKey } from "lucide-react"
 import RoleGuard from "@/components/shared/RoleGuard"
-import Navbar from "@/components/shared/navbar"
-import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import IconTooltip from "@/components/ui/IconTooltip"
+import BheemaLoader from "@/components/shared/loader/loader"
 
 export default function EmployeeTable() {
   const { toast } = useToast()
@@ -63,7 +62,7 @@ const fetchStaff = async () => {
       <div className="p-8 max-w-[1400px] mx-auto">
         {loading ? (
           <div className="flex h-screen justify-center items-center">
-            <Loader2 className="animate-spin" size={40} />
+            <BheemaLoader/>
           </div>
         ) : (
           <>

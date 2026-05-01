@@ -13,9 +13,9 @@ import {
   ClipboardList, 
   Calendar,
   ChevronRight,
-  Loader2
 } from "lucide-react"
 import RoleGuard from "@/components/shared/RoleGuard"
+import CompanySpinner from "@/components/shared/loader/spinner"
 
 export default function EmployeeTasksPage() {
   const { toast } = useToast()
@@ -59,17 +59,16 @@ export default function EmployeeTasksPage() {
 
   if (loading) {
     return (
-       <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin text-[#5A0F2E]" size={40} />
+       <div className="bg-[#f0e5df] rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex items-center justify-center">
+        <CompanySpinner/>
       </div>
     )
   }
 
   return (
     <RoleGuard allowedRoles={['employee']}>
-      <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex flex-col">
-    {/* <div className="p-8 space-y-8 bg-[#F1E9E4]/70 min-h-screen"> */}
-      <div className="flex justify-between items-center">
+      <div className="bg-[#f0e5df] rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex flex-col">
+      <div className="flex justify-between bg-[#f0e5df] items-center">
         <h1 className="text-2xl font-bold text-[#5A0F2E] flex items-center gap-2">
           <ClipboardList /> My Tasks
         </h1>
@@ -81,12 +80,12 @@ export default function EmployeeTasksPage() {
       <div className="grid grid-cols-1 gap-4">
         {tasks.length > 0 ? (
           tasks.map((task) => (
-            <Card key={task.id} className="border-none shadow-sm hover:shadow-md transition-shadow bg-[#F1E9E4]/70 overflow-hidden">
+            <Card key={task.id} className="border-none shadow-sm hover:shadow-md transition-shadow bg-[#f0e5df] overflow-hidden">
               <div className="flex flex-col md:flex-row">
                 {/* Status Indicator Sidebar */}
                 <div className={`w-2 ${task.status === 'completed' ? 'bg-green-500' : 'bg-orange-400'}`} />
                 
-                <CardContent className="flex-1  p-6">
+                <CardContent className="flex-1 p-6">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-3">
