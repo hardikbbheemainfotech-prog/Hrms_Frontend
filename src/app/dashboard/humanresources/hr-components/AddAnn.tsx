@@ -2,6 +2,8 @@ import api from "@/lib/axios"
 import { Megaphone, X } from "lucide-react"
 import { useState } from "react"
 import { ROLE_COLORS } from "./AnnouncementsPanel"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 const ROLE_OPTIONS = ["hr", "manager", "employee", "admin"]
 
@@ -76,12 +78,12 @@ export  function CreateModal({
             <Megaphone className="w-4 h-4 text-[#2d6a4f]" />
             <h2 className="text-sm font-black text-[#1a3112]">New Announcement</h2>
           </div>
-          <button
+          <Button
             onClick={onClose}
             className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#e8f0e4] transition-colors"
           >
             <X className="w-4 h-4 text-gray-500" />
-          </button>
+          </Button>
         </div>
 
         {/* Body */}
@@ -124,7 +126,7 @@ export  function CreateModal({
                 const active = form.target_roles.includes(role)
                 const colors = ROLE_COLORS[role]
                 return (
-                  <button
+                  <Button
                     key={role}
                     type="button"
                     onClick={() => toggleRole(role)}
@@ -137,7 +139,7 @@ export  function CreateModal({
                   >
                     {role}
                     {active && " ✓"}
-                  </button>
+                  </Button>
                 )
               })}
             </div>
@@ -148,7 +150,7 @@ export  function CreateModal({
             <label className="block text-xs font-semibold text-[#1a3112] mb-1.5">
               Expires At <span className="text-gray-400 font-normal">(optional)</span>
             </label>
-            <input
+            <Input
               type="datetime-local"
               value={form.expires_at}
               onChange={(e) => setForm((p) => ({ ...p, expires_at: e.target.value }))}
@@ -166,13 +168,14 @@ export  function CreateModal({
 
         {/* Footer */}
         <div className="px-6 py-4 border-t border-[#F1E9E4]/30 bg-[#f4f8f2] flex items-center justify-end gap-3">
-          <button
+          <Button
             onClick={onClose}
+            variant="outline"
             className="px-4 py-2 text-xs font-semibold text-gray-500 hover:text-gray-700 rounded-xl hover:bg-white transition-all border border-transparent hover:border-gray-200"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleSubmit}
             disabled={loading}
             className="px-5 py-2 text-xs font-bold text-white bg-[#2d6a4f] hover:bg-[#1a3112] rounded-xl transition-all disabled:opacity-60 flex items-center gap-2 shadow-sm"
@@ -188,7 +191,7 @@ export  function CreateModal({
                 Post Announcement
               </>
             )}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

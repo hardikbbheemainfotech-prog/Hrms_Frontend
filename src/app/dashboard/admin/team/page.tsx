@@ -6,27 +6,31 @@ import { useToast } from "@/hooks/use-toast"
 import { Loader2, UserPlus, Users } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import Navbar from "@/components/shared/navbar"
 import RoleGuard from "@/components/shared/RoleGuard"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function AddTeamForm() {
   const { toast } = useToast()
   
-  // States
+ 
   const [loading, setLoading] = useState(false)
   const [teamId, setTeamId] = useState<string | null>(null) 
   const [employees, setEmployees] = useState<any[]>([])
   
-  // Team Form State
+
   const [teamData, setTeamData] = useState({
     team_name: "", project_name: "", team_lead_id: "", 
     description: "", start_date: "", end_date: ""
   })
 
-  // Member Form State
   const [memberData, setMemberData] = useState({ employee_id: "", role: "" })
 
-  // Fetch Employees for Team Lead & Members dropdown
   useEffect(() => {
     const fetchStaff = async () => {
       try {
@@ -37,7 +41,7 @@ export default function AddTeamForm() {
     fetchStaff()
   }, [])
 
-  // 1. Create Team Handler
+
   const handleCreateTeam = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -51,8 +55,6 @@ export default function AddTeamForm() {
       toast({ variant: "destructive", title: "Error", description: error.response?.data?.message || "Failed" })
     } finally { setLoading(false) }
   }
-
-  // 2. Add Member Handler
   const handleAddMember = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!teamId) return
@@ -82,20 +84,31 @@ export default function AddTeamForm() {
           <Input placeholder="Project Name" value={teamData.project_name} onChange={(e)=>setTeamData({...teamData, project_name: e.target.value})} required />
           
 
-          <select 
-  name="team_lead_id"
-  className="border p-2 rounded-md text-sm"
-  value={teamData.team_lead_id} 
-  onChange={(e) => setTeamData({ ...teamData, team_lead_id: e.target.value })}
-  required
+         
+<Select
+  value={teamData.team_lead_id}
+  onValueChange={(value) =>
+    setTeamData({
+      ...teamData,
+      team_lead_id: value,
+    })
+  }
 >
-  <option value="">Select Team Lead</option>
-  {employees.map((emp) => (
-    <option key={emp.employee_id} value={emp.employee_id}> 
-      {emp.first_name} {emp.last_name}
-    </option>
-  ))}
-</select>
+  <SelectTrigger className="w-full border rounded-md text-sm">
+    <SelectValue placeholder="Select Team Lead" />
+  </SelectTrigger>
+
+  <SelectContent>
+    {employees.map((emp) => (
+      <SelectItem
+        key={emp.employee_id}
+        value={String(emp.employee_id)}
+      >
+        {emp.first_name} {emp.last_name}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
 
           <Input placeholder="Description" value={teamData.description} onChange={(e)=>setTeamData({...teamData, description: e.target.value})} />
           
@@ -126,25 +139,28 @@ export default function AddTeamForm() {
           <form onSubmit={handleAddMember} className="flex flex-col md:flex-row gap-4 items-end">
             <div className="flex-1 space-y-1">
               <label className="text-xs font-semibold">Select Employee</label>
-              <select 
-                className="w-full border p-2 rounded-md bg-white"
+              <Select
                 value={memberData.employee_id}
-                onChange={(e)=>setMemberData({...memberData, employee_id: e.target.value})}
+                onValueChange={(value) =>
+                  setMemberData({
+                    ...memberData,
+                    employee_id: value,
+                  })
+                }
                 required
               >
-                <option value="">Select Staff</option>
-                {employees.map((emp) => (
-    <option key={emp.employee_id} value={emp.employee_id}> 
-      {emp.first_name} {emp.last_name}
-    </option>
-  ))}
-              
-
- 
-</select>
-                       
-
-
+                <SelectTrigger className="w-full border rounded-md text-sm">
+                  <SelectValue placeholder="Select Staff" />
+                </SelectTrigger>
+                <SelectContent>
+                  {employees.map((emp) => (
+                    <SelectItem key={emp.employee_id} value={String(emp.employee_id)}>
+                      {emp.first_name} {emp.last_name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+  
             </div>
 
             <div className="flex-1 space-y-1">

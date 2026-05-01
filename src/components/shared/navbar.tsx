@@ -109,7 +109,7 @@ export default function Navbar({ role }: Props) {
       <nav className="w-[95%] h-16 bg-white/60 backdrop-blur-2xl border border-white/30 rounded-2xl shadow-lg flex items-center justify-between px-6">
         
         <div
-          className="text-sm font-bold text-gray-700 cursor-pointer tracking-wide"
+          className="text-sm font-bold text-[#5A0F2E] cursor-pointer tracking-wide"
           onClick={() => router.push("/")}
         >
           Bheema InfoTech
@@ -137,7 +137,7 @@ export default function Navbar({ role }: Props) {
                 </span>
 
                 <IconTooltip
-                  label="Logout"
+                  label="Check Out"
                   icon={
                     <span
                       onClick={()=> {
@@ -165,13 +165,17 @@ export default function Navbar({ role }: Props) {
 
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex flex-col items-end text-right">
-            <span className="text-xs font-semibold text-gray-700 uppercase">
+            <span className="text-xs font-semibold text-[#5A0F2E] uppercase">
               {user?.first_name
                 ? `${user.first_name} ${user.last_name || ""}`
                 : user?.name || "User"}
             </span>
-            <span className="text-[10px]">{user?.email}</span>
-            <span className="text-[10px] uppercase">{user?.role}</span>
+            <span className="text-[10px] text-[#5A0F2E]">
+              {user?.email}
+            </span>
+            <span className="text-[10px] text-[#5A0F2E] uppercase">
+              {user?.role}
+            </span>
           </div>
 
         <DropdownMenu>

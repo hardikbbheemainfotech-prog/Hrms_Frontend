@@ -20,13 +20,11 @@ const persistConfig = {
   whitelist: ["auth", "employeeSession"],
 }
 
-// 2. Combine Reducers
 const rootReducer = combineReducers({
   auth: authReducer,
   employeeSession: employeeSessionReducer,
 })
 
-// 3. Create Persisted Reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const makeStore = () => {

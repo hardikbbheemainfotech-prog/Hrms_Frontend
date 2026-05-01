@@ -8,7 +8,7 @@ import AttendanceTable from "@/app/dashboard/employee/attendance/_components/Att
 import LeaveSummarySection from "./_components/LeaveSummarySection"
 import LeaveHistoryTable from "./_components/LeaveHistoryTable"
 import RoleGuard from "@/components/shared/RoleGuard"
-import { Loader2 } from "lucide-react"
+import BheemaLoader from "@/components/shared/loader/loader"
 
 type LeavePayload = {
   leave_type_id: number
@@ -87,8 +87,8 @@ useEffect(() => {
 
  if (dataloading) {
     return (
-       <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin text-[#5A0F2E]" size={40} />
+       <div className="bg-[#f0e5df] rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex items-center justify-center">
+        <BheemaLoader />
       </div>
     )
   }
@@ -97,9 +97,9 @@ useEffect(() => {
   return (
     <>
     <RoleGuard allowedRoles={["employee"]}>
-  <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
+  <div className="bg-[#f0e5df] rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
      <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold text-gray-800 tracking-tight">Attendance logs</h1>
+          <h1 className="text-2xl font-bold text-[#5A0F2E] tracking-tight">Attendance logs</h1>
           <p className="text-sm text-gray-500">Your attendance records and leave history</p>
         </div>
 

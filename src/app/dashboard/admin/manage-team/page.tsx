@@ -5,14 +5,12 @@ import api from "@/lib/axios"
 import { useToast } from "@/hooks/use-toast"
 import { 
   Loader2, Mail, Briefcase, Calendar, 
-  PhoneCall, ShieldMinus, UserKey,
-  Search, Plus
+  PhoneCall, ShieldMinus, UserKey
 } from "lucide-react"
 import RoleGuard from "@/components/shared/RoleGuard"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import IconTooltip from "@/components/ui/IconTooltip"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import CompanySpinner from "@/components/shared/loader/spinner"
 
 export default function ManageTeamPage() {
   const { toast } = useToast()
@@ -76,7 +74,7 @@ export default function ManageTeamPage() {
         {/* Table Section */}
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <Loader2 className="animate-spin text-[#5A0F2E]" size={40} />
+            <CompanySpinner/>
           </div>
         ) : (
           <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-gray-100 shadow-sm overflow-hidden no-scrollbar">
