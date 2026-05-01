@@ -3,14 +3,9 @@
 import { Card, CardContent, CardHeader, CardTitle, Gauge } from "@/components/ui/card"
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
 import { PieChart as PieIcon } from "lucide-react"
+import { LeaveSummaryItem } from "@/types/employeeTypes"
 
-type LeaveSummaryItem = {
-  leave_type_id: number
-  leave_type: string
-  total_days?: number
-  remaining_days?: number
-  taken_days?: number
-}
+
 
 type Props = {
   data: LeaveSummaryItem[]

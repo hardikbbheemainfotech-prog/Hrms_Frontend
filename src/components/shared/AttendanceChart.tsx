@@ -17,6 +17,7 @@ export default function AttendanceCharts({ trend }: { trend: any[] }) {
       <h2 className="text-lg font-semibold mb-4">
         Attendance Overview
       </h2>
+    
 
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={trend}>
@@ -36,7 +37,7 @@ export default function AttendanceCharts({ trend }: { trend: any[] }) {
 
           <XAxis
             dataKey="date"
-            tickFormatter={(d) => dayjs(d).format("DD")}
+            tickFormatter={(d) => dayjs(d).format("DD MMM")}
           />
 
           <Tooltip

@@ -57,11 +57,10 @@ const checkAuthAndFinish = async () => {
     const res = await api.get("/auth/refresh")
 
     if (res.data.success) {
-      const userData = res.data.data.user
-      const userRole = userData.role
-
-      dispatch(setCredentials({ user: userData }))
-      dispatch(setInitialized())
+      const userData = res.data.data.user;
+      let userRole = userData.role; 
+      dispatch(setCredentials({ user: userData }));
+      dispatch(setInitialized());
 
       setTimeout(() => {
         setShow(false)

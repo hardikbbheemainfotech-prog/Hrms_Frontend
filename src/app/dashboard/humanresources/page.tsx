@@ -1,9 +1,12 @@
-import Dashboard from "@/app/dashboard/humanresources/attendance/page";
+import RoleGuard from "@/components/shared/RoleGuard";
+
 
 export default function Home() {
   return (
-    <main className="  min-h-screen ">
+       <RoleGuard allowedRoles={["hr"]}>
+    <main className="min-h-screen ">
 
     </main>
+      </RoleGuard>
   );
 }
