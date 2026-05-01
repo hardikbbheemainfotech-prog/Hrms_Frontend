@@ -176,7 +176,7 @@ export default function AttendancePage() {
 
   return (
     <RoleGuard allowedRoles={["hr"]}>
-      <div className="min-h-screen p-4 md:p-6 m-3 md:m-5 rounded-2xl space-y-5 bg-[#f5f8f4] border border-[#F1E9E4]/30">
+      <div className="min-h-screen p-4 md:p-6 m-3 md:m-5 rounded-2xl space-y-5 bg-[#fdfdfd] border border-[#F1E9E4]/30">
 
         {/* ── FILTERS ─────────────────────────────────────────────────────── */}
         <div className="flex flex-wrap gap-3 bg-white p-4 rounded-2xl shadow-sm border border-[#F1E9E4]/30">
@@ -212,18 +212,17 @@ export default function AttendancePage() {
           </Select>
 
           {/* date badge */}
-          <div className="ml-auto flex items-center gap-2 text-xs font-semibold text-[#2d6a4f] bg-[#e8f5e9] px-4 py-2 rounded-xl border border-[#c5ddbf]">
+          <div className="ml-auto flex items-center gap-2 text-xs font-semibold text-[#5A0F2E] bg-[#F1E9E4] px-4 py-2 rounded-xl border border-[#c27d9a]">
             📅 {dayjs().format("dddd, DD MMMM YYYY")}
           </div>
         </div>
 
-        {/* ── GREETING + DASHBOARD CARDS ───────────────────────────────────── */}
         <div className="relative overflow-hidden rounded-2xl bg-white border border-[#F1E9E4]/30 shadow-sm p-6">
           {/* decorative blobs */}
           <div className="pointer-events-none absolute -top-16 -right-16 w-64 h-64 rounded-full opacity-[0.06]"
-            style={{ background: "radial-gradient(circle, #4e7740 0%, transparent 70%)" }} />
+            style={{ background: "radial-gradient(circle, #5A0F2E 0%, transparent 70%)" }} />
           <div className="pointer-events-none absolute -bottom-10 left-0 w-48 h-48 rounded-full opacity-[0.04]"
-            style={{ background: "radial-gradient(circle, #1a3112 0%, transparent 70%)" }} />
+            style={{ background: "radial-gradient(circle, #5A0F2E 0%, transparent 70%)" }} />
 
           {/* greeting row */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
@@ -240,18 +239,18 @@ export default function AttendancePage() {
               </h2>
               <p className="text-sm text-gray-400 mt-1">
                 Attendance overview for{" "}
-                <span className="font-semibold text-[#2d6a4f]">{dayjs().format("MMMM YYYY")}</span>
+                <span className="font-semibold text-[#5A0F2E]">{dayjs().format("MMMM YYYY")}</span>
               </p>
             </div>
-            <div className="flex items-center gap-2 text-sm font-semibold text-[#1a3112] bg-[#e8f0e4] px-4 py-2 rounded-xl border border-[#c5ddbf]">
+            <div className="flex items-center gap-2 text-sm font-semibold text-[#5A0F2E] bg-[#F1E9E4] px-4 py-2 rounded-xl border border-[#c27d9a]">
               <span>👥</span> Total Records
-              <span className="bg-[#1a3112] text-white text-xs px-2 py-0.5 rounded-lg">{totalCount}</span>
+              <span className="bg-[#5A0F2E] text-white text-xs px-2 py-0.5 rounded-lg">{totalCount}</span>
             </div>
           </div>
 
           {/* dashboard stat cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <StatCard icon={<Users className="w-4 h-4" />} label="Employees" value={dashboard?.employees || 0} accent="#4e7740" />
+            <StatCard icon={<Users className="w-4 h-4" />} label="Employees" value={dashboard?.employees || 0} accent="#5A0F2E" />
             <StatCard icon={<CalendarCheck className="w-4 h-4" />} label="Interviews" value={dashboard?.interviews?.scheduled || 0} accent="#549beb" />
             <StatCard
               icon={<CalendarCheck className="w-4 h-4" />}
@@ -298,7 +297,7 @@ export default function AttendancePage() {
         <div className="bg-white rounded-2xl shadow-sm border border-[#F1E9E4]/30 overflow-hidden">
           {/* table header */}
           <div className="px-5 py-4 border-b border-[#F1E9E4]/20 flex items-center justify-between bg-[#f4f8f2]">
-            <h3 className="text-sm font-black text-[#1a3112]">Attendance Records</h3>
+            <h3 className="text-sm font-black text-[#5A0F2E]">Attendance Records</h3>
             <span className="text-xs text-gray-400 bg-white px-3 py-1 rounded-full border border-[#F1E9E4]/30">
               {attendance.length} entries
             </span>
@@ -309,7 +308,7 @@ export default function AttendancePage() {
               <thead>
                 <tr className="bg-[#f9fbf8]">
                   {["Employee", "Date", "Check In", "Check Out", "Status"].map((h) => (
-                    <th key={h} className="px-5 py-3 text-left text-xs font-bold text-[#1a3112] tracking-wider uppercase">
+                    <th key={h} className="px-5 py-3 text-left text-xs font-bold text-[#5A0F2E] tracking-wider uppercase">
                       {h}
                     </th>
                   ))}
@@ -321,7 +320,7 @@ export default function AttendancePage() {
                     <td colSpan={5} className="text-center py-12">
                       <div className="flex justify-center gap-1.5">
                         {[0, 1, 2].map((i) => (
-                          <div key={i} className="w-2 h-2 rounded-full bg-[#4e7740] animate-bounce"
+                          <div key={i} className="w-2 h-2 rounded-full bg-[#5A0F2E] animate-bounce"
                             style={{ animationDelay: `${i * 0.15}s` }} />
                         ))}
                       </div>
@@ -338,7 +337,7 @@ export default function AttendancePage() {
                     <tr key={i} className="border-t border-gray-50 hover:bg-[#f9fbf8] transition-colors group">
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#4e7740] to-[#2d6a4f] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#5A0F2E] to-[#2d6a4f] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
                             {(a.first_name?.[0] || "") + (a.last_name?.[0] || "")}
                           </div>
                           <span className="font-semibold text-gray-800">

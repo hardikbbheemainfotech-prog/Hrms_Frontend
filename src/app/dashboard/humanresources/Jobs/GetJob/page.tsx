@@ -53,7 +53,7 @@ export default function JobsPage() {
 
             {/* Header */}
             <div className="flex items-center gap-2">
-                <Briefcase className="text-[#4e7740]" />
+                <Briefcase className="text-[#5A0F2E]" />
                 <h2 className="text-xl font-bold text-[#1a3112]">
                     Job Openings
                 </h2>
@@ -66,7 +66,7 @@ export default function JobsPage() {
                         onClick={() => setFilter(f as any)}
                         className={`px-4 py-1.5 rounded-full text-sm font-semibold border
         ${filter === f
-                                ? "bg-[#4e7740] text-white"
+                                ? "bg-[#5A0F2E] text-white"
                                 : "bg-white text-gray-600"
                             }`}
                     >

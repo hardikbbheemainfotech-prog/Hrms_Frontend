@@ -28,7 +28,7 @@ export default function IDCard({ emp }: { emp: Employee }) {
   return (
     <div className="flex flex-col space-x-2 items-center group">
   {/* Lanyard */}
-  <div className="w-6 h-12 bg-[#1a3112] rounded-t-md relative z-10">
+  <div className="w-6 h-12 bg-[#5A0F2E] rounded-t-md relative z-10">
     <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-4 h-3 bg-gray-300 rounded-b-md" />
   </div>
 
@@ -38,8 +38,8 @@ export default function IDCard({ emp }: { emp: Employee }) {
     group-hover:-translate-y-2 group-hover:shadow-2xl">
 
     {/* Header */}
-    <div className="bg-[#1a3112] px-3 py-2 text-center">
-      <p className="text-white font-semibold text-xs tracking-widest uppercase">
+    <div className="bg-[#5A0F2E] px-3 py-2 text-center">
+      <p className="text-[#F1E9E4] font-semibold text-xs tracking-widest uppercase">
         Bheema Infotech
       </p>
       <p className="text-[#a8c89e] text-[9px] tracking-wider uppercase">
@@ -49,7 +49,7 @@ export default function IDCard({ emp }: { emp: Employee }) {
 
     {/* Profile */}
     <div className="flex flex-col items-center pt-5 px-3">
-      <div className="relative w-20 h-[90px] bg-[#4e7740] rounded-b-[40px] flex items-end justify-center pb-1 shadow-inner">
+      <div className="relative w-20 h-[90px] bg-[#ac4e75] rounded-b-[40px] flex items-end justify-center pb-1 shadow-inner">
 
         {/* Avatar */}
         {emp.profile_image ? (
@@ -66,7 +66,7 @@ export default function IDCard({ emp }: { emp: Employee }) {
       </div>
 
       {/* Name */}
-      <p className="mt-3 text-[#1a3112] font-semibold text-[15px] text-center leading-tight">
+      <p className="mt-3 text-[#5A0F2E] font-semibold text-[15px] text-center leading-tight">
         {name}
       </p>
 
@@ -77,7 +77,7 @@ export default function IDCard({ emp }: { emp: Employee }) {
 
       {/* Department */}
       {emp.department_name && (
-        <span className="text-[11px] font-medium text-[#1a3112] bg-[#e6f2e6] px-3 py-0.5 rounded-full mb-3">
+        <span className="text-[11px] font-medium text-[#5A0F2E] bg-[#e6f2e6] px-3 py-0.5 rounded-full mb-3">
           {emp.department_name}
         </span>
       )}
@@ -96,7 +96,7 @@ export default function IDCard({ emp }: { emp: Employee }) {
       ].map(({ label, value }) => (
         <div key={label} className="flex justify-between gap-2">
           <span className="font-medium text-gray-700">{label}</span>
-          <span className="text-[#1a3112] text-right truncate max-w-[130px]" title={value}>
+          <span className="text-[#5A0F2E] text-right truncate max-w-[130px]" title={value}>
             {value}
           </span>
         </div>
@@ -105,11 +105,11 @@ export default function IDCard({ emp }: { emp: Employee }) {
 
     {/* Bottom accent */}
     <div className="flex justify-center mt-3">
-      <div className="w-10 h-1.5 bg-[#1a3112] rounded-full opacity-80" />
+      <div className="w-10 h-1.5 bg-[#5A0F2E] rounded-full opacity-80" />
     </div>
 
     {/* Footer */}
-    <p className="text-center text-[9px] text-[#4e7740] tracking-wide py-2">
+    <p className="text-center text-[9px] text-[#5A0F2E] tracking-wide py-2">
       bheemainfotech.in
     </p>
   </div>

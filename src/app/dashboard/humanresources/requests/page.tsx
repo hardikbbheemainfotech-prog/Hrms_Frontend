@@ -31,7 +31,7 @@ export default function PendingLeaves() {
       <div className="p-6 bg-[#F1E9E4]/20 min-h-screen">
 
         {/* HEADER */}
-        <div className="text-xl font-bold text-[#1a3112] p-2">
+        <div className="text-xl font-bold text-[#5A0F2E] p-2">
           <h1 className="text-xl font-semibold">Pending Leave Requests</h1>
         </div>
 
