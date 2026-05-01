@@ -1,6 +1,5 @@
-
 "use client"
-import Navbar from "@/components/shared/navbar"
+
 import RoleGuard from "@/components/shared/RoleGuard"
 
 export default function EmployeeDashboard() {

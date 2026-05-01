@@ -29,7 +29,7 @@ const checkAuthAndFinish = async () => {
     
     if (res.data.success) {
       const userData = res.data.data.user;
-      const userRole = userData.role; 
+      let userRole = userData.role; 
       dispatch(setCredentials({ user: userData }));
       dispatch(setInitialized());
 
@@ -39,7 +39,8 @@ const checkAuthAndFinish = async () => {
           if (userRole == "employee") {
             router.replace(`/dashboard/${userRole}/mywork`);
           }if (userRole == "hr") {
-            router.replace(`/dashboard/${userRole}`);
+            userRole = "humanresources"
+            router.replace(`/dashboard/${userRole}/Home`);
           } 
           else {
             router.replace("/auth/login");
