@@ -12,7 +12,7 @@ dayjs.extend(relativeTime)
 
 
 export const ROLE_COLORS: Record<string, { bg: string; text: string }> = {
-  hr:       { bg: "#e8f5e9", text: "#2d6a4f" },
+  hr:       { bg: "#e8f5e9", text: "#5A0F2E" },
   manager:  { bg: "#e8f1fd", text: "#2563eb" },
   employee: { bg: "#f5eeff", text: "#7c3aed" },
   admin:    { bg: "#fff0ee", text: "#dc2626" },
@@ -40,13 +40,14 @@ function AnnouncementCard({ a, expanded, onToggle }: {
       >
         {/* Icon */}
         <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#e8f0e4] flex items-center justify-center mt-0.5">
-          <Megaphone className="w-4 h-4 text-[#2d6a4f]" />
+          <Megaphone className="w-4 h-4 text-[#5A0F2E]" />
         </div>
+        
 
         {/* Text */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className="text-sm font-bold text-[#1a3112] truncate">{a.title}</p>
+            <p className="text-sm font-bold text-[#5A0F2E] truncate">{a.title}</p>
             {isExpired && (
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-200 text-gray-500 font-semibold">
                 Expired
@@ -157,10 +158,10 @@ export default function AnnouncementsPanel() {
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Bell className="w-4 h-4 text-[#2d6a4f]" />
+            <Bell className="w-4 h-4 text-[#5A0F2E]" />
             <h3 className="text-sm font-black text-gray-800">Announcements</h3>
             {active.length > 0 && (
-              <span className="text-[10px] bg-[#e8f5e9] text-[#2d6a4f] font-bold px-2 py-0.5 rounded-full">
+              <span className="text-[10px] bg-[#e8f5e9] text-[#5A0F2E] font-bold px-2 py-0.5 rounded-full">
                 {active.length} active
               </span>
             )}
@@ -168,7 +169,7 @@ export default function AnnouncementsPanel() {
 
           <button
             onClick={() => setModalOpen(true)}
-            className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#2d6a4f] hover:bg-[#1a3112] px-3 py-2 rounded-xl transition-all shadow-sm active:scale-95"
+            className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#5A0F2E] hover:bg-[#1a3112] px-3 py-2 rounded-xl transition-all shadow-sm active:scale-95"
           >
             <Plus className="w-3.5 h-3.5" />
             New

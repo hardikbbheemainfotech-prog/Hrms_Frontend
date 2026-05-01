@@ -42,7 +42,7 @@ export default function EmployeePage() {
   })
 
   return (
-    <div className="px-6 py-6 mx-auto max-w-7xl rounded-2xl bg-[#e8e8f0]">
+    <div className="px-6 py-6 mx-auto max-w-7xl rounded-2xl ">
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">

@@ -47,7 +47,7 @@ export default function RequestsPage() {
         <div className="p-5 space-y-5">
 
             {/* Header */}
-            <h2 className="text-xl font-bold text-[#1a3112]">
+            <h2 className="text-xl font-bold text-[#5A0F2E]">
                 Employee Requests
             </h2>
 
@@ -59,8 +59,8 @@ export default function RequestsPage() {
                         onClick={() => setFilter(t)}
                         className={`px-4 py-1.5 rounded-full text-sm font-semibold border
               ${filter === t
-                                ? "bg-[#4e7740] text-white"
-                                : "bg-white text-gray-600"
+                                ? "bg-[#5A0F2E] text-[#F1E9E4]"
+                                : "bg-[#F1E9E4] text-[#5A0F2E]"
                             }`}
                     >
                         {t}

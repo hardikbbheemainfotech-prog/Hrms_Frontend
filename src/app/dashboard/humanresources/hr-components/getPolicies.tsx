@@ -38,8 +38,8 @@ export default function PoliciesPage() {
 
             {/* Header */}
             <div className="flex items-center gap-2">
-                <FileText className="text-[#4e7740]" />
-                <h2 className="text-xl font-bold text-[#1a3112]">
+                <FileText className="text-[#5A0F2E]" />
+                <h2 className="text-xl font-bold text-[#833153]">
                     Company Policies
                 </h2>
             </div>
@@ -63,7 +63,7 @@ export default function PoliciesPage() {
                         >
                             {/* Top */}
                             <div className="flex items-center justify-between">
-                                <h3 className="font-bold text-[#1a3112]">
+                                <h3 className="font-bold text-[#5A0F2E]">
                                     {p.policy_key}
                                 </h3>
 

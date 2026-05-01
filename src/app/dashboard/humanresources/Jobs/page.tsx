@@ -17,7 +17,7 @@ export default function JobsPage() {
       <div className="flex items-center justify-between">
 
         <div className="flex items-center gap-2">
-          <Briefcase className="text-[#4e7740]" />
+          <Briefcase className="text-[#5A0F2E]" />
           <h2 className="text-xl font-bold text-[#1a3112]">
             Jobs
           </h2>
