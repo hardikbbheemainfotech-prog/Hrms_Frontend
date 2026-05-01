@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { MdOutlineManageAccounts, MdOutlinePersonAdd  } from "react-icons/md";
+import { MdOutlineManageAccounts, MdOutlinePersonAdd, MdOutlinePolicy  } from "react-icons/md";
 import { RiTeamLine } from "react-icons/ri";
 import {
   Home,
@@ -19,13 +19,14 @@ const navItems = [
   { href: "/dashboard/admin/add-staff", icon: MdOutlinePersonAdd, label: "Add Staff" },
   { href: "/dashboard/admin/allemployees", icon: UsersRound, label: "All Employees" },
   { href: "/dashboard/admin/manage-team", icon: MdOutlineManageAccounts, label: "Manage Team" },
+  { href: "/dashboard/admin/manage-policies", icon: MdOutlinePolicy, label: "Manage Policies" },
 ];
 export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
 
   return (
-    <div className="h-screen bg-[#ACC8A2]/70 rounded flex items-center px-4">
+    <div className="h-screen bg-[#ACC8A2]/70 rounded flex items-center -mt-12 px-4">
       <div className="w-20 bg-white/70 backdrop-blur-xl shadow-xl rounded-3xl flex flex-col items-center gap-6 border border-gray-200">
 
         <div className="flex-1" />

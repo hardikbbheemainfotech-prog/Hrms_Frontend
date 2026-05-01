@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import api from "@/lib/axios"
-import { useToast } from "@/hooks/use_toast"
+import { useToast } from "@/hooks/use-toast"
 import { 
   Loader2, Mail, Briefcase, Calendar, 
   PhoneCall, ShieldMinus, UserKey,
@@ -27,7 +27,7 @@ export default function ManageTeamPage() {
       const res = await api.get("/core/employees")
       setEmployees(res.data?.data || [])
     } catch (err) {
-      toast({ variant: "destructive", title: "Error", description: "Fetch fail ho gaya" })
+      toast({ variant: "destructive", title: "Error", description: "Fetch fail " })
     } finally {
       setLoading(false)
     }
@@ -59,6 +59,8 @@ export default function ManageTeamPage() {
 
   return (
     <RoleGuard allowedRoles={["admin", "hr"]}>
+      
+            <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
       <div className="p-6 space-y-6 no-scrollbar">
         
         {/* Header with Stats */}
@@ -161,6 +163,7 @@ export default function ManageTeamPage() {
             </div>
           </div>
         )}
+      </div>
       </div>
     </RoleGuard>
   )

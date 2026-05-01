@@ -12,6 +12,7 @@ interface UserProfile {
   profile_image?: string; 
   department?: string;
   loginTime?: number;
+  loginDate?: string;
 }
 
 interface AuthState {
@@ -32,13 +33,23 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-   setCredentials: (state, action: PayloadAction<{ user: any }>) => {
+ setCredentials: (state, action: PayloadAction<{ user: any }>) => {
   const newUser = action.payload.user;
+
   state.user = {
     ...state.user,
-    ...newUser,    
+    ...newUser,
+
+    id: newUser.id || newUser.user_id,
     profile_image: newUser.profile_image || state.user?.profile_image,
-    loginTime: newUser.login_time ? new Date(newUser.login_time).getTime() : (state.user?.loginTime || Date.now())
+
+    loginTime: newUser.login_time
+      ? new Date(newUser.login_time).getTime()
+      : state.user?.loginTime || Date.now(),
+
+    loginDate: newUser.login_time
+      ? new Date(newUser.login_time).toDateString()
+      : state.user?.loginDate || new Date().toDateString(),
   };
 
   state.isAuthenticated = true;

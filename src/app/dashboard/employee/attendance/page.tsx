@@ -97,7 +97,6 @@ useEffect(() => {
   return (
     <>
     <RoleGuard allowedRoles={["employee"]}>
-  {/* <div className="bg-[#ACC8A2]/70 p-6 overflow-x-auto no-scrollbar"> */}
   <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
      <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-bold text-gray-800 tracking-tight">Attendance logs</h1>

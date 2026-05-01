@@ -3,8 +3,8 @@
 import React from "react"
 
 // --- Helper Functions ---
-function getInitials(first: string = "", last: string = "") {
-  return `${(first[0] || "")}${(last[0] || "")}`.toUpperCase()
+function getInitials(first: string = "", last: string = "",user_id?: number | string) {
+  return `${(first[0] || "")}${(last[0] || "")}${(user_id ? String(user_id).slice(-2) : "")}`.toUpperCase()
 }
 
 function padId(id: number | string) {
@@ -27,7 +27,8 @@ export default function EmployeeIDCard({
 
   const initials = getInitials(
     user.first_name || user.name,
-    user.last_name
+    user.last_name,
+    user.user_id,
   )
 
   return (
@@ -96,7 +97,7 @@ export default function EmployeeIDCard({
           <div className="flex justify-between items-center">
             <span className="font-medium text-gray-400">ID</span>
             <span className="text-[#1a3112] font-semibold tracking-wider">
-              {padId(user.employee_id || user.id)}
+              {padId(user.user_id)}
             </span>
           </div>
           <div className="flex justify-between items-center">

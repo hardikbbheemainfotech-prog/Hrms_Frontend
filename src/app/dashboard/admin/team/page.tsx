@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import api from "@/lib/axios"
-import { useToast } from "@/hooks/use_toast"
+import { useToast } from "@/hooks/use-toast"
 import { Loader2, UserPlus, Users } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -69,7 +69,7 @@ export default function AddTeamForm() {
   return (
     <>
       <RoleGuard allowedRoles={["admin"]}>
-          
+            <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       
       {/* SECTION 1: CREATE TEAM */}
@@ -171,6 +171,7 @@ export default function AddTeamForm() {
           </Button>
         </div>
       )}
+    </div>
     </div>
     </RoleGuard>
     </>

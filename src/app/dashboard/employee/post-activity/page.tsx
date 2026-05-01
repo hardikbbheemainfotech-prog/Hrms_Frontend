@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import api from "@/lib/axios"
-import { useToast } from "@/hooks/use_toast"
+import { useToast } from "@/hooks/use-toast"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
@@ -16,11 +16,9 @@ import RoleGuard from "@/components/shared/RoleGuard"
 export default function PostActivity() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
-  
-  // Track which fields are invalid
   const [errors, setErrors] = useState<Record<string, boolean>>({})
 
-  // Helper to validate form data
+
   const validate = (data: Record<string, any>, fields: string[]) => {
     const newErrors: Record<string, boolean> = {}
     let isValid = true
@@ -36,7 +34,6 @@ export default function PostActivity() {
     return isValid
   }
 
-  // Clear error when user interacts with the field
   const clearError = (name: string) => {
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: false }))
@@ -47,9 +44,7 @@ export default function PostActivity() {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const data = Object.fromEntries(formData.entries())
-
-    // Validate specific fields for Task Form
-    if (!validate(data, ["project_name", "assigned_by", "task_title", "description"])) {
+    if (!validate(data, ["project_name", "task_title", "description"])) {
       toast({ variant: "destructive", title: "Missing Fields", description: "Please fill in all required fields." })
       return
     }
@@ -74,7 +69,6 @@ export default function PostActivity() {
     const formData = new FormData(e.currentTarget)
     const data = Object.fromEntries(formData.entries())
 
-    // Validate specific fields for Request Form
     if (!validate(data, ["type", "title", "description"])) {
       toast({ variant: "destructive", title: "Missing Fields", description: "Please fill in all required fields." })
       return
@@ -127,12 +121,6 @@ export default function PostActivity() {
                   placeholder="Project Name" 
                   className={cn("rounded-xl", errorClass("project_name"))}
                   onChange={() => clearError("project_name")}
-                />
-                <Input 
-                  name="assigned_by" 
-                  placeholder="Assigned By (Manager Name)" 
-                  className={cn("rounded-xl", errorClass("assigned_by"))}
-                  onChange={() => clearError("assigned_by")}
                 />
               </div>
               <Input 

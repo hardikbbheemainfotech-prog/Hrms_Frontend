@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SessionState {
-  loginTime: number | null; // Shift start time (Timestamp)
-  duration: number;        // Elapsed time in ms
+  loginTime: number | null; 
+  duration: number;        
 }
 
 const initialState: SessionState = {
@@ -14,16 +14,12 @@ const employeeSessionSlice = createSlice({
   name: "employeeSession",
   initialState,
   reducers: {
-    // 1. Jab user Punch-in kare tab ye call karo
     setLoginTime(state, action: PayloadAction<number>) {
       state.loginTime = action.payload;
     },
 
-    // 2. Refresh-safe Update Logic
     updateDuration(state) {
       if (state.loginTime) {
-        // Calculation: Current Time - Start Time
-        // Isse farak nahi padta ki kitni baar refresh ho, calculation hamesha sahi aayegi
         state.duration = Date.now() - state.loginTime;
       }
     },

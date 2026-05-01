@@ -6,7 +6,6 @@ import { useAppDispatch } from "@/lib/hooks"
 
 export const useLogout = () => {
   const dispatch = useAppDispatch()
-
   const handleLogout = async () => {
     try {
       await api.post("/auth/logout")

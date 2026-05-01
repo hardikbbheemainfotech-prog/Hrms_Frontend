@@ -13,6 +13,10 @@ type Props = {
   onFinish?: () => void
 }
 
+
+
+
+
 export default function WelcomeLoader({ onFinish }: Props) {
   const [show, setShow] = useState(false)
   const [barW, setBarW] = useState(0)
@@ -25,8 +29,33 @@ export default function WelcomeLoader({ onFinish }: Props) {
 
 const checkAuthAndFinish = async () => {
   try {
-    const res = await api.get("/auth/refresh");
-    
+    const today = new Date().toDateString()
+
+    const storedAuth = localStorage.getItem("persist:root")
+
+    if (storedAuth) {
+      const parsedRoot = JSON.parse(storedAuth)
+      const authData = parsedRoot.auth ? JSON.parse(parsedRoot.auth) : null
+
+      const loginDate = authData?.user?.loginDate
+
+      if (!loginDate || loginDate !== today) {
+        localStorage.removeItem("persist:root")
+
+        dispatch(setInitialized())
+
+        setShow(false)
+
+        setTimeout(() => {
+          onFinish?.()
+        }, 450)
+
+        return
+      }
+    }
+
+    const res = await api.get("/auth/refresh")
+
     if (res.data.success) {
       const userData = res.data.data.user;
       let userRole = userData.role; 
@@ -34,33 +63,37 @@ const checkAuthAndFinish = async () => {
       dispatch(setInitialized());
 
       setTimeout(() => {
-        setShow(false);
+        setShow(false)
+
         setTimeout(() => {
-          if (userRole == "employee") {
-            router.replace(`/dashboard/${userRole}/mywork`);
-          }if (userRole == "hr") {
-            userRole = "humanresources"
-            router.replace(`/dashboard/${userRole}/Home`);
-          } 
-          else {
-            router.replace("/auth/login");
+          if (userRole === "employee") {
+            router.replace(`/dashboard/employee`)
+          } else if (userRole === "hr") {
+            router.replace(`/dashboard/humanresources/Home`)
+          }else if (userRole === "admin") {
+            router.replace(`/dashboard/admin`)
+          }else {
+            router.replace("/auth/login")
           }
-        }, 450);
-      }, 1500);
-      
-      return; 
+        }, 450)
+      }, 1500)
+
+      return
     }
   } catch (err) {
-    console.log("Session dead, stay on login");
-    dispatch(setInitialized());
+    console.log("Session dead, stay on login")
+
+    dispatch(setInitialized())
+
     setTimeout(() => {
-      setShow(false);
+      setShow(false)
+
       setTimeout(() => {
-        onFinish?.();
-      }, 450);
-    }, 1000);
+        onFinish?.()
+      }, 450)
+    }, 1000)
   }
-};
+}
     checkAuthAndFinish();
 
     return () => {
