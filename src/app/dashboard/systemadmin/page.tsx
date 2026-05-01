@@ -25,14 +25,14 @@ export default function FounderDashboard() {
     <RoleGuard allowedRoles={["systemadmin"]} >
     <Navbar role="founder" />
 
-    <div className="p-8 bg-[#ACC8A2]/70 min-h-screen space-y-8">
+    <div className="p-8 bg-[#F1E9E4]/70 min-h-screen space-y-8">
       {/* Header Section */}
       <div className="flex justify-between items-end">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Founder Dashboard</h1>
           <p className="text-muted-foreground">Welcome back, here is what's happening at Bheema Infotech.</p>
         </div>
-        <Button className="bg-[#1A2517] hover:bg-[#70003c] shadow-lg shadow-[#1A2517]/20">
+        <Button className="bg-[#5A0F2E] hover:bg-[#70003c] shadow-lg shadow-[#5A0F2E]/20">
           Download Annual Report
         </Button>
       </div>
@@ -45,7 +45,7 @@ export default function FounderDashboard() {
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 {stat.title}
               </CardTitle>
-              <stat.icon className="h-4 w-4 text-[#1A2517]" />
+              <stat.icon className="h-4 w-4 text-[#5A0F2E]" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>

@@ -176,15 +176,15 @@ export default function AttendancePage() {
 
   return (
     <RoleGuard allowedRoles={["hr"]}>
-      <div className="min-h-screen p-4 md:p-6 m-3 md:m-5 rounded-2xl space-y-5 bg-[#f5f8f4] border border-[#ACC8A2]/30">
+      <div className="min-h-screen p-4 md:p-6 m-3 md:m-5 rounded-2xl space-y-5 bg-[#f5f8f4] border border-[#F1E9E4]/30">
 
         {/* ── FILTERS ─────────────────────────────────────────────────────── */}
-        <div className="flex flex-wrap gap-3 bg-white p-4 rounded-2xl shadow-sm border border-[#ACC8A2]/30">
+        <div className="flex flex-wrap gap-3 bg-white p-4 rounded-2xl shadow-sm border border-[#F1E9E4]/30">
           <Select
             value={filters.employee_id || "all"}
             onValueChange={(v) => handleFilterChange("employee_id", v === "all" ? "" : v)}
           >
-            <SelectTrigger className="w-[220px] rounded-xl border-[#ACC8A2]/50 bg-[#f9fbf8]">
+            <SelectTrigger className="w-[220px] rounded-xl border-[#F1E9E4]/50 bg-[#f9fbf8]">
               <SelectValue placeholder="All Employees" />
             </SelectTrigger>
             <SelectContent>
@@ -201,7 +201,7 @@ export default function AttendancePage() {
             value={filters.filter}
             onValueChange={(v) => handleFilterChange("filter", v)}
           >
-            <SelectTrigger className="w-[160px] rounded-xl border-[#ACC8A2]/50 bg-[#f9fbf8]">
+            <SelectTrigger className="w-[160px] rounded-xl border-[#F1E9E4]/50 bg-[#f9fbf8]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -218,7 +218,7 @@ export default function AttendancePage() {
         </div>
 
         {/* ── GREETING + DASHBOARD CARDS ───────────────────────────────────── */}
-        <div className="relative overflow-hidden rounded-2xl bg-white border border-[#ACC8A2]/30 shadow-sm p-6">
+        <div className="relative overflow-hidden rounded-2xl bg-white border border-[#F1E9E4]/30 shadow-sm p-6">
           {/* decorative blobs */}
           <div className="pointer-events-none absolute -top-16 -right-16 w-64 h-64 rounded-full opacity-[0.06]"
             style={{ background: "radial-gradient(circle, #4e7740 0%, transparent 70%)" }} />
@@ -295,11 +295,11 @@ export default function AttendancePage() {
         <AttendanceCharts trend={trend} />
 
         {/* ── ATTENDANCE TABLE ─────────────────────────────────────────────── */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#ACC8A2]/30 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#F1E9E4]/30 overflow-hidden">
           {/* table header */}
-          <div className="px-5 py-4 border-b border-[#ACC8A2]/20 flex items-center justify-between bg-[#f4f8f2]">
+          <div className="px-5 py-4 border-b border-[#F1E9E4]/20 flex items-center justify-between bg-[#f4f8f2]">
             <h3 className="text-sm font-black text-[#1a3112]">Attendance Records</h3>
-            <span className="text-xs text-gray-400 bg-white px-3 py-1 rounded-full border border-[#ACC8A2]/30">
+            <span className="text-xs text-gray-400 bg-white px-3 py-1 rounded-full border border-[#F1E9E4]/30">
               {attendance.length} entries
             </span>
           </div>

@@ -49,7 +49,7 @@
 }
 
 :root {
-  --background: #ACC8A2;
+  --background: #F1E9E4;
   --foreground: #1a1a1a;
 
   --card: #ffffff;
@@ -58,7 +58,7 @@
   --popover: #ffffff;
   --popover-foreground: #1a1a1a;
 
-  --primary: #1A2517;
+  --primary: #5A0F2E;
   --primary-foreground: #ffffff;
 
   --secondary: #e8e5dc;
@@ -68,33 +68,33 @@
   --muted-foreground: #6b6b6b;
 
   --accent: #f5f3ee;
-  --accent-foreground: #1A2517;
+  --accent-foreground: #5A0F2E;
 
   --border: #e0ddd5;
   --input: #e0ddd5;
-  --ring: #1A2517;
+  --ring: #5A0F2E;
 
   --radius: 0.625rem;
 }
 .dark {
   --background: #1a1a1a;
-  --foreground: #ACC8A2;
+  --foreground: #F1E9E4;
 
   --card: #262626;
-  --card-foreground: #ACC8A2;
+  --card-foreground: #F1E9E4;
 
-  --primary: #1A2517;
+  --primary: #5A0F2E;
   --primary-foreground: #ffffff;
 
   --secondary: #333333;
-  --secondary-foreground: #ACC8A2;
+  --secondary-foreground: #F1E9E4;
 
   --muted: #333333;
   --muted-foreground: #a1a1a1;
 
   --border: #444;
   --input: #444;
-  --ring: #1A2517;
+  --ring: #5A0F2E;
 }
 
 /* globals.css mein isse replace karo */

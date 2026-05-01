@@ -93,9 +93,9 @@ export default function PostActivity() {
 
   return (
       <RoleGuard allowedRoles={['employee']}>
-          <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex flex-col">
+          <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex flex-col">
     <Card className="border-none shadow-xl bg-white/90 backdrop-blur-md rounded-2xl overflow-hidden no-scrollbar">
-      <CardHeader className="bg-[#1A2517] text-white p-6">
+      <CardHeader className="bg-[#5A0F2E] text-white p-6">
         <CardTitle className="text-xl flex items-center gap-2 font-bold tracking-tight">
           <SendHorizontal size={22} /> POST ACTIVITY
         </CardTitle>
@@ -135,7 +135,7 @@ export default function PostActivity() {
                 className={cn("rounded-xl min-h-[120px]", errorClass("description"))}
                 onChange={() => clearError("description")}
               />
-              <Button type="submit" disabled={loading} className="w-full bg-[#465e3e] hover:bg-[#1A2517] rounded-xl py-6 font-bold text-lg transition-all">
+              <Button type="submit" disabled={loading} className="w-full bg-[#5A0F2E] hover:bg-[#5A0F2E] rounded-xl py-6 font-bold text-lg transition-all">
                 {loading ? <Loader2 className="animate-spin" /> : "Post Daily Task"}
               </Button>
             </form>
@@ -168,7 +168,7 @@ export default function PostActivity() {
                 className={cn("rounded-xl min-h-[120px]", errorClass("description"))}
                 onChange={() => clearError("description")}
               />
-              <Button type="submit" disabled={loading} className="w-full bg-[#465e3e] hover:bg-[#1A2517] rounded-xl py-6 font-bold text-lg transition-all">
+              <Button type="submit" disabled={loading} className="w-full bg-[#5A0F2E] hover:bg-[#5A0F2E] rounded-xl py-6 font-bold text-lg transition-all">
                 {loading ? <Loader2 className="animate-spin" /> : "Submit Request"}
               </Button>
             </form>

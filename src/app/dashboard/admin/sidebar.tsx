@@ -26,7 +26,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="h-screen bg-[#ACC8A2]/70 rounded flex items-center -mt-12 px-4">
+    <div className="h-screen bg-[#F1E9E4]/70 rounded flex items-center -mt-12 px-4">
       <div className="w-20 bg-white/70 backdrop-blur-xl shadow-xl rounded-3xl flex flex-col items-center gap-6 border border-gray-200">
 
         <div className="flex-1" />
@@ -62,8 +62,8 @@ export default function Sidebar() {
                                   <div
                                     className={`relative z-10 flex items-center justify-center w-full h-full rounded-2xl transition-all duration-300 ${
                                       isActive
-                                        ? "bg-[#465e3e] text-white shadow-md"
-                                        : "bg-[#ACC8A2]/30 group-hover:bg-[#1A2517]"
+                                        ? "bg-[#5A0F2E] text-white shadow-md"
+                                        : "bg-[#F1E9E4]/30 group-hover:bg-[#5A0F2E]"
                                     }`}
                                   >
                                     <Icon

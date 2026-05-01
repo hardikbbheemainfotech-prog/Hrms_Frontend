@@ -83,7 +83,7 @@ export default function AddPolicyPage() {
   return (
     <RoleGuard allowedRoles={['admin']}>
       
-            <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
+            <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
                <div className="flex items-center justify-between mb-8">
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">

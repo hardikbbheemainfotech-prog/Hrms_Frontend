@@ -6,8 +6,8 @@ import { useDispatch } from "react-redux"
 import { setCredentials, setInitialized } from "@/feature/auth/authslice"
 import api from "@/lib/axios"
 
-const CRIMSON = "#1A2517"
-const CREAM = "#ACC8A2"
+const CRIMSON = "#5A0F2E"
+const CREAM = "#F1E9E4"
 
 type Props = {
   onFinish?: () => void

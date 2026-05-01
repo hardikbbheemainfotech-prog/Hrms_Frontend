@@ -60,7 +60,7 @@ export default function ManageTeamPage() {
   return (
     <RoleGuard allowedRoles={["admin", "hr"]}>
       
-            <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
+            <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
       <div className="p-6 space-y-6 no-scrollbar">
         
         {/* Header with Stats */}
@@ -76,7 +76,7 @@ export default function ManageTeamPage() {
         {/* Table Section */}
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <Loader2 className="animate-spin text-[#465e3e]" size={40} />
+            <Loader2 className="animate-spin text-[#5A0F2E]" size={40} />
           </div>
         ) : (
           <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-gray-100 shadow-sm overflow-hidden no-scrollbar">
@@ -98,7 +98,7 @@ export default function ManageTeamPage() {
                         <div className="flex items-center gap-3">
                           <Avatar className="h-10 w-10 border-2 border-white shadow-sm">
                             <AvatarImage src={emp.profile_image} />
-                            <AvatarFallback className="bg-[#ACC8A2] text-white">
+                            <AvatarFallback className="bg-[#F1E9E4] text-white">
                               {emp.first_name[0]}
                             </AvatarFallback>
                           </Avatar>

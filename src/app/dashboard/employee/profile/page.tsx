@@ -27,8 +27,8 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="bg-[#ACC8A2]/90 min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin text-[#1A2517]" size={40} />
+      <div className="bg-[#F1E9E4]/90 min-h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin text-[#5A0F2E]" size={40} />
       </div>
     )
   }
@@ -40,7 +40,7 @@ export default function ProfilePage() {
 
   return (
     <RoleGuard allowedRoles={["employee"]}>
-        <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex justify-center items-center ">
+        <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex justify-center items-center ">
         <div className="flex flex-col items-center group">
           {/* Lanyard Hook */}
           <div className="w-6 h-12 bg-[#1a3112] rounded-t-md relative z-10">

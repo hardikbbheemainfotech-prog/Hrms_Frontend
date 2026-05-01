@@ -16,8 +16,8 @@ export default function adminDashboard() {
   return (
     <>
     <RoleGuard allowedRoles={["admin"]} >
-  <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
-      <div className="p-8 bg-[#ACC8A2]/70 min-h-screen space-y-8">
+  <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
+      <div className="p-8 bg-[#F1E9E4]/70 min-h-screen space-y-8">
         <h1 className="text-3xl font-bold">admin Dashboard</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -25,7 +25,7 @@ export default function adminDashboard() {
             <Card key={i}>
               <CardHeader className="flex justify-between flex-row">
                 <CardTitle className="text-sm">{stat.title}</CardTitle>
-                <stat.icon className="h-4 w-4 text-[#1A2517]" />
+                <stat.icon className="h-4 w-4 text-[#5A0F2E]" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>

@@ -69,7 +69,7 @@ export default function AddTeamForm() {
   return (
     <>
       <RoleGuard allowedRoles={["admin"]}>
-            <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
+            <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       
       {/* SECTION 1: CREATE TEAM */}

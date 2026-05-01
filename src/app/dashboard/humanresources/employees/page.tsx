@@ -50,14 +50,14 @@ export default function EmployeePage() {
           <h1 className="text-2xl font-bold tracking-wide text-[#1a1a2e]">
             EMPLOYEES
           </h1>
-          <span className="bg-[#465e3e] text-white text-xs font-medium px-3 py-0.5 rounded-full">
+          <span className="bg-[#5A0F2E] text-white text-xs font-medium px-3 py-0.5 rounded-full">
             {filtered.length}
           </span>
         </div>
 
         <button
           onClick={() => setOpen(true)}
-          className="bg-[#465e3e] hover:bg-[#242c21] text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors"
+          className="bg-[#5A0F2E] hover:bg-[#242c21] text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors"
         >
           + Add Employee
         </button>

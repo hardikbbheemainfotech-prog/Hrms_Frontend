@@ -57,19 +57,19 @@ export default function LoginPage() {
 
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen bg-[#ACC8A2]/70 overflow-hidden font-sans">
+    <div className="relative flex items-center justify-center min-h-screen bg-[#F1E9E4]/70 overflow-hidden font-sans">
       <div className="absolute inset-0 z-0 opacity-30">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-100 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-slate-200 blur-[120px]" />
       </div>
-      <Card className="relative z-10 w-full max-w-md bg-white/95 backdrop-blur-sm border border-[#1A2517]/10 shadow-[0_35px_60px_-15px_rgba(26,37,23,0.3)]">
+      <Card className="relative z-10 w-full max-w-md bg-white/95 backdrop-blur-sm border border-[#5A0F2E]/10 shadow-[0_35px_60px_-15px_rgba(26,37,23,0.3)]">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-2">
-            <div className="p-3 bg-[#1A2517]/10 rounded-xl">
-              <ShieldCheck className="w-8 h-8 text-[#1A2517]" />
+            <div className="p-3 bg-[#5A0F2E]/10 rounded-xl">
+              <ShieldCheck className="w-8 h-8 text-[#5A0F2E]" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-extrabold tracking-tight text-[#1A2517]">Bheema Infotech</CardTitle>
+          <CardTitle className="text-3xl font-extrabold tracking-tight text-[#5A0F2E]">Bheema Infotech</CardTitle>
           <CardDescription>
             Enter your employee credentials to access your dashboard
           </CardDescription>
@@ -91,7 +91,7 @@ export default function LoginPage() {
                   id="email"
                   type="email" 
                   placeholder="name@company.com"
-                  className="pl-10 h-11 focus-visible:ring-[#1A2517]"
+                  className="pl-10 h-11 focus-visible:ring-[#5A0F2E]"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -101,7 +101,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password" title="password" className="font-semibold text-slate-700">Password</Label>
-                <a href="#" className="text-xs text-[#1A2517] hover:underline font-bold">
+                <a href="#" className="text-xs text-[#5A0F2E] hover:underline font-bold">
                   Forgot password?
                 </a>
               </div>
@@ -112,7 +112,7 @@ export default function LoginPage() {
     id="password"
     type={showPassword ? "text" : "password"}
     placeholder="••••••••"
-    className="pl-10 pr-10 h-11 focus-visible:ring-[#1A2517]"
+    className="pl-10 pr-10 h-11 focus-visible:ring-[#5A0F2E]"
     value={password}
     onChange={(e) => setPassword(e.target.value)}
   />
@@ -120,7 +120,7 @@ export default function LoginPage() {
   <button
     type="button"
     onClick={() => setShowPassword((prev) => !prev)}
-    className="absolute right-3 top-2.5 text-slate-400 hover:text-[#1A2517]"
+    className="absolute right-3 top-2.5 text-slate-400 hover:text-[#5A0F2E]"
   >
     {showPassword ? <Eye /> : <EyeClosed />}
   </button>
@@ -129,7 +129,7 @@ export default function LoginPage() {
 
             <Button 
               type="submit" 
-              className="w-full h-12 font-bold bg-[#1A2517] hover:bg-[#2a3b26] shadow-xl shadow-[#1A2517]/20 transition-all active:scale-[0.98]" 
+              className="w-full h-12 font-bold bg-[#5A0F2E] hover:bg-[#2a3b26] shadow-xl shadow-[#5A0F2E]/20 transition-all active:scale-[0.98]" 
               disabled={isLoading}
             >
               {isLoading ? (
@@ -150,7 +150,7 @@ export default function LoginPage() {
           </p>
           <p className="text-xs text-center text-slate-500 mt-2">
             By logging in, you agree to our 
-            <a href="#" className="underline ml-1 hover:text-[#1A2517]">Security Policy</a>.
+            <a href="#" className="underline ml-1 hover:text-[#5A0F2E]">Security Policy</a>.
           </p>
         </CardFooter>
       </Card>

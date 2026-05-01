@@ -98,14 +98,14 @@ export default function Navbar({ role }: Props) {
 
   if (!isInitialized) {
     return (
-      <div className="w-full flex justify-center bg-[#ACC8A2]/70 p-3 sticky top-0 z-50">
+      <div className="w-full flex justify-center bg-[#F1E9E4]/70 p-3 sticky top-0 z-50">
         <div className="w-[95%] h-16 bg-white/20 animate-pulse rounded-2xl border border-white/10 shadow-lg" />
       </div>
     )
   }
 
   return (
-    <div className="w-full flex justify-center bg-[#ACC8A2]/70 p-3 sticky top-0 z-50">
+    <div className="w-full flex justify-center bg-[#F1E9E4]/70 p-3 sticky top-0 z-50">
       <nav className="w-[95%] h-16 bg-white/60 backdrop-blur-2xl border border-white/30 rounded-2xl shadow-lg flex items-center justify-between px-6">
         
         <div

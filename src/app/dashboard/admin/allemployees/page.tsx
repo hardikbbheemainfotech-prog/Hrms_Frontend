@@ -59,7 +59,7 @@ const fetchStaff = async () => {
 
  return (
   <RoleGuard allowedRoles={["admin"]}>
-    <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 flex flex-col">
+    <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 flex flex-col">
       <div className="p-8 max-w-[1400px] mx-auto">
         {loading ? (
           <div className="flex h-screen justify-center items-center">

@@ -87,8 +87,8 @@ useEffect(() => {
 
  if (dataloading) {
     return (
-       <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin text-[#1A2517]" size={40} />
+       <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin text-[#5A0F2E]" size={40} />
       </div>
     )
   }
@@ -97,7 +97,7 @@ useEffect(() => {
   return (
     <>
     <RoleGuard allowedRoles={["employee"]}>
-  <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
+  <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
      <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-bold text-gray-800 tracking-tight">Attendance logs</h1>
           <p className="text-sm text-gray-500">Your attendance records and leave history</p>

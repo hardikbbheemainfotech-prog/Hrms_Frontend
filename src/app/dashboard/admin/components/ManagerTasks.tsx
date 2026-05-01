@@ -29,7 +29,7 @@ export default function ManagerTasksPage() {
   }, [])
 
   return (
-    <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 shadow-lg space-y-6">
+    <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 shadow-lg space-y-6">
       
       {/* Header */}
       <div className="flex items-center justify-between">
