@@ -20,7 +20,7 @@ export default function RoleGuard({ children, allowedRoles }: { children: React.
   if (!isInitialized) {
     return (
       <div className="flex items-center justify-center h-screen">
-         <p className="animate-pulse font-bold text-[#1A2517]">Verifying Session...</p>
+         <p className="animate-pulse font-bold text-[#5A0F2E]">Verifying Session...</p>
       </div>
     )
   }

@@ -37,7 +37,7 @@ function AnnouncementCard({ a, expanded, onToggle }: {
       className={`rounded-xl border transition-all duration-200 overflow-hidden ${
         isExpired
           ? "border-gray-100 bg-gray-50/60 opacity-60"
-          : "border-[#ACC8A2]/40 bg-white hover:shadow-sm hover:border-[#ACC8A2]/80"
+          : "border-[#F1E9E4]/40 bg-white hover:shadow-sm hover:border-[#F1E9E4]/80"
       }`}
     >
       {/* Card Header — always visible */}
@@ -94,7 +94,7 @@ function AnnouncementCard({ a, expanded, onToggle }: {
       {expanded && (
         <div className="px-4 pb-4 pt-0">
           <div className="ml-11 pl-0.5">
-            <div className="h-px bg-[#ACC8A2]/30 mb-3" />
+            <div className="h-px bg-[#F1E9E4]/30 mb-3" />
             <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
               {a.message}
             </p>
@@ -149,7 +149,7 @@ export default function AnnouncementsPanel() {
   return (
     <>
      
-      <div className="relative overflow-hidden rounded-2xl bg-white border border-[#ACC8A2]/40 shadow-sm p-5">
+      <div className="relative overflow-hidden rounded-2xl bg-white border border-[#F1E9E4]/40 shadow-sm p-5">
         {/* Decorative bg blob */}
         <div
           className="pointer-events-none absolute -top-10 -right-10 w-48 h-48 rounded-full opacity-[0.05]"
@@ -169,7 +169,7 @@ export default function AnnouncementsPanel() {
           </div>
         </div>
 
-        <div className="h-px bg-gradient-to-r from-transparent via-[#acc8a2]/50 to-transparent mb-4" />
+        <div className="h-px bg-gradient-to-r from-transparent via-[#F1E9E4]/50 to-transparent mb-4" />
 
         {/* Content */}
         {loading ? (

@@ -69,9 +69,9 @@ export  function CreateModal({
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-[#ACC8A2]/40 overflow-hidden">
+      <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-[#F1E9E4]/40 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#ACC8A2]/30 bg-[#f4f8f2]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#F1E9E4]/30 bg-[#f4f8f2]">
           <div className="flex items-center gap-2">
             <Megaphone className="w-4 h-4 text-[#2d6a4f]" />
             <h2 className="text-sm font-black text-[#1a3112]">New Announcement</h2>
@@ -96,7 +96,7 @@ export  function CreateModal({
               placeholder="e.g. Office closure on Friday"
               value={form.title}
               onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
-              className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#ACC8A2]/60 bg-[#f9fbf8] focus:outline-none focus:ring-2 focus:ring-[#4e7740]/30 focus:border-[#4e7740] placeholder:text-gray-300 transition-all"
+              className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#F1E9E4]/60 bg-[#f9fbf8] focus:outline-none focus:ring-2 focus:ring-[#4e7740]/30 focus:border-[#4e7740] placeholder:text-gray-300 transition-all"
             />
           </div>
 
@@ -110,7 +110,7 @@ export  function CreateModal({
               value={form.message}
               onChange={(e) => setForm((p) => ({ ...p, message: e.target.value }))}
               rows={4}
-              className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#ACC8A2]/60 bg-[#f9fbf8] focus:outline-none focus:ring-2 focus:ring-[#4e7740]/30 focus:border-[#4e7740] placeholder:text-gray-300 transition-all resize-none"
+              className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#F1E9E4]/60 bg-[#f9fbf8] focus:outline-none focus:ring-2 focus:ring-[#4e7740]/30 focus:border-[#4e7740] placeholder:text-gray-300 transition-all resize-none"
             />
           </div>
 
@@ -152,7 +152,7 @@ export  function CreateModal({
               type="datetime-local"
               value={form.expires_at}
               onChange={(e) => setForm((p) => ({ ...p, expires_at: e.target.value }))}
-              className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#ACC8A2]/60 bg-[#f9fbf8] focus:outline-none focus:ring-2 focus:ring-[#4e7740]/30 focus:border-[#4e7740] transition-all"
+              className="w-full px-3 py-2.5 text-sm rounded-xl border border-[#F1E9E4]/60 bg-[#f9fbf8] focus:outline-none focus:ring-2 focus:ring-[#4e7740]/30 focus:border-[#4e7740] transition-all"
             />
           </div>
 
@@ -165,7 +165,7 @@ export  function CreateModal({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-[#ACC8A2]/30 bg-[#f4f8f2] flex items-center justify-end gap-3">
+        <div className="px-6 py-4 border-t border-[#F1E9E4]/30 bg-[#f4f8f2] flex items-center justify-end gap-3">
           <button
             onClick={onClose}
             className="px-4 py-2 text-xs font-semibold text-gray-500 hover:text-gray-700 rounded-xl hover:bg-white transition-all border border-transparent hover:border-gray-200"

@@ -11,7 +11,7 @@ type Props = {
   data: LeaveSummaryItem[]
 }
 
-const COLORS = ['#1A2517', '#AE275F', '#4B6344', '#1A2517']
+const COLORS = ['#5A0F2E', '#AE275F', '#4B6344', '#5A0F2E']
 
 export default function LeaveSummarySection({ data }: Props) {
 

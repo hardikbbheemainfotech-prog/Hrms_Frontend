@@ -58,7 +58,7 @@ export default function FullCalendar() {
   }
 
   return (
-    <div className="px-6 py-10 bg-[#ACC8A2]/20 min-h-screen">
+    <div className="px-6 py-10 bg-[#F1E9E4]/20 min-h-screen">
 
       <div className="bg-white/70 backdrop-blur-xl border rounded-2xl p-5 shadow-xl">
 

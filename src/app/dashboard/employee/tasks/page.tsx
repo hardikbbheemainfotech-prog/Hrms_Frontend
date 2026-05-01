@@ -59,21 +59,21 @@ export default function EmployeeTasksPage() {
 
   if (loading) {
     return (
-       <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin text-[#1A2517]" size={40} />
+       <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin text-[#5A0F2E]" size={40} />
       </div>
     )
   }
 
   return (
     <RoleGuard allowedRoles={['employee']}>
-      <div className="bg-[#ACC8A2]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex flex-col">
-    {/* <div className="p-8 space-y-8 bg-[#ACC8A2]/70 min-h-screen"> */}
+      <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6 min-h-screen flex flex-col">
+    {/* <div className="p-8 space-y-8 bg-[#F1E9E4]/70 min-h-screen"> */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-[#1A2517] flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-[#5A0F2E] flex items-center gap-2">
           <ClipboardList /> My Tasks
         </h1>
-        <Badge variant="outline" className="bg-white text-[#1A2517] font-bold px-4 py-1">
+        <Badge variant="outline" className="bg-white text-[#5A0F2E] font-bold px-4 py-1">
           Total: {tasks.length}
         </Badge>
       </div>
@@ -81,7 +81,7 @@ export default function EmployeeTasksPage() {
       <div className="grid grid-cols-1 gap-4">
         {tasks.length > 0 ? (
           tasks.map((task) => (
-            <Card key={task.id} className="border-none shadow-sm hover:shadow-md transition-shadow bg-[#ACC8A2]/70 overflow-hidden">
+            <Card key={task.id} className="border-none shadow-sm hover:shadow-md transition-shadow bg-[#F1E9E4]/70 overflow-hidden">
               <div className="flex flex-col md:flex-row">
                 {/* Status Indicator Sidebar */}
                 <div className={`w-2 ${task.status === 'completed' ? 'bg-green-500' : 'bg-orange-400'}`} />
@@ -90,7 +90,7 @@ export default function EmployeeTasksPage() {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-3">
-                        <h3 className="text-lg font-bold text-[#1A2517]">{task.title}</h3>
+                        <h3 className="text-lg font-bold text-[#5A0F2E]">{task.title}</h3>
                         <Badge className={`${getStatusColor(task.status)} uppercase text-[10px] font-black`}>
                           {task.status}
                         </Badge>
@@ -115,7 +115,7 @@ export default function EmployeeTasksPage() {
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        className="text-xs border-[#1A2517] text-[#1A2517] hover:bg-[#1A2517] hover:text-[#ACC8A2]"
+                        className="text-xs border-[#5A0F2E] text-[#5A0F2E] hover:bg-[#5A0F2E] hover:text-[#F1E9E4]"
                         onClick={() => updateTaskStatus(task.id, 'completed')}
                       >
                         <CheckCircle2 size={14} className="mr-2" /> Mark Completed
@@ -130,7 +130,7 @@ export default function EmployeeTasksPage() {
             </Card>
           ))
         ) : (
-          <div className="text-center py-20 bg-[#ACC8A2]/70 rounded-xl border-2 border-dashed border-gray-200">
+          <div className="text-center py-20 bg-[#F1E9E4]/70 rounded-xl border-2 border-dashed border-gray-200">
             <AlertCircle className="mx-auto text-black mb-4" size={48} />
             <h2 className="text-xl font-semibold text-black">No tasks assigned yet.</h2>
             <p className="text-black text-sm">Enjoy your free time!</p>

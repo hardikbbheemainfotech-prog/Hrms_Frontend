@@ -169,7 +169,7 @@ export default function AddEmployeeModal({ open, setOpen, onSuccess }: any) {
 
         <div className="flex justify-end gap-3 mt-4">
           <button onClick={() => setOpen(false)}>Cancel</button>
-          <button onClick={handleSubmit} className="bg-[#465e3e] text-white px-4 py-2 rounded">
+          <button onClick={handleSubmit} className="bg-[#5A0F2E] text-white px-4 py-2 rounded">
             Save
           </button>
         </div>

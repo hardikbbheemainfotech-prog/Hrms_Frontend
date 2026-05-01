@@ -28,7 +28,7 @@ export default function PendingLeaves() {
 
   return (
     <>
-      <div className="p-6 bg-[#ACC8A2]/20 min-h-screen">
+      <div className="p-6 bg-[#F1E9E4]/20 min-h-screen">
 
         {/* HEADER */}
         <div className="text-xl font-bold text-[#1a3112] p-2">
