@@ -1,12 +1,17 @@
 "use client"
 import PoliciesPage from '../hr-components/getPolicies'
-import SendMail from '../hr-components/mailSection/page'
+import MailComposer from '../hr-components/MailComposer'
 
 const page = () => {
   return (
-    <div>
-      <PoliciesPage/>
-      <SendMail/>
+    <div className="flex flex-col gap-8 p-6">
+      <section>
+        <MailComposer />
+      </section>
+
+      <section>
+        <PoliciesPage />
+      </section>
     </div>
   )
 }
