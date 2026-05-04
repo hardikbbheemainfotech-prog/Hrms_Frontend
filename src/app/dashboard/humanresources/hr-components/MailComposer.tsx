@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { MailKey } from '@/types/mailTypes'
 import { useHRData } from '@/hooks/useHRData'
+import api from '@/lib/axios'
 import { InterviewInvitationPanel } from '@/components/mail/InterviewInvitationPanel'
 import { InterviewReschedulePanel } from '@/components/mail/InterviewReschedulePanel'
 import { CandidateSelectedPanel } from '@/components/mail/CandidateSelectedPanel'
@@ -37,6 +38,7 @@ const SEND_LABELS: Record<MailKey, string> = {
 export default function MailComposer() {
   const [activeTab, setActiveTab] = useState<MailKey>('INTERVIEW_INVITATION')
   const [sending, setSending] = useState(false)
+  const [formData, setFormData] = useState<Record<string, unknown>>({})
 
   const {
     employees, interviews,
@@ -44,19 +46,34 @@ export default function MailComposer() {
     errorEmployees, errorInterviews,
     refetchEmployees, refetchInterviews,
     getEmployeeById, getInterviewById,
+    departments, loadingDepartments
   } = useHRData()
 
-  const panelProps = {
-    employees, interviews,
-    loadingEmployees, loadingInterviews,
-    getEmployeeById, getInterviewById,
+  const onFormChange = (data: Record<string, unknown>) => {
+    setFormData(data)
   }
+
+  const panelProps = {
+  employees, interviews, departments,
+  loadingEmployees, loadingInterviews, loadingDepartments,
+  getEmployeeById, getInterviewById,
+  onFormChange,
+}
 
   const handleSend = async () => {
     setSending(true)
     try {
-      await new Promise((r) => setTimeout(r, 800))
+      const payload = {
+        mail_type: activeTab,
+        to_email: formData.candidate_email ?? formData.employee_email ?? '',
+        data: formData,
+      }
+      console.log('Sending payload:', payload)
+      await api.post('/hr/mail/send', payload)
       alert('Mail sent successfully!')
+    } catch (e) {
+      alert('Failed to send mail. Check console.')
+      console.error(e)
     } finally {
       setSending(false)
     }
@@ -68,7 +85,6 @@ export default function MailComposer() {
     <div className="bg-background text-foreground rounded-3xl">
       <div className="mx-auto max-w-6xl px-6 py-8">
 
-        {/* Header */}
         <div className="mb-6">
           <h1 className="text-xl font-semibold tracking-tight">Mail composer</h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -76,7 +92,6 @@ export default function MailComposer() {
           </p>
         </div>
 
-        {/* Error banners */}
         {errorEmployees && (
           <div className="mb-4 flex items-center justify-between rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-2.5 text-sm text-destructive">
             <span>Failed to load employees: {errorEmployees}</span>
@@ -90,21 +105,15 @@ export default function MailComposer() {
           </div>
         )}
 
-        {/* Two-column layout */}
         <div className="flex gap-6 items-start">
 
-          {/* LEFT — active panel */}
           <div className="flex-1 min-w-0">
-            {/* Panel header */}
             <div className="mb-4 rounded-xl border border-border/40 bg-card px-5 py-4">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-1">
-                Composing
-              </p>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-1">Composing</p>
               <h2 className="text-base font-semibold">{activeTabConfig.label}</h2>
               <p className="text-xs text-muted-foreground mt-0.5">{activeTabConfig.description}</p>
             </div>
 
-            {/* Panel content */}
             {activeTab === 'INTERVIEW_INVITATION'          && <InterviewInvitationPanel {...panelProps} />}
             {activeTab === 'INTERVIEW_RESCHEDULED'         && <InterviewReschedulePanel {...panelProps} />}
             {activeTab === 'CANDIDATE_SELECTED'            && <CandidateSelectedPanel {...panelProps} />}
@@ -114,7 +123,6 @@ export default function MailComposer() {
             {activeTab === 'JOINING_INSTRUCTIONS'          && <JoiningInstructionsPanel {...panelProps} />}
             {activeTab === 'GENERAL_EMPLOYEE_NOTIFICATION' && <GeneralEmployeePanel {...panelProps} />}
 
-            {/* Actions */}
             <div className="mt-4 flex items-center justify-end gap-2 border-t border-border/30 pt-4">
               <button className="rounded-lg border border-border/50 bg-background px-4 py-2 text-sm text-muted-foreground hover:bg-muted/30 transition-colors">
                 Preview
@@ -129,28 +137,21 @@ export default function MailComposer() {
             </div>
           </div>
 
-          {/* RIGHT — template selector */}
           <div className="w-56 shrink-0 sticky top-6">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-3 px-1">
-              Templates
-            </p>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-3 px-1">Templates</p>
             <div className="flex flex-col gap-1">
               {TABS.map((tab) => (
                 <button
                   key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
+                  onClick={() => { setActiveTab(tab.key); setFormData({}) }}
                   className={`w-full text-left rounded-lg px-3 py-2.5 transition-colors border ${
                     activeTab === tab.key
-                      ? 'bg-primary/10 text-primary border-primary/20 '
+                      ? 'bg-primary/10 text-primary border-primary/20'
                       : 'bg-background text-muted-foreground border-transparent hover:bg-muted/30 hover:border-border/40'
                   }`}
                 >
-                  <p className={`text-xs font-medium ${activeTab === tab.key ? 'text-primary' : ''}`}>
-                    {tab.label}
-                  </p>
-                  <p className="text-[11px] text-muted-foreground/60 mt-0.5 leading-tight">
-                    {tab.description}
-                  </p>
+                  <p className={`text-xs font-medium ${activeTab === tab.key ? 'text-primary' : ''}`}>{tab.label}</p>
+                  <p className="text-[11px] text-muted-foreground/60 mt-0.5 leading-tight">{tab.description}</p>
                 </button>
               ))}
             </div>

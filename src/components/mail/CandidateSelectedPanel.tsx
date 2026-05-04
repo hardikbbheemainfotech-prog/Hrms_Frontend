@@ -22,9 +22,14 @@ export function CandidateSelectedPanel({ interviews, loadingInterviews, getInter
 
   useEffect(() => {
     if (!selectedInterviewId) return
-    const iv = getInterviewById(Number(selectedInterviewId))
+    const iv = interviews.find((i) => String(i.interview_id) === String(selectedInterviewId))
     if (!iv) return
-    setForm((p) => ({ ...p, candidate_name: iv.candidate_name }))
+    setForm((p) => ({
+      ...p,
+      candidate_name: iv.candidate_name,
+      candidate_email: iv.candidate_email,
+      position: iv.job_title ?? ''
+    }))
   }, [selectedInterviewId, getInterviewById])
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>

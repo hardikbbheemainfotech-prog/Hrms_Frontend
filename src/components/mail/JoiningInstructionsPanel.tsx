@@ -11,9 +11,10 @@ interface Props {
   loadingInterviews: boolean
   getInterviewById: (id: number) => Interview | undefined
   getEmployeeById: (id: number) => Employee | undefined
+  onFormChange: (data: Record<string, unknown>) => void
 }
 
-export function JoiningInstructionsPanel({ employees, interviews, loadingEmployees, loadingInterviews, getInterviewById, getEmployeeById }: Props) {
+export function JoiningInstructionsPanel({ employees, interviews, loadingEmployees, loadingInterviews, onFormChange }: Props) {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState('')
   const [selectedInterviewId, setSelectedInterviewId] = useState('')
   const [form, setForm] = useState({
@@ -23,10 +24,15 @@ export function JoiningInstructionsPanel({ employees, interviews, loadingEmploye
     documents_to_bring: '', day1_instructions: '',
   })
 
-  // Auto-fill from selected employee
+  // notify parent on every form change
   useEffect(() => {
-    if (!selectedEmployeeId) return
-    const emp = getEmployeeById(Number(selectedEmployeeId))
+    onFormChange(form)
+  }, [form])
+
+  // auto-fill from selected employee — uses arrays directly, not helper functions
+  useEffect(() => {
+    if (!selectedEmployeeId || employees.length === 0) return
+    const emp = employees.find((e) => String(e.employee_id) === String(selectedEmployeeId))
     if (!emp) return
     setForm((p) => ({
       ...p,
@@ -34,22 +40,19 @@ export function JoiningInstructionsPanel({ employees, interviews, loadingEmploye
       employee_email: emp.email,
       job_designation: emp.job_title,
     }))
-  }, [selectedEmployeeId, getEmployeeById])
+  }, [selectedEmployeeId, employees])
 
-  // Auto-fill reporting manager from interview (interviewer)
+  // auto-fill reporting manager from interview — first_name/last_name already joined on interview row
   useEffect(() => {
-    if (!selectedInterviewId) return
-    const iv = getInterviewById(Number(selectedInterviewId))
+    if (!selectedInterviewId || interviews.length === 0) return
+    const iv = interviews.find((i) => String(i.interview_id) === String(selectedInterviewId))
     if (!iv) return
-    const interviewer = getEmployeeById(iv.interviewer_id)
-    if (interviewer) {
-      setForm((p) => ({
-        ...p,
-        reporting_manager: `${interviewer.first_name} ${interviewer.last_name}`,
-        manager_contact: interviewer.email,
-      }))
-    }
-  }, [selectedInterviewId, getInterviewById, getEmployeeById])
+    setForm((p) => ({
+      ...p,
+      reporting_manager: iv.first_name ? `${iv.first_name} ${iv.last_name}` : '',
+      manager_contact: '',
+    }))
+  }, [selectedInterviewId, interviews])
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((p) => ({ ...p, [k]: e.target.value }))
@@ -86,7 +89,7 @@ export function JoiningInstructionsPanel({ employees, interviews, loadingEmploye
         <Grid2>
           <Field label="Office / work location"><Input value={form.office_location} onChange={set('office_location')} placeholder="e.g. HQ, 4th Floor, Sector 21, Gurugram" /></Field>
           <Field label="Reporting manager"><Input value={form.reporting_manager} onChange={set('reporting_manager')} placeholder="Auto-filled from interview" /></Field>
-          <Field label="Manager email / phone"><Input value={form.manager_contact} onChange={set('manager_contact')} placeholder="Auto-filled from interview" /></Field>
+          <Field label="Manager email / phone"><Input value={form.manager_contact} onChange={set('manager_contact')} placeholder="Manager email or phone" /></Field>
           <Field label="HR / onboarding contact"><Input value={form.hr_contact} onChange={set('hr_contact')} placeholder="HR name, email, phone" /></Field>
         </Grid2>
       </Card>

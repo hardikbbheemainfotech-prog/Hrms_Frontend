@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Employee, Interview } from '@/types/mail'
+import { Employee, Interview } from '@/types/mailTypes'
 import { Card, Field, Input, Textarea, InterviewSelect, Grid2, StaticBadge } from './shared'
 
 interface Props {
@@ -11,20 +11,30 @@ interface Props {
   loadingInterviews: boolean
   getInterviewById: (id: number) => Interview | undefined
   getEmployeeById: (id: number) => Employee | undefined
+  onFormChange: (data: Record<string, unknown>) => void
 }
 
-export function CandidateRejectionPanel({ interviews, loadingInterviews, getInterviewById }: Props) {
+export function CandidateRejectionPanel({ interviews, loadingInterviews, onFormChange }: Props) {
   const [selectedInterviewId, setSelectedInterviewId] = useState('')
   const [form, setForm] = useState({
     candidate_name: '', candidate_email: '', position: '', optional_feedback: '',
   })
 
   useEffect(() => {
-    if (!selectedInterviewId) return
-    const iv = getInterviewById(Number(selectedInterviewId))
+    onFormChange(form)
+  }, [form])
+
+  useEffect(() => {
+    if (!selectedInterviewId || interviews.length === 0) return
+    const iv = interviews.find((i) => String(i.interview_id) === String(selectedInterviewId))
     if (!iv) return
-    setForm((p) => ({ ...p, candidate_name: iv.candidate_name }))
-  }, [selectedInterviewId, getInterviewById])
+    setForm((p) => ({
+      ...p,
+      candidate_name: iv.candidate_name,
+      candidate_email: iv.candidate_email ?? '',
+      position: iv.job_title ?? '',
+    }))
+  }, [selectedInterviewId, interviews])
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((p) => ({ ...p, [k]: e.target.value }))

@@ -31,6 +31,7 @@ export interface Employee {
 export interface Interview {
   interview_id: number
   candidate_name: string
+  candidate_email: string
   job_id: number
   interview_type: string
   interview_mode: string
@@ -45,4 +46,7 @@ export interface Interview {
   location: string | null
   created_at: string
   updated_at: string
+  job_title: string | null
+  first_name: string | null
+  last_name: string | null
 }
