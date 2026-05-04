@@ -63,38 +63,51 @@ export default function MailComposer() {
 }
 
  const handleSend = async () => {
-  setSending(true)
+  const toEmail = String(formData.candidate_email ?? formData.employee_email ?? '')
 
+  if (!toEmail && activeTab !== 'GENERAL_EMPLOYEE_NOTIFICATION') {
+    alert('Please enter recipient email before sending.')
+    return
+  }
+
+  setSending(true)
   try {
-    const payload = {
-      mail_type: activeTab,
-      to_email:
-        formData.candidate_email ??
-        formData.employee_email ??
-        "",
-      data: formData,
+    const file = formData.offer_letter_file as File | null
+
+    let offer_letter_base64: string | null = null
+    let offer_letter_filename: string | null = null
+    let offer_letter_mimetype: string | null = null
+
+    if (file instanceof File) {
+      offer_letter_base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve((reader.result as string).split(',')[1])
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      })
+      offer_letter_filename = file.name
+      offer_letter_mimetype = file.type
     }
 
-    console.log("Sending payload:", payload)
+    const { offer_letter_file, ...restFormData } = formData
 
-    await api.post("/hr/mail/send", payload)
-
-    toast({
-      variant: "default",
-      title: "Mail sent successfully",
-      description:
-        "Your email has been delivered successfully.",
+    await api.post('/hr/mail/send', {
+      mail_type: activeTab,
+      to_email: toEmail,
+      data: {
+        ...restFormData,
+        ...(offer_letter_base64 && {
+          offer_letter_base64,
+          offer_letter_filename,
+          offer_letter_mimetype,
+        }),
+      },
     })
-  } catch (e: any) {
+
+    alert('Mail sent successfully!')
+  } catch (e) {
+    alert('Failed to send mail. Check console.')
     console.error(e)
-
-    toast({
-      variant: "destructive",
-      title: "Failed to send mail",
-      description:
-        e?.response?.data?.message ||
-        "Something went wrong. Please try again.",
-    })
   } finally {
     setSending(false)
   }
