@@ -12,6 +12,7 @@ import { NextRoundInvitationPanel } from '@/components/mail/NextRoundInvitationP
 import { OfferLetterPanel } from '@/components/mail/OfferLetterPanel'
 import { JoiningInstructionsPanel } from '@/components/mail/JoiningInstructionsPanel'
 import { GeneralEmployeePanel } from '@/components/mail/GeneralEmployeePanel'
+import { useToast } from '@/hooks/use-toast'
 
 const TABS: { key: MailKey; label: string; description: string }[] = [
   { key: 'INTERVIEW_INVITATION',          label: 'Interview invitation',  description: 'Invite candidate for interview' },
@@ -39,6 +40,7 @@ export default function MailComposer() {
   const [activeTab, setActiveTab] = useState<MailKey>('INTERVIEW_INVITATION')
   const [sending, setSending] = useState(false)
   const [formData, setFormData] = useState<Record<string, unknown>>({})
+  const {toast} = useToast();
 
   const {
     employees, interviews,
@@ -60,24 +62,43 @@ export default function MailComposer() {
   onFormChange,
 }
 
-  const handleSend = async () => {
-    setSending(true)
-    try {
-      const payload = {
-        mail_type: activeTab,
-        to_email: formData.candidate_email ?? formData.employee_email ?? '',
-        data: formData,
-      }
-      console.log('Sending payload:', payload)
-      await api.post('/hr/mail/send', payload)
-      alert('Mail sent successfully!')
-    } catch (e) {
-      alert('Failed to send mail. Check console.')
-      console.error(e)
-    } finally {
-      setSending(false)
+ const handleSend = async () => {
+  setSending(true)
+
+  try {
+    const payload = {
+      mail_type: activeTab,
+      to_email:
+        formData.candidate_email ??
+        formData.employee_email ??
+        "",
+      data: formData,
     }
+
+    console.log("Sending payload:", payload)
+
+    await api.post("/hr/mail/send", payload)
+
+    toast({
+      variant: "default",
+      title: "Mail sent successfully",
+      description:
+        "Your email has been delivered successfully.",
+    })
+  } catch (e: any) {
+    console.error(e)
+
+    toast({
+      variant: "destructive",
+      title: "Failed to send mail",
+      description:
+        e?.response?.data?.message ||
+        "Something went wrong. Please try again.",
+    })
+  } finally {
+    setSending(false)
   }
+}
 
   const activeTabConfig = TABS.find((t) => t.key === activeTab)!
 

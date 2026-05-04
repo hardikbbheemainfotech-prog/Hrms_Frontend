@@ -43,7 +43,7 @@ export default function PostJobPage() {
   const handleSubmit = async () => {
     setLoading(true)
     try {
-      await api.post("/hr/post_job", form)
+      await api.post("/job/post_job", form)
       alert("Job posted successfully")
 
       setForm({

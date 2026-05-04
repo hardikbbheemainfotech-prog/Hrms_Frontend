@@ -8,17 +8,19 @@ import { Badge } from "@/components/ui/badge"
 import { Briefcase, MapPin, IndianRupee, Clock } from "lucide-react"
 import { Job } from "@/types/hrTypes"
 import SkeletonCard from "@/components/skeleton/SkeletonCard"
+import { useToast } from "@/hooks/use-toast"
 
 export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(false)
   const [filter, setFilter] = useState<"all" | "open" | "closed">("all")
+  const {toast} = useToast();
 
   const fetchJobs = async () => {
     try {
       setLoading(true)
 
-      const res = await api.get("/hr/get_posts")
+      const res = await api.get("/job/get_posts")
       setJobs(res.data?.data?.jobs || [])
     } catch {
       setJobs([])
@@ -48,7 +50,7 @@ export default function JobsPage() {
 
   const handleCloseJob = async (jobId: number) => {
     try {
-      await api.patch(`/hr/close_post/${jobId}`)
+      await api.patch(`/job/close_post/${jobId}`)
 
       setJobs((prev) =>
         prev.map((job) =>
@@ -58,7 +60,7 @@ export default function JobsPage() {
         )
       )
     } catch (err: any) {
-      alert(err?.response?.data?.message || "Failed to close job")
+      toast({ variant: "destructive", title: "Failed to load tasks" })
     }
   }
 
