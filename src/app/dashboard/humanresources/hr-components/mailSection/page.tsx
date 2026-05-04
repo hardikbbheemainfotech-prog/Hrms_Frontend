@@ -1,5 +1,6 @@
 "use client"
 
+import { useToast } from "@/hooks/use-toast";
 import api from "@/lib/axios";
 import { useEffect, useState } from "react";
 
@@ -22,6 +23,7 @@ export default function SendMail() {
   const [interviews, setInterviews] = useState<Interview[]>([]);
 
   const [loading, setLoading] = useState(false);
+  const {toast} = useToast();
 
   const [recipientType, setRecipientType] =
     useState<"EMPLOYEE" | "CANDIDATE">(
@@ -182,15 +184,20 @@ export default function SendMail() {
         }
       );
 
-      alert("Mail sent successfully");
+     
+      toast({ variant: "default", title: "Mail sent successfully" })
 
-    } catch (error) {
+    } catch (error: any) {
+  console.log(error)
 
-      console.log(error);
-
-      alert("Failed to send mail");
-
-    } finally {
+  toast({
+    variant: "destructive",
+    title: "Failed to send mail",
+    description:
+      error?.response?.data?.message ||
+      "Something went wrong while sending the mail.",
+  })
+} finally {
 
       setLoading(false);
     }

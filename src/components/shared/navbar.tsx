@@ -17,9 +17,10 @@ import { useLogout } from "@/hooks/useLogout"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useRouter } from "next/navigation"
 import { useSelector } from "react-redux"
-import { LogOut } from "lucide-react"
+import { LogOut, MessageCircleQuestionMark } from "lucide-react"
 import IconTooltip from "../ui/IconTooltip"
 import EmployeeIDCard from "../shared/EmployeeIDCard"
+import GlobalSupportModal from "@/app/dashboard/employee/components/GlobalSupportModal"
 
 type Props = {
   role: "hr" | "founder" | "admin" | "employee"
@@ -180,29 +181,32 @@ export default function Navbar({ role }: Props) {
 
         <DropdownMenu>
   {(role === "employee" || role === "hr") ? (
-    <HoverCard>
-      <HoverCardTrigger asChild>
-        <Avatar className="cursor-pointer border hover:scale-105 transition">
-          <AvatarImage
-            src={user?.profile_image || user?.profile_url || user?.avatar}
-            className="object-cover"
-          />
-          <AvatarFallback>
-            {(user?.first_name || user?.name || role)
-              .charAt(0)
-              .toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-      </HoverCardTrigger>
+    <div className="flex items-center gap-2">
+  <HoverCard>
+    <HoverCardTrigger asChild>
+      <Avatar className="cursor-pointer border hover:scale-105 transition">
+        <AvatarImage
+          src={user?.profile_image || user?.profile_url || user?.avatar}
+          className="object-cover"
+        />
+        <AvatarFallback>
+          {(user?.first_name || user?.name || role)
+            .charAt(0)
+            .toUpperCase()}
+        </AvatarFallback>
+      </Avatar>
+    </HoverCardTrigger>
 
-      <HoverCardContent
-        align="end"
-        sideOffset={10}
-        className="w-auto border-none bg-transparent shadow-none -translate-x-6"
-      >
-        <EmployeeIDCard user={user} compact />
-      </HoverCardContent>
-    </HoverCard>
+    <HoverCardContent
+      align="end"
+      sideOffset={10}
+      className="w-auto border-none bg-transparent shadow-none -translate-x-6"
+    >
+      <EmployeeIDCard user={user} compact />
+    </HoverCardContent>
+  </HoverCard>
+  <GlobalSupportModal />
+</div>
   ) : (
     <>
       <DropdownMenuTrigger asChild>

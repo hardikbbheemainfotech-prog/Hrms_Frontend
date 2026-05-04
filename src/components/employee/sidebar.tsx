@@ -7,8 +7,8 @@ import IconTooltip from "@/components/ui/IconTooltip"
 
 const navItems = [
   { href: "/dashboard/employee", icon: Home, label: "Home" },
-   { href: "/dashboard/employee/mywork", icon:FolderInput, label: "My Work" },
-  { href: "/dashboard/employee/tasks", icon: ClipboardList, label: "Tasks" },
+  { href: "/dashboard/employee/mywork", icon:FolderInput, label: "YOur Work" },
+  { href: "/dashboard/employee/myteam", icon: ClipboardList, label: "Your Team" },
   { href: "/dashboard/employee/attendance", icon: Clock, label: "Attendance" },
   { href: "/dashboard/employee/employe-request", icon: HandHelping, label: "Employee support" },
 ]

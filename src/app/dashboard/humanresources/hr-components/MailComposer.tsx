@@ -12,6 +12,7 @@ import { NextRoundInvitationPanel } from '@/components/mail/NextRoundInvitationP
 import { OfferLetterPanel } from '@/components/mail/OfferLetterPanel'
 import { JoiningInstructionsPanel } from '@/components/mail/JoiningInstructionsPanel'
 import { GeneralEmployeePanel } from '@/components/mail/GeneralEmployeePanel'
+import { useToast } from '@/hooks/use-toast'
 
 const TABS: { key: MailKey; label: string; description: string }[] = [
   { key: 'INTERVIEW_INVITATION',          label: 'Interview invitation',  description: 'Invite candidate for interview' },
@@ -39,6 +40,7 @@ export default function MailComposer() {
   const [activeTab, setActiveTab] = useState<MailKey>('INTERVIEW_INVITATION')
   const [sending, setSending] = useState(false)
   const [formData, setFormData] = useState<Record<string, unknown>>({})
+  const {toast} = useToast();
 
   const {
     employees, interviews,
