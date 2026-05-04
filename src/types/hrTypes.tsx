@@ -65,7 +65,7 @@ export type Job = {
   title: string
   department: string
   location: string
-  employee_type: string
+  employment_type: string
   work_mode: string
   experience_min: number
   experience_max: number

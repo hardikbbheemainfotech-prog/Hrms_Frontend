@@ -2,7 +2,16 @@
 
 import React, { useEffect, useState } from "react"
 import api from "@/lib/axios"
-import dayjs from "dayjs"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Input } from "@/components/mail/shared"
+import { Button } from "@/components/ui/button"
+import { Toast } from "radix-ui"
 
 export default function AddEmployeeModal({ open, setOpen, onSuccess }: any) {
 
@@ -37,8 +46,6 @@ export default function AddEmployeeModal({ open, setOpen, onSuccess }: any) {
     }
     fetchDeps()
   }, [])
-
-  // ✅ CLOUDINARY
   const uploadImage = async (file: File) => {
     setUploading(true)
 
@@ -85,7 +92,6 @@ export default function AddEmployeeModal({ open, setOpen, onSuccess }: any) {
 
   const handleSubmit = async () => {
     if (!imageUrl) {
-      alert("Upload image first")
       return
     }
 
@@ -116,62 +122,76 @@ export default function AddEmployeeModal({ open, setOpen, onSuccess }: any) {
 
         <div className="grid grid-cols-2 gap-3">
 
-          <input placeholder="First Name"
+          <Input placeholder="First Name"
             onChange={(e) => setForm({ ...form, first_name: e.target.value })} />
 
-          <input placeholder="Last Name"
+          <Input placeholder="Last Name"
             onChange={(e) => setForm({ ...form, last_name: e.target.value })} />
 
-          <input placeholder="Email"
+          <Input placeholder="Email"
             onChange={(e) => setForm({ ...form, email: e.target.value })} />
 
-          <input placeholder="Phone"
+          <Input placeholder="Phone"
             onChange={(e) => setForm({ ...form, phone: e.target.value })} />
 
-          <input placeholder="Password"
+          <Input placeholder="Password"
             onChange={(e) => setForm({ ...form, password: e.target.value })} />
 
-          <input placeholder="Job Title"
+          <Input placeholder="Job Title"
             onChange={(e) => setForm({ ...form, job_title: e.target.value })} />
 
-          <input type="number" placeholder="Salary"
+          <Input type="number" placeholder="Salary"
             onChange={(e) => setForm({ ...form, salary: e.target.value })} />
+<Select
+  value={form.department_id}
+  onValueChange={(value) =>
+    setForm({
+      ...form,
+      department_id: value,
+    })
+  }
+>
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder="Select Department" />
+  </SelectTrigger>
 
-          <select
-            onChange={(e) => setForm({ ...form, department_id: e.target.value })}
-          >
-            <option>Select Department</option>
-            {departments.map((d) => (
-              <option key={d.department_id} value={d.department_id}>
-                {d.name}
-              </option>
-            ))}
-          </select>
-
-          <input type="date"
+  <SelectContent>
+    {departments.map((dep) => (
+      <SelectItem
+        key={dep.department_id}
+        value={String(dep.department_id)}
+      >
+        {dep.name}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
+          <Input type="date"
             onChange={(e) => setForm({ ...form, hire_date: e.target.value })} />
 
-          <input type="date"
+          <Input type="date"
             onChange={(e) => setForm({ ...form, date_of_birth: e.target.value })} />
 
         </div>
+<div className="mt-4">
+  <Input type="file" accept="image/*" onChange={handleFile} />
 
-        {/* IMAGE */}
-        <div className="mt-4">
-          <input type="file" onChange={handleFile} />
+  {uploading && <p>Uploading...</p>}
 
-          {uploading && <p>Uploading...</p>}
-
-          {preview && (
-            <img src={preview} className="w-16 h-16 rounded-full mt-2" />
-          )}
-        </div>
+  {preview && (
+    <img
+      src={preview}
+      alt="Preview"
+      className="w-16 h-16 rounded-full mt-2 object-cover border"
+    />
+  )}
+</div>
 
         <div className="flex justify-end gap-3 mt-4">
-          <button onClick={() => setOpen(false)}>Cancel</button>
-          <button onClick={handleSubmit} className="bg-[#5A0F2E] text-white px-4 py-2 rounded">
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={handleSubmit} className="bg-[#5A0F2E] text-white px-4 py-2 rounded">
             Save
-          </button>
+          </Button>
         </div>
 
       </div>

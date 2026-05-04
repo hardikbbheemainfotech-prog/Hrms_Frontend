@@ -5,6 +5,7 @@ import api from "@/lib/axios"
 import dayjs from "dayjs"
 import { Ban } from "lucide-react"
 import { RequestRow } from "@/types/hrTypes"
+import BheemaLoader from "@/components/shared/loader/loader"
 
 
 const TYPE_STYLES: any = {
@@ -85,7 +86,9 @@ export default function RequestsPage() {
                         {loading ? (
                             <tr>
                                 <td colSpan={5} className="text-center p-6 text-gray-400">
-                                    Loading...
+                                 <div className="flex justify-center items-center py-20">
+                                             <BheemaLoader />
+                                           </div>
                                 </td>
                             </tr>
                         ) : requests.length === 0 ? (

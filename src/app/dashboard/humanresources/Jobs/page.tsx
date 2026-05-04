@@ -40,8 +40,7 @@ export default function JobsPage() {
             <PlusCircle className="mr-1" size={16} />
             Post Job
           </Button>
-
-          {/* 🔥 NEW BUTTON */}
+          
           <Button
             variant={view === "interview" ? "default" : "outline"}
             onClick={() => setView("interview")}

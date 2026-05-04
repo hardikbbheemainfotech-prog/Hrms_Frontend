@@ -7,6 +7,8 @@ import relativeTime from "dayjs/plugin/relativeTime"
 import { Bell, BellOff, ChevronDown, Megaphone, Plus, X } from "lucide-react"
 import { Announcement } from "@/types/hrTypes"
 import { CreateModal } from "./AddAnn"
+import CompanySpinner from "@/components/shared/loader/spinner"
+import BheemaLoader from "@/components/shared/loader/loader"
 
 dayjs.extend(relativeTime)
 
@@ -181,13 +183,7 @@ export default function AnnouncementsPanel() {
         {/* Content */}
         {loading ? (
           <div className="flex justify-center gap-1.5 py-6">
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className="w-2 h-2 rounded-full bg-[#4e7740] animate-bounce"
-                style={{ animationDelay: `${i * 0.15}s` }}
-              />
-            ))}
+           <BheemaLoader/>
           </div>
         ) : announcements.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 gap-2">
