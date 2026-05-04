@@ -18,7 +18,6 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
 
   return (
     <div className="flex flex-col h-screen overflow-x-auto no-scrollbar bg-[#F1E9E4]">
-      {/* Navbar hamesha top par rahega */}
       <div className="z-50">
         <Navbar role="employee" />
       </div>

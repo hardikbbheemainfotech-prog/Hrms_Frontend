@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import Navbar from "@/components/shared/navbar"
 import Sidebar from "./Sidebar"
 import { setLoginTime, updateDuration } from "../../../feature/sessionSlice/employeeSessionSlice"
+import RoleGuard from "@/components/shared/RoleGuard"
 
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch()
@@ -17,8 +18,8 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
   }, [dispatch, loginTime]) 
 
  return (
+      <RoleGuard allowedRoles={["hr"]}>
      <div className="flex flex-col h-screen overflow-x-auto no-scrollbar bg-[#F1E9E4]/20">
-       {/* Navbar hamesha top par rahega */}
        <div className="z-50">
          <Navbar role="employee" />
        </div>
@@ -30,5 +31,6 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
          </main>
        </div>
      </div>
+     </RoleGuard>
    )
  }
