@@ -75,14 +75,14 @@ export  function CreateModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#F1E9E4]/30 bg-[#f4f8f2]">
           <div className="flex items-center gap-2">
-            <Megaphone className="w-4 h-4 text-[#2d6a4f]" />
+            <Megaphone className="w-4 h-4 text-[#5A0F2E]" />
             <h2 className="text-sm font-black text-[#1a3112]">New Announcement</h2>
           </div>
           <Button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#e8f0e4] transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-full transition-colors"
           >
-            <X className="w-4 h-4 text-gray-500" />
+            <X className="w-4 h-4 text-[#F1E9E4]" />
           </Button>
         </div>
 
@@ -171,14 +171,14 @@ export  function CreateModal({
           <Button
             onClick={onClose}
             variant="outline"
-            className="px-4 py-2 text-xs font-semibold text-gray-500 hover:text-gray-700 rounded-xl hover:bg-white transition-all border border-transparent hover:border-gray-200"
+            className="px-4 py-2 text-xs font-semibold text-black hover:text-[#F1E9E4] rounded-xl hover:bg-[#5A0F2E] transition-all border border-transparent hover:border-gray-200"
           >
             Cancel
           </Button>
           <Button
             onClick={handleSubmit}
             disabled={loading}
-            className="px-5 py-2 text-xs font-bold text-white bg-[#2d6a4f] hover:bg-[#1a3112] rounded-xl transition-all disabled:opacity-60 flex items-center gap-2 shadow-sm"
+            className="px-5 py-2 text-xs font-bold text-white bg-[#5A0F2E] rounded-xl transition-all disabled:opacity-60 flex items-center gap-2 shadow-sm"
           >
             {loading ? (
               <>
@@ -187,7 +187,7 @@ export  function CreateModal({
               </>
             ) : (
               <>
-                <Megaphone className="w-3 h-3" />
+                <Megaphone className="w-3 h-3 bg-" />
                 Post Announcement
               </>
             )}

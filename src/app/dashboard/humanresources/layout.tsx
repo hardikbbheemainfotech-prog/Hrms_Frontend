@@ -23,7 +23,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
          <Navbar role="employee" />
        </div>
  
-       <div className="flex flex-1 overflow-hidden">
+       <div className="flex flex-1  overflow-hidden">
          <Sidebar />
          <main className="flex-1 bg-[#F1E9E4]/70 overflow-y-auto p-0 no-scrollbar">
            {children}

@@ -11,12 +11,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import AttendanceCharts from "@/components/shared/AttendanceChart"
-import CircleStat from "@/components/ui/Circle_Progress"
-import { Cake, CloudSun, Moon, PartyPopper, SunDim, Users, CalendarCheck, ClipboardList, Bell } from "lucide-react"
+import { Cake, CloudSun, Moon, PartyPopper, SunDim, Users, CalendarCheck, ClipboardList,CalendarDays, UsersRound } from "lucide-react"
 import RoleGuard from "@/components/shared/RoleGuard"
 import AnnouncementsPanel from "@/app/dashboard/humanresources/hr-components/AnnouncementsPanel"
 import { BirthdayCard } from "../hr-components/BirthdayCard"
 import { AttendanceRow, Employee, SummaryRow } from "@/types/hrTypes"
+import CompanySpinner from "@/components/shared/loader/spinner"
 
 // ─── Utils ─────────────────────────────────
 function useDebounce<T>(value: T, delay = 400) {
@@ -126,6 +126,13 @@ export default function AttendancePage() {
     } catch { setEmployees([]) }
   }
 
+  const employeeMap = useMemo(() => {
+  return employees.reduce((acc: Record<string, any>, emp: any) => {
+    acc[String(emp.employee_id)] = emp
+    return acc
+  }, {})
+}, [employees])
+
   const fetchAttendance = async () => {
     setLoading(true)
     try {
@@ -213,7 +220,7 @@ export default function AttendancePage() {
 
           {/* date badge */}
           <div className="ml-auto flex items-center gap-2 text-xs font-semibold text-[#5A0F2E] bg-[#F1E9E4] px-4 py-2 rounded-xl border border-[#c27d9a]">
-            📅 {dayjs().format("dddd, DD MMMM YYYY")}
+            <CalendarDays/> {dayjs().format("dddd, DD MMMM YYYY")}
           </div>
         </div>
 
@@ -243,7 +250,7 @@ export default function AttendancePage() {
               </p>
             </div>
             <div className="flex items-center gap-2 text-sm font-semibold text-[#5A0F2E] bg-[#F1E9E4] px-4 py-2 rounded-xl border border-[#c27d9a]">
-              <span>👥</span> Total Records
+              <span><UsersRound size={18}/></span> Total Records
               <span className="bg-[#5A0F2E] text-white text-xs px-2 py-0.5 rounded-lg">{totalCount}</span>
             </div>
           </div>
@@ -287,13 +294,9 @@ export default function AttendancePage() {
           </div>
         )}
 
-        {/* ── ANNOUNCEMENTS ────────────────────────────────────────────────── */}
         <AnnouncementsPanel />
 
-        {/* ── CHARTS ───────────────────────────────────────────────────────── */}
         <AttendanceCharts trend={trend} />
-
-        {/* ── ATTENDANCE TABLE ─────────────────────────────────────────────── */}
         <div className="bg-white rounded-2xl shadow-sm border border-[#F1E9E4]/30 overflow-hidden">
           {/* table header */}
           <div className="px-5 py-4 border-b border-[#F1E9E4]/20 flex items-center justify-between bg-[#f4f8f2]">
@@ -319,10 +322,9 @@ export default function AttendancePage() {
                   <tr>
                     <td colSpan={5} className="text-center py-12">
                       <div className="flex justify-center gap-1.5">
-                        {[0, 1, 2].map((i) => (
-                          <div key={i} className="w-2 h-2 rounded-full bg-[#5A0F2E] animate-bounce"
-                            style={{ animationDelay: `${i * 0.15}s` }} />
-                        ))}
+                        
+                        <CompanySpinner/>
+                        
                       </div>
                     </td>
                   </tr>
@@ -335,16 +337,29 @@ export default function AttendancePage() {
                 ) : (
                   attendance.map((a, i) => (
                     <tr key={i} className="border-t border-gray-50 hover:bg-[#f9fbf8] transition-colors group">
-                      <td className="px-5 py-3.5">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#5A0F2E] to-[#2d6a4f] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
-                            {(a.first_name?.[0] || "") + (a.last_name?.[0] || "")}
-                          </div>
-                          <span className="font-semibold text-gray-800">
-                            {a.first_name} {a.last_name}
-                          </span>
-                        </div>
-                      </td>
+                    
+                 <td className="px-5 py-3.5">
+                 <div className="flex items-center gap-3">
+    
+                   {employeeMap[String(a.employee_id)]?.profile_image ? (
+                     <img
+                src={employeeMap[String(a.employee_id)].profile_image}
+                  alt={`${a.first_name} ${a.last_name}`}
+                    className="w-9 h-9 rounded-full object-cover border border-gray-200 shadow-sm flex-shrink-0"
+                 />
+               ) : (
+                 <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#5A0F2E] to-[#2d6a4f] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                     {a.first_name?.[0]}
+                     {a.last_name?.[0]}
+                   </div>
+                         )}
+
+    <span className="font-semibold text-gray-800">
+      {a.first_name} {a.last_name}
+    </span>
+
+  </div>
+</td>
                       <td className="px-5 py-3.5 text-gray-500 text-xs">
                         {a.check_in ? dayjs(a.check_in).format("DD MMM YYYY") : "—"}
                       </td>

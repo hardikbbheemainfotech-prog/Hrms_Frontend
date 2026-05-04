@@ -27,11 +27,11 @@ export default function Sidebar() {
   return (
   
      <div className="h-screen flex bg-[#F1E9E4]/70 items-center px-4">
-      <div className="w-20 bg-white/70 backdrop-blur-xl shadow-xl rounded-3xl flex flex-col items-center gap-6 border border-gray-200 py-8">
+      <div className="w-20 bg-white/70 backdrop-blur-xl shadow-xl rounded-3xl flex flex-col items-center gap-1 border border-gray-200  py-8">
 
         <div className="flex-1" />
 
-        <div className="flex flex-col items-center gap-6">
+        <div className="flex flex-col items-center gap-4">
           {navItems.map((item, index) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;

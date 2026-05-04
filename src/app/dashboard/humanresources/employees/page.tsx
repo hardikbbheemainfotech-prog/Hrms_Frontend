@@ -3,6 +3,14 @@ import { useEffect, useState } from "react"
 import api from "@/lib/axios"
 import IDCard from "@/components/ui/IDCard"
 import AddEmployeeModal from "../addEmployee/page"
+import BheemaLoader from "@/components/shared/loader/loader"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function EmployeePage() {
   const [employees, setEmployees] = useState<any[]>([])
@@ -72,31 +80,39 @@ export default function EmployeePage() {
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 min-w-[180px] px-4 py-2 rounded-lg border border-[#c0c0d8] text-sm bg-white text-[#1a1a2e] outline-none focus:border-[#4040c8]"
         />
-        <select
-          value={deptFilter}
-          onChange={(e) => setDeptFilter(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-[#c0c0d8] text-sm bg-white text-[#1a1a2e] outline-none focus:border-[#4040c8]"
-        >
-          <option value="">All Departments</option>
-          {departments.map((d) => (
-            <option key={d} value={d}>
-              {d}
-            </option>
-          ))}
-        </select>
+      <Select
+  value={deptFilter || "all"}
+  onValueChange={(value) =>
+    setDeptFilter(value === "all" ? "" : value)
+  }
+>
+  <SelectTrigger className="w-[220px] rounded-xl border border-[#c0c0d8] bg-white text-[#1a1a2e] focus:ring-2 focus:ring-[#4040c8]/30 focus:border-[#4040c8]">
+    <SelectValue placeholder="All Departments" />
+  </SelectTrigger>
+
+  <SelectContent>
+    <SelectItem value="all">All Departments</SelectItem>
+
+    {departments?.length > 0 ? (
+      departments.map((dept, index) => (
+        <SelectItem key={index} value={dept}>
+          {dept}
+        </SelectItem>
+      ))
+    ) : (
+      <SelectItem value="no-data" disabled>
+        No Departments Found
+      </SelectItem>
+    )}
+  </SelectContent>
+</Select>
       </div>
 
       {/* Cards */}
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <div className="flex gap-2">
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className="w-2.5 h-2.5 rounded-full bg-[#4040c8] animate-bounce"
-                style={{ animationDelay: `${i * 0.15}s` }}
-              />
-            ))}
+            <BheemaLoader/>
           </div>
         </div>
       ) : filtered.length === 0 ? (
