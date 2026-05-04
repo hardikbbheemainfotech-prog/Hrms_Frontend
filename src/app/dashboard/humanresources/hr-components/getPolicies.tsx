@@ -5,6 +5,7 @@ import api from "@/lib/axios"
 import dayjs from "dayjs"
 import { FileText } from "lucide-react"
 import { Policy } from "@/types/hrTypes"
+import BheemaLoader from "@/components/shared/loader/loader"
 
 
 
@@ -46,9 +47,10 @@ export default function PoliciesPage() {
 
             {/* Content */}
             {loading ? (
-                <div className="text-center text-gray-400 py-10">
-                    Loading policies...
-                </div>
+                  <div className="flex mt-10 justify-center items-center">
+                            <BheemaLoader/>
+                          </div>
+               
             ) : policies.length === 0 ? (
                 <div className="text-center text-gray-400 py-10">
                     No policies found

@@ -25,16 +25,18 @@ export function NextRoundInvitationPanel({ interviews, loadingInterviews, getInt
 
   useEffect(() => {
     if (!selectedInterviewId) return
-    const iv = getInterviewById(Number(selectedInterviewId))
+    const iv = interviews.find((i) => String(i.interview_id) === String(selectedInterviewId))
     if (!iv) return
     const interviewer = getEmployeeById(iv.interviewer_id)
     const d = new Date(iv.scheduled_at)
     setForm((p) => ({
       ...p,
       candidate_name: iv.candidate_name,
+      candidate_email: iv.candidate_email,
+      position: iv.job_title ?? "",
       last_round_type: iv.interview_type,
       last_interview_date: d.toISOString().split('T')[0],
-      last_interviewer_name: interviewer ? `${interviewer.first_name} ${interviewer.last_name}` : '',
+      last_interviewer_name: `${iv.first_name} ${iv.last_name}`,
       venue: iv.location ?? '',
       interview_mode: iv.interview_mode,
     }))

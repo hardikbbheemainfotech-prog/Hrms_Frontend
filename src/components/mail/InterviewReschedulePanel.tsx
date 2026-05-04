@@ -24,11 +24,13 @@ export function InterviewReschedulePanel({ interviews, loadingInterviews, getInt
 
   useEffect(() => {
     if (!selectedInterviewId) return
-    const iv = getInterviewById(Number(selectedInterviewId))
+    const iv = interviews.find((i) => String(i.interview_id) === String(selectedInterviewId))
     if (!iv) return
     setForm((p) => ({
       ...p,
       candidate_name: iv.candidate_name,
+      candidate_email: iv.candidate_email,
+      job_title: iv.job_title ?? '',
       interview_mode: iv.interview_mode,
       meeting_link: iv.location ?? '',
     }))

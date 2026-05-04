@@ -11,35 +11,45 @@ interface Props {
   loadingInterviews: boolean
   getInterviewById: (id: number) => Interview | undefined
   getEmployeeById: (id: number) => Employee | undefined
+  onFormChange: (data: Record<string, unknown>) => void  // ← new
 }
 
-export function InterviewInvitationPanel({ interviews, loadingInterviews, getInterviewById, getEmployeeById }: Props) {
+const INITIAL_FORM = {
+  candidate_name: '', candidate_email: '', job_title: '', department: '',
+  interview_date: '', start_time: '', duration: '60',
+  interview_mode: 'Online (Video call)', interview_type: 'Technical round',
+  meeting_link: '', location: '', interviewer_name: '',
+  documents: '', instructions: '', confirmation_deadline: '', hr_contact: '',
+}
+
+export function InterviewInvitationPanel({ interviews, loadingInterviews, onFormChange }: Props) {
   const [selectedInterviewId, setSelectedInterviewId] = useState('')
-  const [form, setForm] = useState({
-    candidate_name: '', candidate_email: '', job_title: '', department: '',
-    interview_date: '', start_time: '', duration: '60',
-    interview_mode: 'Online (Video call)', interview_type: 'Technical round',
-    meeting_link: '', location: '', interviewer_name: '',
-    documents: '', instructions: '', confirmation_deadline: '', hr_contact: '',
-  })
+  const [form, setForm] = useState(INITIAL_FORM)
+
+  // notify parent whenever form changes
+  useEffect(() => {
+    onFormChange(form)
+  }, [form])
 
   useEffect(() => {
-    if (!selectedInterviewId) return
-    const iv = getInterviewById(Number(selectedInterviewId))
+    if (!selectedInterviewId || interviews.length === 0) return
+    const iv = interviews.find((i) => String(i.interview_id) === String(selectedInterviewId))
     if (!iv) return
-    const interviewer = getEmployeeById(iv.interviewer_id)
     const d = new Date(iv.scheduled_at)
     setForm((p) => ({
       ...p,
       candidate_name: iv.candidate_name,
+      candidate_email: iv.candidate_email,
+      job_title: iv.job_title ?? '',
       interview_type: iv.interview_type,
       interview_mode: iv.interview_mode,
       interview_date: d.toISOString().split('T')[0],
       start_time: d.toTimeString().slice(0, 5),
       location: iv.location ?? '',
-      interviewer_name: interviewer ? `${interviewer.first_name} ${interviewer.last_name}` : '',
+      meeting_link: iv.location ?? '',
+      interviewer_name: iv.first_name ? `${iv.first_name} ${iv.last_name}` : '',
     }))
-  }, [selectedInterviewId, getInterviewById, getEmployeeById])
+  }, [selectedInterviewId, interviews])
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm((p) => ({ ...p, [k]: e.target.value }))
