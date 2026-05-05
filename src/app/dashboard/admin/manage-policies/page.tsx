@@ -1,5 +1,6 @@
 'use client';
 
+import CompanySpinner from '@/components/shared/loader/spinner';
 import RoleGuard from '@/components/shared/RoleGuard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -167,32 +168,50 @@ export default function AddPolicyPage() {
           </tr>
         </thead>
 
-        <tbody className="divide-y divide-gray-50">
-          {policies.map((policy) => (
-            <tr
-              key={policy.policy_key}
-              className="hover:bg-gray-50/30 transition-colors"
-            >
-              <td className="px-6 py-4">
-                <span className="font-bold text-gray-700">
-                  {policy.policy_key}
-                </span>
-              </td>
+      <tbody className="divide-y divide-gray-50">
+  {loading ? (
+    <tr>
+      <td colSpan={3} className="px-6 py-8 text-center">
+        <div className="flex justify-center items-center gap-3">
+        <CompanySpinner/>
+        </div>
+      </td>
+    </tr>
+  ) : policies.length > 0 ? (
+    policies.map((policy) => (
+      <tr
+        key={policy.policy_key}
+        className="hover:bg-gray-50/30 transition-colors"
+      >
+        <td className="px-6 py-4">
+          <span className="font-bold text-gray-700">
+            {policy.policy_key}
+          </span>
+        </td>
 
-              <td className="px-6 py-4 text-center">
-                <span className="font-semibold uppercase">
-                  {policy.policy_value}
-                </span>
-              </td>
+        <td className="px-6 py-4 text-center">
+          <span className="font-semibold uppercase">
+            {policy.policy_value}
+          </span>
+        </td>
 
-              <td className="px-6 py-4 text-left">
-                <span className=" font-medium">
-                  {policy.description}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <td className="px-6 py-4 text-left">
+          <span className="font-medium">
+            {policy.description}
+          </span>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan={3} className="px-6 py-8 text-center">
+        <span className="text-gray-500 font-medium">
+          No policies found.
+        </span>
+      </td>
+    </tr>
+  )}
+</tbody>
       </table>
 
       {policies.length === 0 && (

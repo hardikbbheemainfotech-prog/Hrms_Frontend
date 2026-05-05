@@ -22,8 +22,8 @@ export default function FounderDashboard() {
 
   return (
     <>
-    <RoleGuard allowedRoles={["systemadmin"]} >
-    <Navbar role="founder" />
+    {/* <RoleGuard allowedRoles={["systemadmin"]} > */}
+  
 
     <div className="p-8 bg-[#F1E9E4]/70 min-h-screen space-y-8">
       {/* Header Section */}
@@ -58,7 +58,7 @@ export default function FounderDashboard() {
         ))}
       </div>
     </div>
-    </RoleGuard>
+    {/* </RoleGuard> */}
     </>
   )
 }
