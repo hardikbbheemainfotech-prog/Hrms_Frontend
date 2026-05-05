@@ -1,30 +1,45 @@
 "use client"
 
 import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import Navbar from "@/components/shared/navbar"
 import Sidebar from "./sidebar"
-import { setLoginTime, updateDuration } from "../../../feature/sessionSlice/employeeSessionSlice"
 
-export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
+import {
+  initializeSession,
+  updateDuration,
+} from "../../../feature/sessionSlice/employeeSessionSlice"
+
+export default function EmployeeLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const dispatch = useDispatch()
-  const { loginTime } = useSelector((state: any) => state.employeeSession)
 
   useEffect(() => {
-    if (!loginTime) dispatch(setLoginTime(Date.now()))
-    const interval = setInterval(() => dispatch(updateDuration()), 1000)
+    // ✅ Same day → continue old session hours
+    // ✅ New day → reset automatically
+    dispatch(initializeSession())
+
+    // ✅ Update working timer every second
+    const interval = setInterval(() => {
+      dispatch(updateDuration())
+    }, 1000)
+
     return () => clearInterval(interval)
-  }, [dispatch, loginTime]) 
+  }, [dispatch])
 
   return (
     <div className="flex flex-col h-screen overflow-x-auto no-scrollbar bg-[#F1E9E4]/20">
-      {/* Navbar hamesha top par rahega */}
+      {/* Navbar always on top */}
       <div className="z-50">
         <Navbar role="admin" />
       </div>
 
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
+
         <main className="flex-1 bg-[#F1E9E4]/70 overflow-y-auto p-0 no-scrollbar">
           {children}
         </main>

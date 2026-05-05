@@ -50,18 +50,18 @@ export default function EmployeeIDCard({
         `}
       >
         {/* Header */}
-        <div className="bg-[#1a3112] px-3 py-3 text-center">
-          <p className="text-white font-semibold text-xs tracking-widest uppercase">
+        <div className="bg-[#5A0F2E] px-3 py-3 text-center">
+          <p className="text-[#F1E9E4] font-semibold text-xs tracking-widest uppercase">
             Bheema Infotech
           </p>
-          <p className="text-[#a8c89e] text-[9px] tracking-wider uppercase">
+          <p className="text-[#F1E9E4] text-[9px] tracking-wider uppercase">
             Pvt. Ltd.
           </p>
         </div>
 
         {/* Profile */}
         <div className="flex flex-col items-center pt-5 px-3">
-          <div className="relative w-20 h-[90px] bg-[#4e7740] rounded-b-[40px] flex items-end justify-center pb-1 shadow-inner">
+          <div className="relative w-20 h-[90px] bg-[#5A0F2E] rounded-b-[40px] flex items-end justify-center pb-1 shadow-inner">
             {user.profile_image || user.avatar ? (
               <img
                 src={user.profile_image || user.avatar}
@@ -75,7 +75,7 @@ export default function EmployeeIDCard({
             )}
           </div>
 
-          <p className="mt-3 text-[#1a3112] font-semibold text-[15px] text-center leading-tight">
+          <p className="mt-3 text-[#5A0F2E] font-semibold text-[15px] text-center leading-tight">
             {name}
           </p>
 
@@ -120,7 +120,7 @@ export default function EmployeeIDCard({
           <div className="w-10 h-1.5 bg-[#1a3112] rounded-full opacity-80" />
         </div>
 
-        <p className="text-center text-[9px] text-[#4e7740] tracking-wide py-3">
+        <p className="text-center text-[9px] text-[#5A0F2E] tracking-wide py-3">
           bheemainfotech.in
         </p>
       </div>

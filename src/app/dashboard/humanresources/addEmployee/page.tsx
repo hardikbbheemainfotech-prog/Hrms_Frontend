@@ -90,26 +90,61 @@ export default function AddEmployeeModal({ open, setOpen, onSuccess }: any) {
     }
   }
 
-  const handleSubmit = async () => {
-    if (!imageUrl) {
-      return
-    }
+const handleSubmit = async () => {
+  if (!imageUrl) {
+    console.error("Profile image is required")
+    return
+  }
 
-    try {
-      await api.post("/hr/add_employee", {
-        ...form,
-        salary: Number(form.salary || 0),
-        profile_image: imageUrl,
-        profile_public_key: publicId,
-      })
+  try {
+    await api.post("/hr/add_employee", {
+      ...form,
+      salary: Number(form.salary || 0),
+      profile_image: imageUrl,
+      profile_public_key: publicId,
+    })
 
-      onSuccess()
-      setOpen(false)
+    onSuccess()
+    setOpen(false)
 
-    } catch (err) {
-      console.error(err)
+    setForm({
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone: "",
+      password: "",
+      hire_date: "",
+      job_title: "",
+      department_id: "",
+      salary: "",
+      date_of_birth: "",
+    })
+
+    setImageUrl("")
+    setPublicId("")
+    setPreview(null)
+
+  } catch (err: any) {
+    console.error(
+      err.response?.data?.message || "Failed to add employee"
+    )
+
+    if (publicId) {
+      try {
+        await api.post("/delete-file", {
+          public_id: publicId,
+        })
+
+        console.log("Uploaded image deleted successfully")
+      } catch (deleteErr) {
+        console.error(
+          "Employee creation failed, but image cleanup also failed",
+          deleteErr
+        )
+      }
     }
   }
+}
 
   if (!open) return null
 

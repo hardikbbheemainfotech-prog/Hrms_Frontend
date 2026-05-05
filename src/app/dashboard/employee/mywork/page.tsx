@@ -53,10 +53,14 @@ export default function PostActivity() {
     try {
       const res = await api.post("/employee/daily_task", data)
       if (res.data.success) {
-        toast({ title: "Success", description: "Daily task added successfully!" })
-        ;(e.target as HTMLFormElement).reset()
-        setErrors({})
-      }
+  localStorage.setItem("dailyTaskSubmitted", "true")
+  localStorage.setItem("dailyTaskDate", new Date().toDateString())
+
+  toast({
+    title: "Success",
+    description: "Daily task added successfully!",
+  })
+}
     } catch (err: any) {
       toast({ variant: "destructive", title: "Error", description: err.response?.data?.message || "Failed to add task" })
     } finally {

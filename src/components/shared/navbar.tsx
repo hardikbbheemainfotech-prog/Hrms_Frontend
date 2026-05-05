@@ -6,7 +6,6 @@ import {
   HoverCardTrigger,
   HoverCardContent,
 } from "@/components/ui/hover-card"
-
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -17,51 +16,98 @@ import { useLogout } from "@/hooks/useLogout"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useRouter } from "next/navigation"
 import { useSelector } from "react-redux"
-import { LogOut, MessageCircleQuestionMark } from "lucide-react"
+import { LogOut} from "lucide-react"
 import IconTooltip from "../ui/IconTooltip"
 import EmployeeIDCard from "../shared/EmployeeIDCard"
 import GlobalSupportModal from "@/app/dashboard/employee/components/GlobalSupportModal"
+import { useToast } from "@/hooks/use-toast"
 
 type Props = {
   role: "hr" | "founder" | "admin" | "employee"
 }
 
 export default function Navbar({ role }: Props) {
+  const [canLogout, setCanLogout] = React.useState(role !== "employee")
   const router = useRouter()
   const { user, isInitialized } = useSelector((state: any) => state.auth)
   const logoutAction = useLogout();
-
   const [, setTick] = React.useState(0)
+  const {toast} = useToast();
+  
+  const hasSubmittedTodayTask = () => {
+  const submitted = localStorage.getItem("dailyTaskSubmitted")
+  const submittedDate = localStorage.getItem("dailyTaskDate")
+  const today = new Date().toDateString()
 
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setTick((prev) => prev + 1)
-    }, 1000)
+  return submitted === "true" && submittedDate === today
+}
+ 
 
-    return () => clearInterval(interval)
-  }, [])
 
-  React.useEffect(() => {
-    const today = new Date().toDateString()
+const handleProtectedLogout = () => {
+  if (role === "employee" && !hasSubmittedTodayTask()) {
+    toast({
+      variant: "destructive",
+      title: "Task Required",
+      description: "Please submit your daily task before logout.",
+    })
+    return
+  }
 
-    if (user?.loginDate && user.loginDate !== today) {
-      logoutAction()
-      return
-    }
+  logoutAction()
+}
 
-    const now = new Date()
-    const nextMidnight = new Date()
 
-    nextMidnight.setHours(24, 0, 0, 0)
+React.useEffect(() => {
+  const interval = setInterval(() => {
+    setTick((prev) => prev + 1)
+  }, 1000)
 
-    const msUntilMidnight = nextMidnight.getTime() - now.getTime()
+  return () => clearInterval(interval)
+}, [])
 
-    const midnightTimer = setTimeout(() => {
-      logoutAction()
-    }, msUntilMidnight)
+React.useEffect(() => {
+  if (role !== "employee") {
+    setCanLogout(true)
+    return
+  }
 
-    return () => clearTimeout(midnightTimer)
-  }, [user?.loginDate, logoutAction])
+  setCanLogout(hasSubmittedTodayTask())
+}, [role, setTick])
+
+
+
+React.useEffect(() => {
+  const storedDate = localStorage.getItem("dailyTaskDate")
+  const today = new Date().toDateString()
+
+  if (storedDate !== today) {
+    localStorage.removeItem("dailyTaskSubmitted")
+    localStorage.removeItem("dailyTaskDate")
+  }
+}, [])
+
+React.useEffect(() => {
+  const today = new Date().toDateString()
+
+  if (user?.loginDate && user.loginDate !== today) {
+    logoutAction()
+    return
+  }
+
+  const now = new Date()
+  const nextMidnight = new Date()
+
+  nextMidnight.setHours(24, 0, 0, 0)
+
+  const msUntilMidnight = nextMidnight.getTime() - now.getTime()
+
+  const midnightTimer = setTimeout(() => {
+    logoutAction()
+  }, msUntilMidnight)
+
+  return () => clearTimeout(midnightTimer)
+}, [user?.loginDate, logoutAction])
 
   const loginTime = user?.loginTime
   const elapsed = loginTime ? Date.now() - loginTime : 0
@@ -96,6 +142,8 @@ export default function Navbar({ role }: Props) {
   }
 
   const { date, time } = formatCurrentDateTime()
+
+  
 
   if (!isInitialized) {
     return (
@@ -137,19 +185,21 @@ export default function Navbar({ role }: Props) {
                   {formatTime(remainingTime)}
                 </span>
 
-                <IconTooltip
-                  label="Check Out"
-                  icon={
-                    <span
-                      onClick={()=> {
-                        logoutAction();
-                      }}
-                      className="ripple cursor-pointer px-3 py-2 rounded-xl text-sm text-red-500 border border-transparent hover:bg-red-50 hover:border-red-500 transition-all duration-300 flex items-center justify-center"
-                    >
-                      <LogOut size={16} />
-                    </span>
-                  }
-                />
+             <IconTooltip
+  label={canLogout ? "Check Out" : "Submit daily task first"}
+  icon={
+    <span
+      onClick={handleProtectedLogout}
+      className={`ripple px-3 py-2 rounded-xl text-sm border transition-all duration-300 flex items-center justify-center ${
+        canLogout
+          ? "cursor-pointer text-red-500 hover:bg-red-50 hover:border-red-500"
+          : "cursor-not-allowed text-gray-400 bg-gray-100"
+      }`}
+    >
+      <LogOut size={16} />
+    </span>
+  }
+/>
               </div>
             </div>
           ) : (

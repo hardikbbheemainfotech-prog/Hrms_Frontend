@@ -24,8 +24,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-import { Loader2, HandHelping } from "lucide-react"
+import { Loader2, HandHelping, Info } from "lucide-react"
 import { cn } from "@/lib/utils"
+import IconTooltip from "@/components/ui/IconTooltip"
 
 type GlobalSupportModalProps = {
   trigger?: ReactNode
@@ -110,17 +111,26 @@ export default function GlobalSupportModal({
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        {trigger ?? (
-          <button className="fixed bottom-2 right-70 z-50 bg-[#5A0F2E] text-white w-11 h-11 rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition">
-            <HandHelping size={18} />
-          </button>
-        )}
-      </DialogTrigger>
+     <DialogTrigger asChild>
+  <div className="fixed bottom-3 right-70 z-50">
+    <IconTooltip
+      label="Employee Support"
+      icon={
+        <Button
+          type="button"
+          size="icon"
+          className="bg-[#5A0F2E] text-white w-10 h-10 rounded-full shadow-xl hover:scale-110 transition"
+        >
+          <Info size={20} />
+        </Button>
+      }
+    />
+  </div>
+</DialogTrigger>
 
       <DialogContent className="sm:max-w-xl rounded-3xl p-0 overflow-hidden">
 
-        <DialogHeader className="bg-[#5A0F2E] text-white p-5">
+        <DialogHeader className="bg-[#5A0F2E] text-white p-4">
           <DialogTitle className="flex items-center gap-2">
             <HandHelping size={18} />
             Employee Support
@@ -132,8 +142,8 @@ export default function GlobalSupportModal({
           {/* Request Type */}
           <div>
             <label className="text-sm font-semibold">Request Type</label>
-
-            <Select
+         
+               <Select
               value={requestType}
               onValueChange={(value) => {
                 setRequestType(value)
@@ -150,6 +160,7 @@ export default function GlobalSupportModal({
                 <SelectItem value="complaint">Complaint</SelectItem>
               </SelectContent>
             </Select>
+           
           </div>
 
           {/* Subject */}
@@ -158,6 +169,7 @@ export default function GlobalSupportModal({
 
             <Input
               name="title"
+              placeholder="Your Subject"
               className={cn("mt-2 h-11 rounded-xl", errorClass("title"))}
               onChange={() => clearError("title")}
             />
@@ -169,6 +181,7 @@ export default function GlobalSupportModal({
 
             <Textarea
               name="description"
+              placeholder="Your Message"
               className={cn(
                 "mt-2 min-h-[140px] rounded-2xl",
                 errorClass("description")
