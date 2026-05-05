@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useToast } from "@/hooks/use-toast"
 
 export default function PostJobPage() {
   const [form, setForm] = useState({
@@ -34,6 +35,7 @@ export default function PostJobPage() {
   })
 
   const [loading, setLoading] = useState(false)
+  const {toast} = useToast();
   
 
   const handleChange = (key: string, value: any) => {
@@ -44,7 +46,11 @@ export default function PostJobPage() {
     setLoading(true)
     try {
       await api.post("/job/post_job", form)
-      alert("Job posted successfully")
+    toast({
+      variant: "default",
+      title: "Success",
+      description: "Daily task added successfully!",
+       })
 
       setForm({
         title: "",
@@ -62,7 +68,12 @@ export default function PostJobPage() {
         openings: ""
       })
     } catch (err: any) {
-      alert(err?.response?.data?.message || "Error posting job")
+      toast({
+      variant: "destructive",
+      title: "Fail",
+      description: "Fail to Post New Job",
+       })
+
     } finally {
       setLoading(false)
     }

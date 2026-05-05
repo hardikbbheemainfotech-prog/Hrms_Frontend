@@ -24,13 +24,19 @@ export default function IconTooltip({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <button
-            type="button"
-            onClick={onClick}
-            className={className}
-          >
-            {icon}
-          </button>
+         <span
+  onClick={onClick}
+  className={className}
+  role="button"
+  tabIndex={0}
+  onKeyDown={(e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      onClick?.()
+    }
+  }}
+>
+  {icon}
+</span>
         </TooltipTrigger>
 
         <TooltipContent>

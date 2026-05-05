@@ -10,7 +10,6 @@ const navItems = [
   { href: "/dashboard/employee/mywork", icon:FolderInput, label: "YOur Work" },
   { href: "/dashboard/employee/myteam", icon: ClipboardList, label: "Your Team" },
   { href: "/dashboard/employee/attendance", icon: Clock, label: "Attendance" },
-  { href: "/dashboard/employee/employe-request", icon: HandHelping, label: "Employee support" },
 ]
 
 export default function Sidebar() {
