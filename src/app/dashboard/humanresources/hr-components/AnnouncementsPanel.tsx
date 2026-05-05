@@ -171,7 +171,7 @@ export default function AnnouncementsPanel() {
 
           <button
             onClick={() => setModalOpen(true)}
-            className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#5A0F2E] hover:bg-[#1a3112] px-3 py-2 rounded-xl transition-all shadow-sm active:scale-95"
+            className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#5A0F2E] hover:bg-[#5A0F2E]/90 px-3 py-2 rounded-xl transition-all shadow-sm active:scale-95"
           >
             <Plus className="w-3.5 h-3.5" />
             New

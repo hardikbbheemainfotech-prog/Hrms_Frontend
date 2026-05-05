@@ -2,24 +2,55 @@
 
 import { useEffect, useState } from "react"
 import api from "@/lib/axios"
-import {  CalendarDays, Briefcase, ClipboardList, User } from "lucide-react"
 import CompanySpinner from "@/components/shared/loader/spinner"
+import { Input } from "@/components/ui/input"
 
-export default function ManagerTasksPage() {
-  const [tasks, setTasks] = useState<any[]>([])
+type Task = {
+  task_id: string
+  first_name: string
+  last_name: string
+  project_name: string
+  task_title: string
+  description: string
+  task_date: string
+  email: string
+}
+
+export default function AllEmployeeTasks() {
+  const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
+
+  const todayObj = new Date()
+  const lastWeekObj = new Date()
+  lastWeekObj.setDate(todayObj.getDate() - 6)
+
+  const today = todayObj.toISOString().split("T")[0]
+  const lastWeek = lastWeekObj.toISOString().split("T")[0]
+
+  const [startDate, setStartDate] = useState(lastWeek)
+  const [endDate, setEndDate] = useState(today)
 
   const fetchTasks = async () => {
     try {
       setLoading(true)
 
-      const res = await api.get("/admin/tasks")
+      const res = await api.get("/core/tasks", {
+        params: {
+          filter: "custom",
+          from: startDate,
+          to: endDate,
+        },
+      })
 
       if (res.data?.success) {
+        // 👉 NO EMAIL FILTER HERE (ALL EMPLOYEES)
         setTasks(res.data.data || [])
+      } else {
+        setTasks([])
       }
     } catch (error) {
       console.error("Failed to fetch tasks:", error)
+      setTasks([])
     } finally {
       setLoading(false)
     }
@@ -27,103 +58,120 @@ export default function ManagerTasksPage() {
 
   useEffect(() => {
     fetchTasks()
-  }, [])
+  }, [startDate, endDate])
 
   return (
-    <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 shadow-lg space-y-6">
-      
+    <div className="p-6 space-y-6">
+
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            Task Management
+            All Employee Tasks
           </h1>
           <p className="text-muted-foreground">
-            Monitor employee assigned tasks and progress.
+            View all employees tasks with date filtering.
           </p>
         </div>
 
-        <div className="bg-white/70 px-4 py-2 rounded-full font-bold shadow-sm">
-          Total Tasks: {tasks.length}
+        {/* Date Filters */}
+        <div className="flex flex-col sm:flex-row gap-3 bg-white/80 p-3 rounded-2xl border shadow-sm">
+          <div className="flex flex-col">
+            <label className="text-xs text-gray-500 font-medium mb-1">
+              From
+            </label>
+            <Input
+              type="date"
+              value={startDate}
+              max={endDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="rounded-xl"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-xs text-gray-500 font-medium mb-1">
+              To
+            </label>
+            <Input
+              type="date"
+              min={startDate}
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="rounded-xl"
+            />
+          </div>
         </div>
       </div>
 
-      {/* Loading */}
-      {loading ? (
-        <div className="flex justify-center items-center h-60">
-          <CompanySpinner />
-        </div>
-      ) : (
-        <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-gray-100 shadow-sm overflow-hidden no-scrollbar">
-          <div className="overflow-x-auto no-scrollbar">
-            <table className="w-full text-sm text-left">
-              
-              <thead className="bg-gray-50/50 border-b text-xs font-bold text-gray-500 uppercase tracking-wider">
-                <tr>
-                   <th className="px-6 py-4">Employee name</th>
-                  <th className="px-6 py-4">Project</th>
-                  <th className="px-6 py-4">Task Title</th>
-                  <th className="px-6 py-4">Description</th>
-                  <th className="px-6 py-4">Task Date</th>
-                </tr>
-              </thead>
+      {/* Table */}
+      <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto no-scrollbar">
 
-              <tbody className="divide-y divide-gray-50">
-                {tasks.map((task) => (
+          <table className="w-full text-sm text-left">
+
+            <thead className="bg-gray-50/50 border-b text-xs font-bold text-gray-500 uppercase tracking-wider">
+              <tr>
+                <th className="px-6 py-4">Employee</th>
+                <th className="px-6 py-4">Project</th>
+                <th className="px-6 py-4">Task Title</th>
+                <th className="px-6 py-4">Description</th>
+                <th className="px-6 py-4 text-right">Task Date</th>
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-gray-50">
+
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className="py-20 text-center">
+                    <CompanySpinner />
+                    <p className="text-[#5A0F2E] mt-2 font-medium">
+                      Loading all tasks...
+                    </p>
+                  </td>
+                </tr>
+              ) : tasks.length > 0 ? (
+                tasks.map((task) => (
                   <tr
                     key={task.task_id}
                     className="hover:bg-gray-50/30 transition-colors"
                   >
-                   <td className="px-6 py-4">
-                      <span className="flex items-center gap-2 text-gray-700 font-medium">
-                        <User size={14} className="text-gray-500" />
-                        {task.first_name} {task.last_name}
-                      </span>
-                    </td>
-                    {/* Project */}
-                    <td className="px-6 py-4">
-                      <span className="flex items-center gap-2 font-semibold text-gray-700">
-                        <Briefcase size={14} className="text-gray-500" />
-                        {task.project_name}
-                      </span>
+                    <td className="px-6 py-4 font-medium text-gray-700">
+                      {task.first_name} {task.last_name}
                     </td>
 
-                    {/* Task Title */}
-                    <td className="px-6 py-4">
-                      <span className="flex items-center gap-2 text-gray-700 font-medium">
-                        <ClipboardList size={14} className="text-gray-500" />
-                        {task.task_title}
-                      </span>
+                    <td className="px-6 py-4 font-semibold text-indigo-600">
+                      {task.project_name}
                     </td>
 
-                    {/* Description */}
-                    <td className="px-6 py-4 text-gray-600 max-w-xs">
+                    <td className="px-6 py-4 text-gray-700">
+                      {task.task_title}
+                    </td>
+
+                    <td className="px-6 py-4 text-gray-500 max-w-xs truncate">
                       {task.description}
                     </td>
 
-                  
-
-                    {/* Date */}
-                    <td className="px-6 py-4">
-                      <span className="flex items-center gap-2 text-gray-500">
-                        <CalendarDays size={14} />
-                        {new Date(task.task_date).toLocaleDateString()}
-                      </span>
+                    <td className="px-6 py-4 text-right text-gray-500">
+                      {new Date(task.task_date).toLocaleDateString()}
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="p-12 text-center text-gray-400">
+                    No tasks found for selected range.
+                  </td>
+                </tr>
+              )}
 
-            {/* Empty State */}
-            {tasks.length === 0 && (
-              <div className="p-12 text-center text-gray-400 font-medium">
-                No tasks available.
-              </div>
-            )}
-          </div>
+            </tbody>
+
+          </table>
+
         </div>
-      )}
+      </div>
     </div>
   )
 }

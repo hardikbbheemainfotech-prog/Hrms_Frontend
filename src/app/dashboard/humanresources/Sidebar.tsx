@@ -16,7 +16,7 @@ const navItems = [
   { href: "/dashboard/humanresources/attendance", icon: CalendarCheck, label: "Attendance" },
   { href: "/dashboard/humanresources/requests", icon: ClipboardList, label: "Employee Requests" },
   { href: "/dashboard/humanresources/employees", icon: UserPlus, label: "Employees" },
- { href: "/dashboard/humanresources/desk", icon: Book, label: "Desk" },
+  { href: "/dashboard/humanresources/desk", icon: Book, label: "Desk" },
   { href: "/dashboard/humanresources/Jobs", icon: BriefcaseBusiness, label: "Jobs" },
 ];
 
