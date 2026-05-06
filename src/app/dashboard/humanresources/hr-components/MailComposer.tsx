@@ -52,8 +52,9 @@ export default function MailComposer() {
   } = useHRData()
 
   const onFormChange = (data: Record<string, unknown>) => {
-    setFormData(data)
-  }
+  console.log("Updated from panel:", data)
+  setFormData(data)
+}
 
   const panelProps = {
   employees, interviews, departments,
@@ -63,12 +64,21 @@ export default function MailComposer() {
 }
 
  const handleSend = async () => {
-  const toEmail = String(formData.candidate_email ?? formData.employee_email ?? '')
+ const toEmail = String(
+  formData.to_email ??
+  formData.candidate_email ??
+  formData.employee_email ??
+  ''
+)
 
-  if (!toEmail && activeTab !== 'GENERAL_EMPLOYEE_NOTIFICATION') {
-    alert('Please enter recipient email before sending.')
-    return
-  }
+const isGroupMail =
+  activeTab === 'GENERAL_EMPLOYEE_NOTIFICATION' &&
+  formData.recipient_mode === 'group'
+
+if (!toEmail && !isGroupMail) {
+     toast({ variant: "destructive", title: "Failed", description: "Receipent Name missing " })
+  return
+}
 
   setSending(true)
   try {
@@ -104,9 +114,9 @@ export default function MailComposer() {
       },
     })
 
-    alert('Mail sent successfully!')
+    toast({ variant: "default", title: "sucess", description: "Mail sent Successfully" })
   } catch (e) {
-    alert('Failed to send mail. Check console.')
+     toast({ variant: "destructive", title: "Failed", description: "Please Fill all data" })
     console.error(e)
   } finally {
     setSending(false)

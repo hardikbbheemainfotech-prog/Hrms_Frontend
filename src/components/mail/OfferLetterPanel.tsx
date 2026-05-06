@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Employee, Interview } from '@/types/mailTypes'
 import { Card, Field, Input, Textarea, Select, InterviewSelect, Grid2 } from './shared'
+import { Pin, PinIcon } from 'lucide-react'
 
 interface Props {
   employees: Employee[]
@@ -106,7 +107,7 @@ export function OfferLetterPanel({ interviews, loadingInterviews, onFormChange }
             className="flex cursor-pointer items-center gap-3 rounded-lg border border-dashed border-border/60 bg-muted/20 px-4 py-3 hover:bg-muted/40 transition-colors"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/40 bg-background text-sm">
-              📎
+              <PinIcon/>
             </div>
             <div className="flex-1 min-w-0">
               {attachedFile ? (
