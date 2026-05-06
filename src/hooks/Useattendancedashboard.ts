@@ -32,9 +32,9 @@ export type TrendPoint = {
 
 export type Filters = {
   employee_id: string
-  filter:      string   // "today" | "week" | "month" | "" (empty when using custom range)
-  start_date:  string   // "YYYY-MM-DD" or ""
-  end_date:    string   // "YYYY-MM-DD" or ""
+  filter:      string  
+  start_date:  string  
+  end_date:    string  
 }
 
 // ─── Debounce ─────────────────────────────────────────────────────────────────
@@ -165,7 +165,6 @@ const fetchAttendance = async () => {
       setSummary([])
     }
 
-    // ✅ prefer API trend, fall back to local build
     if (data.trend?.length) {
       setTrend(data.trend)
     } else {

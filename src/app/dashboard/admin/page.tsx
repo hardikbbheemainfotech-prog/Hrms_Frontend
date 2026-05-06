@@ -20,12 +20,7 @@ export default function AdminDashboard() {
     getEmployeeById,
   } = useAdminData()
 
-  const stats = [
-    { title: "Team Members", value: "12", icon: Users },
-    { title: "Tasks Completed", value: "86", icon: CheckCircle },
-    { title: "Pending Tasks", value: "14", icon: Clock },
-    { title: "Performance", value: "92%", icon: BarChart },
-  ]
+ 
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F1E9E4]/60">
@@ -39,27 +34,7 @@ export default function AdminDashboard() {
           </h1>
         </div>
 
-        {/* STATS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, i) => {
-            const Icon = stat.icon
-            return (
-              <Card key={i} className="bg-white/70 backdrop-blur">
-                <CardHeader className="flex flex-row justify-between items-center">
-                  <CardTitle className="text-sm text-gray-600">
-                    {stat.title}
-                  </CardTitle>
-                  <Icon className="h-5 w-5 text-[#5A0F2E]" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-[#5A0F2E]">
-                    {stat.value}
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </div>
+      
 
         <AnnouncementsPanel />
 
