@@ -149,7 +149,7 @@ const handleSubmit = async () => {
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-100 flex justify-center items-center">
+    <div className="fixed inset-0 z-100 bg-black/40 flex justify-center items-center">
 
       <div className="bg-white p-6 rounded-xl w-[500px]">
 

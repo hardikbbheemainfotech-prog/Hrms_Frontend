@@ -42,8 +42,6 @@ const [endDate, setEndDate] = useState(today)
 
     try {
       setLoading(true)
-
-      // Backend expects: filter, from, to
       const res = await api.get("/core/tasks", {
         params: {
           filter: "custom",

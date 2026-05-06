@@ -1,11 +1,27 @@
 "use client"
-import Navbar from "@/components/shared/navbar"
-import RoleGuard from "@/components/shared/RoleGuard"
+
+import React, { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, CheckCircle, Clock, BarChart } from "lucide-react"
 import ManagerTasks from "./components/ManagerTasks"
+import AnnouncementsPanel from "../humanresources/hr-components/AnnouncementsPanel"
+import { useHRData } from "@/hooks/useHRData"
+import { Mail } from "./components/mailSection/Mail"
 
-export default function adminDashboard() {
+export default function AdminDashboard() {
+  const [open, setOpen] = useState(false)
+
+  const {
+    employees,
+    interviews,
+    departments,
+    loadingEmployees,
+    loadingInterviews,
+    loadingDepartments,
+    getEmployeeById,
+    getInterviewById,
+  } = useHRData()
+
   const stats = [
     { title: "Team Members", value: "12", icon: Users },
     { title: "Tasks Completed", value: "86", icon: CheckCircle },
@@ -14,38 +30,98 @@ export default function adminDashboard() {
   ]
 
   return (
-    <>
-    <RoleGuard allowedRoles={["admin"]} >
-  <div className="bg-[#F1E9E4]/90 rounded-2xl p-6 overflow-x-auto shadow-lg p-6 space-y-6  flex flex-col">
-      <div className="p-8 bg-[#F1E9E4]/70 min-h-screen space-y-8">
-        <h1 className="text-3xl font-bold">admin Dashboard</h1>
+    <div className="flex flex-col min-h-screen bg-[#F1E9E4]/60">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, i) => (
-            <Card key={i}>
-              <CardHeader className="flex justify-between flex-row">
-                <CardTitle className="text-sm">{stat.title}</CardTitle>
-                <stat.icon className="h-4 w-4 text-[#5A0F2E]" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-              </CardContent>
-            </Card>
-          ))}
+      <div className="p-6 space-y-8">
+
+        {/* HEADER */}
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-[#5A0F2E]">
+            Admin Dashboard
+          </h1>
         </div>
 
-        <Card>
+        {/* STATS */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat, i) => {
+            const Icon = stat.icon
+            return (
+              <Card key={i} className="bg-white/70 backdrop-blur">
+                <CardHeader className="flex flex-row justify-between items-center">
+                  <CardTitle className="text-sm text-gray-600">
+                    {stat.title}
+                  </CardTitle>
+                  <Icon className="h-5 w-5 text-[#5A0F2E]" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-[#5A0F2E]">
+                    {stat.value}
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+
+        <AnnouncementsPanel />
+
+        {/* TEAM ACTIVITY */}
+        <Card className="bg-white/70">
           <CardHeader>
             <CardTitle>Team Activity</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">Track team productivity and performance.</p>
+
+          <CardContent className="space-y-3">
+            <p className="text-gray-500">
+              Track team productivity and performance.
+            </p>
+
+            <button
+              onClick={() => setOpen(true)}
+              className="px-4 py-2 bg-[#5A0F2E] text-white rounded-lg hover:opacity-90 transition"
+            >
+              Send Mail
+            </button>
           </CardContent>
         </Card>
-        <ManagerTasks/>
+
+        <ManagerTasks />
+
       </div>
-      </div>
-      </RoleGuard>
-    </>
+
+      {/* 🔥 MAIL OVERLAY */}
+      {open && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+
+          <div className="bg-white w-full max-w-6xl rounded-2xl shadow-xl relative">
+
+            {/* CLOSE */}
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-black"
+            >
+              ✕
+            </button>
+
+            {/* MAIL PANEL */}
+            <div className="p-6 max-h-[90vh] overflow-y-auto">
+              <Mail
+                employees={employees}
+                interviews={interviews}
+                departments={departments}
+                loadingEmployees={loadingEmployees}
+                loadingInterviews={loadingInterviews}
+                loadingDepartments={loadingDepartments}
+                getEmployeeById={getEmployeeById}
+                getInterviewById={getInterviewById}
+                onFormChange={() => {}}
+              />
+            </div>
+
+          </div>
+        </div>
+      )}
+
+    </div>
   )
 }

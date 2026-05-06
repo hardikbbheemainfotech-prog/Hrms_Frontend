@@ -23,7 +23,7 @@ import GlobalSupportModal from "@/app/dashboard/employee/components/GlobalSuppor
 import { useToast } from "@/hooks/use-toast"
 
 type Props = {
-  role: "hr" | "founder" | "admin" | "employee"
+  role: "hr" | "system-admin" | "admin" | "employee"
 }
 
 export default function Navbar({ role }: Props) {
