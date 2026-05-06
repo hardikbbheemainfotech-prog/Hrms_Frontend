@@ -1,4 +1,3 @@
-// src/app/dashboard/systemadmin/recruitment/page.tsx
 
 "use client"
 

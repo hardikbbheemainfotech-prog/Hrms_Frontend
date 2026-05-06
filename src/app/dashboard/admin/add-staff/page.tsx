@@ -49,7 +49,6 @@ const [publicId, setPublicId] = useState("")
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  // 1. CLOUDINARY UPLOAD (Direct Frontend)
 const uploadImage = async (file: File) => {
   setUploading(true)
 

@@ -2,25 +2,23 @@
 
 import React, { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Users, CheckCircle, Clock, BarChart } from "lucide-react"
+import { Users, CheckCircle, Clock, BarChart, MailIcon } from "lucide-react"
 import ManagerTasks from "./components/ManagerTasks"
 import AnnouncementsPanel from "../humanresources/hr-components/AnnouncementsPanel"
-import { useHRData } from "@/hooks/useHRData"
 import { Mail } from "./components/mailSection/Mail"
+import { Button } from "@/components/ui/button"
+import { useAdminData } from "@/hooks/adminData"
 
 export default function AdminDashboard() {
   const [open, setOpen] = useState(false)
 
   const {
     employees,
-    interviews,
     departments,
     loadingEmployees,
-    loadingInterviews,
     loadingDepartments,
     getEmployeeById,
-    getInterviewById,
-  } = useHRData()
+  } = useAdminData()
 
   const stats = [
     { title: "Team Members", value: "12", icon: Users },
@@ -65,31 +63,26 @@ export default function AdminDashboard() {
 
         <AnnouncementsPanel />
 
-        {/* TEAM ACTIVITY */}
-        <Card className="bg-white/70">
-          <CardHeader>
-            <CardTitle>Team Activity</CardTitle>
-          </CardHeader>
+        <Card >
+             <div className="flex items-center justify-between p-2 ">
+          <div className="flex items-center gap-2">
+            <MailIcon className="w-4 h-4 text-[#5A0F2E]" />
+            <h3 className="text-sm font-black text-gray-800">Compose Mail to Employee</h3>
+          </div>
 
-          <CardContent className="space-y-3">
-            <p className="text-gray-500">
-              Track team productivity and performance.
-            </p>
-
-            <button
+          <Button
               onClick={() => setOpen(true)}
-              className="px-4 py-2 bg-[#5A0F2E] text-white rounded-lg hover:opacity-90 transition"
+             
+            className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#5A0F2E] hover:bg-[#5A0F2E]/90 px-3 py-2 rounded-xl transition-all shadow-sm active:scale-95"
             >
               Send Mail
-            </button>
-          </CardContent>
+            </Button>
+        </div>
         </Card>
 
         <ManagerTasks />
 
       </div>
-
-      {/* 🔥 MAIL OVERLAY */}
       {open && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
 
@@ -107,13 +100,10 @@ export default function AdminDashboard() {
             <div className="p-6 max-h-[90vh] overflow-y-auto">
               <Mail
                 employees={employees}
-                interviews={interviews}
                 departments={departments}
                 loadingEmployees={loadingEmployees}
-                loadingInterviews={loadingInterviews}
                 loadingDepartments={loadingDepartments}
                 getEmployeeById={getEmployeeById}
-                getInterviewById={getInterviewById}
                 onFormChange={() => {}}
               />
             </div>

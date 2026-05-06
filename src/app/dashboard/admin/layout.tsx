@@ -18,11 +18,7 @@ export default function EmployeeLayout({
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // ✅ Same day → continue old session hours
-    // ✅ New day → reset automatically
     dispatch(initializeSession())
-
-    // ✅ Update working timer every second
     const interval = setInterval(() => {
       dispatch(updateDuration())
     }, 1000)
