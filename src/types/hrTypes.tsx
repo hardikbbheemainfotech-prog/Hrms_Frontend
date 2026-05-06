@@ -80,3 +80,18 @@ export type Job = {
   updated_at?: string
   created_at: string
 }
+
+export interface Applicant {
+  application_id: number
+  application_type: string
+  full_name: string
+  email: string
+  phone: string
+  current_company: string
+  experience: number
+  expected_salary: number
+  notice_period: number
+  resume_url: string | { url: string; public_id: string } | null
+  cover_letter: string
+  applied_at: string
+}
