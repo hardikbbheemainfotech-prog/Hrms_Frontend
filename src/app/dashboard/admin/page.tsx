@@ -8,6 +8,7 @@ import AnnouncementsPanel from "../humanresources/hr-components/AnnouncementsPan
 import { Mail } from "./components/mailSection/Mail"
 import { Button } from "@/components/ui/button"
 import { useAdminData } from "@/hooks/adminData"
+import AuditLogsAdmin from "./components/AuditLogsAdmin"
 
 export default function AdminDashboard() {
   const [open, setOpen] = useState(false)
@@ -39,28 +40,8 @@ export default function AdminDashboard() {
           </h1>
         </div>
 
-        {/* STATS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, i) => {
-            const Icon = stat.icon
-            return (
-              <Card key={i} className="bg-white/70 backdrop-blur">
-                <CardHeader className="flex flex-row justify-between items-center">
-                  <CardTitle className="text-sm text-gray-600">
-                    {stat.title}
-                  </CardTitle>
-                  <Icon className="h-5 w-5 text-[#5A0F2E]" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-[#5A0F2E]">
-                    {stat.value}
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </div>
 
+         <AuditLogsAdmin/>
         <AnnouncementsPanel />
 
         <Card >
