@@ -16,11 +16,12 @@ import { useLogout } from "@/hooks/useLogout"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useRouter } from "next/navigation"
 import { useSelector } from "react-redux"
-import { LogOut} from "lucide-react"
+import { LogOut } from "lucide-react"
 import IconTooltip from "../ui/IconTooltip"
 import EmployeeIDCard from "../shared/EmployeeIDCard"
 import GlobalSupportModal from "@/app/dashboard/employee/components/GlobalSupportModal"
 import { useToast } from "@/hooks/use-toast"
+import CompanySpinner from "./loader/spinner"
 
 type Props = {
   role: "hr" | "system-admin" | "admin" | "employee"
@@ -28,86 +29,93 @@ type Props = {
 
 export default function Navbar({ role }: Props) {
   const [canLogout, setCanLogout] = React.useState(role !== "employee")
+  const [isLoggingOut, setIsLoggingOut] = React.useState(false)
+
   const router = useRouter()
   const { user, isInitialized } = useSelector((state: any) => state.auth)
-  const logoutAction = useLogout();
+  const logoutAction = useLogout()
   const [, setTick] = React.useState(0)
-  const {toast} = useToast();
-  
+  const { toast } = useToast()
+
   const hasSubmittedTodayTask = () => {
-  const submitted = localStorage.getItem("dailyTaskSubmitted")
-  const submittedDate = localStorage.getItem("dailyTaskDate")
-  const today = new Date().toDateString()
+    const submitted = localStorage.getItem("dailyTaskSubmitted")
+    const submittedDate = localStorage.getItem("dailyTaskDate")
+    const today = new Date().toDateString()
 
-  return submitted === "true" && submittedDate === today
-}
- 
-
-
-const handleProtectedLogout = () => {
-  if (role === "employee" && !hasSubmittedTodayTask()) {
-    toast({
-      variant: "destructive",
-      title: "Task Required",
-      description: "Please submit your daily task before logout.",
-    })
-    return
+    return submitted === "true" && submittedDate === today
   }
 
-  logoutAction()
-}
-
-
-React.useEffect(() => {
-  const interval = setInterval(() => {
-    setTick((prev) => prev + 1)
-  }, 1000)
-
-  return () => clearInterval(interval)
-}, [])
-
-React.useEffect(() => {
-  if (role !== "employee") {
-    setCanLogout(true)
-    return
+  const performLogout = async () => {
+    try {
+      setIsLoggingOut(true)
+      await logoutAction()
+    } catch (error) {
+      console.log(error)
+      setIsLoggingOut(false)
+    }
   }
 
-  setCanLogout(hasSubmittedTodayTask())
-}, [role, setTick])
+  const handleProtectedLogout = async () => {
+    if (role === "employee" && !hasSubmittedTodayTask()) {
+      toast({
+        variant: "destructive",
+        title: "Task Required",
+        description: "Please submit your daily task before logout.",
+      })
+      return
+    }
 
-
-
-React.useEffect(() => {
-  const storedDate = localStorage.getItem("dailyTaskDate")
-  const today = new Date().toDateString()
-
-  if (storedDate !== today) {
-    localStorage.removeItem("dailyTaskSubmitted")
-    localStorage.removeItem("dailyTaskDate")
-  }
-}, [])
-
-React.useEffect(() => {
-  const today = new Date().toDateString()
-
-  if (user?.loginDate && user.loginDate !== today) {
-    logoutAction()
-    return
+    await performLogout()
   }
 
-  const now = new Date()
-  const nextMidnight = new Date()
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setTick((prev) => prev + 1)
+    }, 1000)
 
-  nextMidnight.setHours(24, 0, 0, 0)
+    return () => clearInterval(interval)
+  }, [])
 
-  const msUntilMidnight = nextMidnight.getTime() - now.getTime()
+  React.useEffect(() => {
+    if (role !== "employee") {
+      setCanLogout(true)
+      return
+    }
 
-  const midnightTimer = setTimeout(() => {
-    logoutAction()
-  }, msUntilMidnight)
+    setCanLogout(hasSubmittedTodayTask())
+  }, [role])
 
-  return () => clearTimeout(midnightTimer)
-}, [user?.loginDate, logoutAction])
+  React.useEffect(() => {
+    const storedDate = localStorage.getItem("dailyTaskDate")
+    const today = new Date().toDateString()
+
+    if (storedDate !== today) {
+      localStorage.removeItem("dailyTaskSubmitted")
+      localStorage.removeItem("dailyTaskDate")
+    }
+  }, [])
+
+  React.useEffect(() => {
+    const today = new Date().toDateString()
+
+    if (user?.loginDate && user.loginDate !== today) {
+      performLogout()
+      return
+    }
+
+    const now = new Date()
+    const nextMidnight = new Date()
+
+    nextMidnight.setHours(24, 0, 0, 0)
+
+    const msUntilMidnight = nextMidnight.getTime() - now.getTime()
+
+    const midnightTimer = setTimeout(() => {
+      performLogout()
+    }, msUntilMidnight)
+
+    return () => clearTimeout(midnightTimer)
+  }, [user?.loginDate])
 
   const loginTime = user?.loginTime
   const elapsed = loginTime ? Date.now() - loginTime : 0
@@ -143,7 +151,14 @@ React.useEffect(() => {
 
   const { date, time } = formatCurrentDateTime()
 
-  
+  // FULL SCREEN LOGOUT SPINNER
+  if (isLoggingOut) {
+    return (
+      <div className="fixed inset-0 z-[9999] bg-white flex items-center justify-center">
+        <CompanySpinner/>
+      </div>
+    )
+  }
 
   if (!isInitialized) {
     return (
@@ -156,7 +171,7 @@ React.useEffect(() => {
   return (
     <div className="w-full flex justify-center bg-[#F1E9E4]/70 p-3 sticky top-0 z-50">
       <nav className="w-[95%] h-16 bg-white/60 backdrop-blur-2xl border border-white/30 rounded-2xl shadow-lg flex items-center justify-between px-6">
-        
+
         <div
           className="text-sm font-bold text-[#5A0F2E] cursor-pointer tracking-wide"
           onClick={() => router.push("/")}
@@ -173,33 +188,33 @@ React.useEffect(() => {
                     className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
                       remainingTime > 0 ? "bg-green-400" : "bg-red-400"
                     }`}
-                  ></span>
+                  />
                   <span
                     className={`relative inline-flex rounded-full h-2 w-2 ${
                       remainingTime > 0 ? "bg-green-500" : "bg-red-500"
                     }`}
-                  ></span>
+                  />
                 </span>
 
                 <span className="tracking-widest font-semibold">
                   {formatTime(remainingTime)}
                 </span>
 
-             <IconTooltip
-  label={canLogout ? "Check Out" : "Submit daily task first"}
-  icon={
-    <span
-      onClick={handleProtectedLogout}
-      className={`ripple px-3 py-2 rounded-xl text-sm border transition-all duration-300 flex items-center justify-center ${
-        canLogout
-          ? "cursor-pointer text-red-500 hover:bg-red-50 hover:border-red-500"
-          : "cursor-not-allowed text-gray-400 bg-gray-100"
-      }`}
-    >
-      <LogOut size={16} />
-    </span>
-  }
-/>
+                <IconTooltip
+                  label={canLogout ? "Check Out" : "Submit daily task first"}
+                  icon={
+                    <span
+                      onClick={handleProtectedLogout}
+                      className={`ripple px-3 py-2 rounded-xl text-sm border transition-all duration-300 flex items-center justify-center ${
+                        canLogout
+                          ? "cursor-pointer text-red-500 hover:bg-red-50 hover:border-red-500"
+                          : "cursor-not-allowed text-gray-400 bg-gray-100"
+                      }`}
+                    >
+                      <LogOut size={16} />
+                    </span>
+                  }
+                />
               </div>
             </div>
           ) : (
@@ -229,64 +244,63 @@ React.useEffect(() => {
             </span>
           </div>
 
-        <DropdownMenu>
-  {(role === "employee" || role === "hr") ? (
-    <div className="flex items-center gap-2">
-  <HoverCard>
-    <HoverCardTrigger asChild>
-      <Avatar className="cursor-pointer border hover:scale-105 transition">
-        <AvatarImage
-          src={user?.profile_image || user?.profile_url || user?.avatar}
-          className="object-cover"
-        />
-        <AvatarFallback>
-          {(user?.first_name || user?.name || role)
-            .charAt(0)
-            .toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
-    </HoverCardTrigger>
+          <DropdownMenu>
+            {(role === "employee" || role === "hr") ? (
+              <div className="flex items-center gap-2">
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Avatar className="cursor-pointer border hover:scale-105 transition">
+                      <AvatarImage
+                        src={user?.profile_image || user?.profile_url || user?.avatar}
+                        className="object-cover"
+                      />
+                      <AvatarFallback>
+                        {(user?.first_name || user?.name || role)
+                          .charAt(0)
+                          .toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </HoverCardTrigger>
 
-    <HoverCardContent
-      align="end"
-      sideOffset={10}
-      className="w-auto border-none bg-transparent shadow-none -translate-x-6"
-    >
-      <EmployeeIDCard user={user} compact />
-    </HoverCardContent>
-  </HoverCard>
-  <GlobalSupportModal />
-</div>
-  ) : (
-    <>
-      <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer border hover:scale-105 transition">
-          <AvatarImage
-            src={user?.profile_image || user?.profile_url || user?.avatar}
-            className="object-cover"
-          />
-          <AvatarFallback>
-            {(user?.first_name || user?.name || role)
-              .charAt(0)
-              .toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
+                  <HoverCardContent
+                    align="end"
+                    sideOffset={10}
+                    className="w-auto border-none bg-transparent shadow-none -translate-x-6"
+                  >
+                    <EmployeeIDCard user={user} compact />
+                  </HoverCardContent>
+                </HoverCard>
 
-      <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem
-          onClick={() => {
-            logoutAction()
-          }}
-          className="cursor-pointer text-red-500 focus:text-red-600"
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          Logout
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </>
-  )}
-</DropdownMenu>
+                <GlobalSupportModal />
+              </div>
+            ) : (
+              <>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer border hover:scale-105 transition">
+                    <AvatarImage
+                      src={user?.profile_image || user?.profile_url || user?.avatar}
+                      className="object-cover"
+                    />
+                    <AvatarFallback>
+                      {(user?.first_name || user?.name || role)
+                        .charAt(0)
+                        .toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent align="end" className="w-40">
+                  <DropdownMenuItem
+                    onClick={performLogout}
+                    className="cursor-pointer text-red-500 focus:text-red-600"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </>
+            )}
+          </DropdownMenu>
         </div>
       </nav>
     </div>

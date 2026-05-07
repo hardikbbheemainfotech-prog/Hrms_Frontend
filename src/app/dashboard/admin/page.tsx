@@ -21,12 +21,7 @@ export default function AdminDashboard() {
     getEmployeeById,
   } = useAdminData()
 
-  const stats = [
-    { title: "Team Members", value: "12", icon: Users },
-    { title: "Tasks Completed", value: "86", icon: CheckCircle },
-    { title: "Pending Tasks", value: "14", icon: Clock },
-    { title: "Performance", value: "92%", icon: BarChart },
-  ]
+ 
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F1E9E4]/60">
