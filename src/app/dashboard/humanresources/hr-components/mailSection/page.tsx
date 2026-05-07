@@ -44,11 +44,6 @@ export default function SendMail() {
   });
 
 
-
-  // ===============================
-  // FETCH EMPLOYEES
-  // ===============================
-
   useEffect(() => {
 
     fetchEmployees();
@@ -69,15 +64,9 @@ export default function SendMail() {
       setEmployees(res.data.data);
 
     } catch (error) {
-      console.log(error);
     }
   };
 
-
-
-  // ===============================
-  // FETCH INTERVIEWS
-  // ===============================
 
   const fetchInterviews = async () => {
 
@@ -92,15 +81,9 @@ export default function SendMail() {
       );
 
     } catch (error) {
-      console.log(error);
     }
   };
 
-
-
-  // ===============================
-  // CHANGE
-  // ===============================
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -116,11 +99,6 @@ export default function SendMail() {
     });
   };
 
-
-
-  // ===============================
-  // SUBMIT
-  // ===============================
 
   const handleSubmit = async (
     e: React.FormEvent
@@ -190,8 +168,6 @@ export default function SendMail() {
       toast({ variant: "default", title: "Mail sent successfully" })
 
     } catch (error: any) {
-  console.log(error)
-
   toast({
     variant: "destructive",
     title: "Failed to send mail",

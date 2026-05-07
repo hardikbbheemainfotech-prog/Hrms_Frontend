@@ -1,5 +1,4 @@
 "use client"
-
 import { useState } from "react"
 import api from "@/lib/axios"
 import { useHRData } from "@/hooks/useHRData"
@@ -9,7 +8,6 @@ import {
   User,
   FileText,
   X,
-  Search
 } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
@@ -20,16 +18,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useToast } from "@/hooks/use-toast"
+import { Button } from "@/components/ui/button"
 
 export default function UploadEmployeeDocument({ open, setOpen }: any) {
-
   const { employees, loadingEmployees } = useHRData()
-
+  const [fileUrl, setFileUrl] = useState("")
+  const [publicId, setPublicId] = useState("")
+  const [uploading, setUploading] = useState(false)
   const [employeeId, setEmployeeId] = useState("")
   const [documentType, setDocumentType] = useState("")
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [search, setSearch] = useState("")
+  const { toast } = useToast()
 
   if (!open) return null
 
@@ -38,74 +40,142 @@ export default function UploadEmployeeDocument({ open, setOpen }: any) {
     return name.includes(search.toLowerCase())
   })
 
- const handleSubmit = async (e: any) => {
-  e.preventDefault()
+  const uploadDocument = async (selectedFile: File) => {
+    setUploading(true)
 
-  if (!employeeId) return alert("Select employee")
-  if (!documentType) return alert("Enter document type")
-  if (!file) return alert("Select file")
+    try {
+      const data = new FormData()
 
-  let uploadedPublicId: string | null = null
+      data.append("file", selectedFile)
+      data.append("upload_preset", "HRMS_uploads")
+      data.append("folder", "employees/documents")
 
-  try {
-    setLoading(true)
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dnmleleho/image/upload",
+        {
+          method: "POST",
+          body: data,
+        }
+      )
 
-    const cloudData = new FormData()
-    cloudData.append("file", file)
-    cloudData.append("upload_preset", "HRMS_uploads")
-    cloudData.append("folder", "employees/documents")
+      const text = await res.text()
+      const resData = JSON.parse(text)
 
-    const cloudRes = await fetch(
-      "https://api.cloudinary.com/v1_1/dnmleleho/image/upload",
-      {
-        method: "POST",
-        body: cloudData,
+
+      if (!res.ok || !resData.secure_url) {
+        throw new Error(resData.error?.message || "Upload failed")
       }
-    )
 
-    const cloudJson = await cloudRes.json()
-
-    if (!cloudRes.ok) {
-      throw new Error(cloudJson.error?.message || "Cloud upload failed")
-    }
-
-    const file_url = cloudJson.secure_url
-    const file_public_key = cloudJson.public_id
-
-    uploadedPublicId = file_public_key
-
-    await api.post("/hr/upload_docs", {
-      employee_id: employeeId,
-      document_type: documentType,
-      file_url,
-      file_public_key,
-    })
-
-    alert("Uploaded successfully")
-
-    setEmployeeId("")
-    setDocumentType("")
-    setFile(null)
-    setOpen(false)
-
-  } catch (err: any) {
-
-    if (uploadedPublicId) {
-      try {
-        await api.post("/hr/remove_file", {
-          public_id: uploadedPublicId,
-        })
-      } catch (cleanupErr) {
-        console.error("Cleanup failed:", cleanupErr)
+      return {
+        url: resData.secure_url,
+        public_id: resData.public_id,
       }
+    } catch (err: any) {
+
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: err.message || "Failed to add staff",
+      })
+      return null
+    } finally {
+      setUploading(false)
     }
-
-    alert(err?.message || err?.response?.data?.message || "Upload failed")
-
-  } finally {
-    setLoading(false)
   }
-}
+
+  const handleFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedFile = e.target.files?.[0]
+
+    if (!selectedFile) return
+
+    setFile(selectedFile)
+
+    const result = await uploadDocument(selectedFile)
+
+    if (result) {
+      setFileUrl(result.url)
+      setPublicId(result.public_id)
+      toast({ title: "Success", description: "Document uploaded successfully!" })
+    }
+  }
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
+
+    if (!employeeId) {
+      toast({
+        variant: "destructive",
+        title: "Employee Required",
+        description: "Please select an employee",
+      })
+      return
+    }
+
+    if (!documentType.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Document Type Required",
+        description: "Please enter document type",
+      })
+      return
+    }
+
+    if (!fileUrl) {
+      toast({
+        variant: "destructive",
+        title: "Document Required",
+        description: "Please upload document first",
+      })
+      return
+    }
+
+    try {
+      setLoading(true)
+
+      await api.post("/hr/upload_docs", {
+        employee_id: employeeId,
+        document_type: documentType,
+        file_url: fileUrl,
+        file_public_key: publicId,
+      })
+
+      toast({
+        title: "Success",
+        description: "Document uploaded successfully",
+      })
+
+      setEmployeeId("")
+      setDocumentType("")
+      setFile(null)
+      setFileUrl("")
+      setPublicId("")
+      setOpen(false)
+
+    } catch (err: any) {
+
+      if (publicId) {
+        try {
+          await api.post("/hr/remove_file", {
+            public_id: publicId,
+          })
+        } catch { }
+      }
+
+      toast({
+        variant: "destructive",
+        title: "Upload Failed",
+        description:
+          err?.response?.data?.message ||
+          err?.message ||
+          "Upload failed",
+      })
+
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
@@ -119,24 +189,12 @@ export default function UploadEmployeeDocument({ open, setOpen }: any) {
             Upload Document
           </h2>
 
-          <button onClick={() => setOpen(false)}>
+          <Button onClick={() => setOpen(false)}>
             <X size={18} />
-          </button>
+          </Button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-
-          {/* Search */}
-          <div className="relative">
-            <Search size={16} className="absolute left-3 top-3 text-gray-400" />
-            <Input
-              type="text"
-              placeholder="Search employee..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 border border-[#c0c0d8] rounded-lg text-sm"
-            />
-          </div>
 
           {/* Employee Select */}
           <div className="relative">
@@ -192,9 +250,7 @@ export default function UploadEmployeeDocument({ open, setOpen }: any) {
             <Input
               type="file"
               accept="image/*,application/pdf"
-              onChange={(e) =>
-                setFile(e.target.files?.[0] || null)
-              }
+              onChange={handleFileChange}
               className="w-full text-sm"
             />
 
@@ -206,7 +262,11 @@ export default function UploadEmployeeDocument({ open, setOpen }: any) {
 
                 <button
                   type="button"
-                  onClick={() => setFile(null)}
+                  onClick={() => {
+                    setFile(null)
+                    setFileUrl("")
+                    setPublicId("")
+                  }}
                   className="text-red-500 flex items-center gap-1"
                 >
                   <X size={14} />
@@ -214,6 +274,13 @@ export default function UploadEmployeeDocument({ open, setOpen }: any) {
                 </button>
               </div>
             )}
+
+            {fileUrl && (
+              <p className="text-green-600 text-sm mt-2 font-medium">
+                Document Ready ✔
+              </p>
+            )}
+
           </div>
 
           {/* Buttons */}
@@ -229,11 +296,15 @@ export default function UploadEmployeeDocument({ open, setOpen }: any) {
 
             <button
               type="submit"
-              disabled={loading}
-              className="px-4 py-2 rounded-lg bg-[#5A0F2E] hover:bg-[#af225d] text-white text-sm flex items-center gap-2"
+              disabled={loading || uploading || !fileUrl}
+              className="px-4 py-2 rounded-lg bg-[#5A0F2E] hover:bg-[#af225d] text-white text-sm flex items-center gap-2 disabled:opacity-50"
             >
               <Upload size={16} />
-              {loading ? "Uploading..." : "Upload"}
+              {uploading
+                ? "Uploading File..."
+                : loading
+                  ? "Saving..."
+                  : "Upload"}
             </button>
 
           </div>

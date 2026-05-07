@@ -8,7 +8,7 @@ import {
 } from "lucide-react"
 import {  SummaryRow } from "@/hooks/Useattendancedashboard"
 
-// ─── Greeting util ─────────────────────────────────────────────────────────────
+
 export function getGreeting() {
   const h = dayjs().hour()
   if (h < 12) return { text: "Good Morning",   icon: <CloudSun className="w-5 h-5" /> }
@@ -16,7 +16,6 @@ export function getGreeting() {
   return        { text: "Good Evening",   icon: <Moon strokeWidth={3} className="w-5 h-5" /> }
 }
 
-// ─── Status colors ─────────────────────────────────────────────────────────────
 export const STATUS_COLORS: Record<string, string> = {
   present:  "#38543d",
   absent:   "#f58476",
@@ -31,7 +30,7 @@ export const STATUS_BG: Record<string, string> = {
   half_day: "#f5eeff",
 }
 
-// ─── StatCard ─────────────────────────────────────────────────────────────────
+
 function StatCard({
   icon, label, value, accent, sub,
 }: {
@@ -61,7 +60,7 @@ function StatCard({
   )
 }
 
-// ─── SummaryBadge ──────────────────────────────────────────────────────────────
+
 function SummaryBadge({ status, count }: { status: string; count: number }) {
   const color = STATUS_COLORS[status] || "#888"
   const bg    = STATUS_BG[status]     || "#f5f5f5"
@@ -80,7 +79,7 @@ function SummaryBadge({ status, count }: { status: string; count: number }) {
 }
 
 
-// ─── GreetingHeader ───────────────────────────────────────────────────────────
+
 export function GreetingHeader({
   dashboard, summary, totalCount, attendancePercent, birthdays,
 }: {
@@ -148,7 +147,7 @@ export function GreetingHeader({
   )
 }
 
-// ─── BirthdayStrip ────────────────────────────────────────────────────────────
+
 export function BirthdayStrip({ birthdays }: { birthdays: any[] }) {
   if (!birthdays.length) return null
 

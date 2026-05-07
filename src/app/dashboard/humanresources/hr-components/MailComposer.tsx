@@ -52,7 +52,6 @@ export default function MailComposer() {
   } = useHRData()
 
   const onFormChange = (data: Record<string, unknown>) => {
-  console.log("Updated from panel:", data)
   setFormData(data)
 }
 
@@ -117,7 +116,6 @@ if (!toEmail && !isGroupMail) {
     toast({ variant: "default", title: "sucess", description: "Mail sent Successfully" })
   } catch (e) {
      toast({ variant: "destructive", title: "Failed", description: "Please Fill all data" })
-    console.error(e)
   } finally {
     setSending(false)
   }

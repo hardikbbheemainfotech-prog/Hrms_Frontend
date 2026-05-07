@@ -24,12 +24,10 @@ export function JoiningInstructionsPanel({ employees, interviews, loadingEmploye
     documents_to_bring: '', day1_instructions: '',
   })
 
-  // notify parent on every form change
   useEffect(() => {
     onFormChange(form)
   }, [form])
 
-  // auto-fill from selected employee — uses arrays directly, not helper functions
   useEffect(() => {
     if (!selectedEmployeeId || employees.length === 0) return
     const emp = employees.find((e) => String(e.employee_id) === String(selectedEmployeeId))
@@ -42,8 +40,7 @@ export function JoiningInstructionsPanel({ employees, interviews, loadingEmploye
     }))
   }, [selectedEmployeeId, employees])
 
-  // auto-fill reporting manager from interview — first_name/last_name already joined on interview row
-  useEffect(() => {
+ useEffect(() => {
     if (!selectedInterviewId || interviews.length === 0) return
     const iv = interviews.find((i) => String(i.interview_id) === String(selectedInterviewId))
     if (!iv) return

@@ -34,9 +34,7 @@ export function useAdminData(): UseAdminDataReturn {
   const [empTick, setEmpTick] = useState(0)
   const [deptTick, setDeptTick] = useState(0)
 
-  // ===============================
-  // FETCH EMPLOYEES
-  // ===============================
+
   useEffect(() => {
     setLoadingEmployees(true)
     setErrorEmployees(null)
@@ -57,7 +55,6 @@ export function useAdminData(): UseAdminDataReturn {
         )
       })
       .catch((e: any) => {
-        console.error('Employees fetch error:', e)
         setErrorEmployees(
           e?.response?.data?.message ||
             e.message ||
@@ -69,9 +66,6 @@ export function useAdminData(): UseAdminDataReturn {
       })
   }, [empTick])
 
-  // ===============================
-  // FETCH DEPARTMENTS
-  // ===============================
   useEffect(() => {
     setLoadingDepartments(true)
     setErrorDepartments(null)
@@ -92,7 +86,6 @@ export function useAdminData(): UseAdminDataReturn {
         )
       })
       .catch((e: any) => {
-        console.error('Departments fetch error:', e)
         setErrorDepartments(
           e?.response?.data?.message ||
             e.message ||
@@ -104,9 +97,6 @@ export function useAdminData(): UseAdminDataReturn {
       })
   }, [deptTick])
 
-  // ===============================
-  // HELPERS
-  // ===============================
   const getEmployeeById = useCallback(
     (id: number) => {
       return employees.find(

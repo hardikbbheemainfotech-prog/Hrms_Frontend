@@ -266,7 +266,6 @@ export function Mail({
 
       resetForm()
     } catch (error: any) {
-      console.error(error)
 
       toast({
         variant: 'destructive',

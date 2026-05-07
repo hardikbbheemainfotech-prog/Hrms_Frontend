@@ -4,12 +4,7 @@ import React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { MdOutlineManageAccounts, MdOutlinePersonAdd, MdOutlinePolicy  } from "react-icons/md";
 import { RiTeamLine } from "react-icons/ri";
-import {
-  Home,
-  Calendar,
-  Users,
-  UsersRound,
-} from "lucide-react";
+import {Home,UsersRound, Landmark} from "lucide-react";
 import IconTooltip from "@/components/ui/IconTooltip";
 
 
@@ -17,6 +12,7 @@ const navItems = [
   { href: "/dashboard/admin", icon: Home, label: "Home" },
   { href: "/dashboard/admin/team", icon: RiTeamLine, label: "Create Team" },
   { href: "/dashboard/admin/add-staff", icon: MdOutlinePersonAdd, label: "Add Staff" },
+  { href: "/dashboard/admin/payroll", icon: Landmark , label: "Payroll" },
   { href: "/dashboard/admin/allemployees", icon: UsersRound, label: "All Employees" },
   { href: "/dashboard/admin/manage-team", icon: MdOutlineManageAccounts, label: "Manage Team" },
   { href: "/dashboard/admin/manage-policies", icon: MdOutlinePolicy, label: "Manage Policies" },

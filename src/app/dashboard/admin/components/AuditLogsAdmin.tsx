@@ -37,7 +37,6 @@ export default function AuditLogsAdmin() {
       setLogs(Array.isArray(data) ? data : [])
 
     } catch (err) {
-      console.error("Failed to fetch logs")
       setLogs([])
     } finally {
       setLoading(false)

@@ -49,7 +49,6 @@ export function NextRoundInvitationPanel({
     confirmation_deadline: '',
   })
 
-  // AUTO FILL FROM PREVIOUS INTERVIEW
   useEffect(() => {
     if (!selectedInterviewId) return
 
@@ -63,11 +62,9 @@ export function NextRoundInvitationPanel({
 
     let interviewerName = ''
 
-    // FIRST TRY DIRECT DATA
     if (iv.first_name || iv.last_name) {
       interviewerName = `${iv.first_name ?? ''} ${iv.last_name ?? ''}`.trim()
     }
-    // FALLBACK TO EMPLOYEE LOOKUP
     else if (iv.interviewer_id) {
       const interviewer = getEmployeeById(iv.interviewer_id)
       if (interviewer) {
@@ -89,7 +86,6 @@ export function NextRoundInvitationPanel({
     }))
   }, [selectedInterviewId, interviews, getEmployeeById])
 
-  // LIVE UPDATE TO MAIL COMPOSER
   useEffect(() => {
     onFormChange({
       ...form,

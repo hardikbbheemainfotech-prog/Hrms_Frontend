@@ -31,7 +31,7 @@ export default function AddStaffForm() {
 const [publicId, setPublicId] = useState("")
   const [uploading, setUploading] = useState(false)
 
-  // Fetch Departments
+
   useEffect(() => {
     const fetchDeps = async () => {
       try {
@@ -84,7 +84,6 @@ const uploadImage = async (file: File) => {
   }
 }
 
-  // 2. HANDLE FILE CHANGE
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
   if (e.target.files?.[0]) {
     const result = await uploadImage(e.target.files[0])
@@ -96,7 +95,6 @@ const uploadImage = async (file: File) => {
   }
 }
 
-  // 3. SUBMIT FINAL DATA TO BACKEND
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault()
 

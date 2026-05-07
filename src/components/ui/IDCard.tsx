@@ -1,5 +1,6 @@
-// components/IDCard.tsx
+
 import dayjs from "dayjs"
+import { useState } from "react"
 
 interface Employee {
   employee_id: number | string
@@ -21,12 +22,24 @@ function padId(id: number | string) {
   return String(id).padStart(3, "0")
 }
 
-export default function IDCard({ emp }: { emp: Employee }) {
+export default function IDCard({
+  emp,
+  onClick,
+}: {
+  emp: Employee
+  onClick?: (employee: Employee) => void
+}) {
   const name = `${emp.first_name} ${emp.last_name}`.trim()
   const initials = getInitials(emp.first_name, emp.last_name)
+   
+  
+
 
   return (
-    <div className="flex flex-col space-x-2 items-center group">
+<div
+  className="flex flex-col space-x-2 items-center group cursor-pointer"
+  onClick={() => onClick?.(emp)}
+>
   {/* Lanyard */}
   <div className="w-6 h-12 bg-[#5A0F2E] rounded-t-md relative z-10">
     <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-4 h-3 bg-gray-300 rounded-b-md" />

@@ -49,16 +49,6 @@ const [endDate, setEndDate] = useState(today)
           to: endDate,
         },
       })
-
-      console.log("Request Params:", {
-        filter: "custom",
-        from: startDate,
-        to: endDate,
-      })
-
-      console.log("API Response:", res.data)
-      console.log("Current User:", currentUser)
-
       if (res.data?.success) {
         const userTasks = (res.data.data || []).filter(
           (task: Task) => task.email === currentUser.email
@@ -69,7 +59,6 @@ const [endDate, setEndDate] = useState(today)
         setTasks([])
       }
     } catch (error) {
-      console.error("Failed to fetch tasks:", error)
       setTasks([])
     } finally {
       setLoading(false)

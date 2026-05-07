@@ -19,7 +19,6 @@ export default function PendingLeaves() {
       const res = await axios.get("/api/hr/get_leave_request")
       setLeaves(res.data?.data?.data || [])
     } catch (error) {
-      console.error(error)
       setLeaves([])
     } finally {
       setLoading(false)
@@ -43,7 +42,6 @@ export default function PendingLeaves() {
 
       fetchLeaves()
     } catch (error) {
-      console.error(error)
       setLoading(false)
     }
   }

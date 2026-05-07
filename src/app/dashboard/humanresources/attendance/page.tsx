@@ -36,7 +36,6 @@ useEffect(() => {
       setAbsences(formattedLeaves)
 
     } catch (err) {
-      console.error(err)
       setEmployees([])
       setAbsences([])
     } finally {
