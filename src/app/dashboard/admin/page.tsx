@@ -1,14 +1,15 @@
 "use client"
 
 import React, { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Users, CheckCircle, Clock, BarChart, MailIcon } from "lucide-react"
+import { Card, } from "@/components/ui/card"
+import { MailIcon } from "lucide-react"
 import ManagerTasks from "./components/ManagerTasks"
 import AnnouncementsPanel from "../humanresources/hr-components/AnnouncementsPanel"
 import { Mail } from "./components/mailSection/Mail"
 import { Button } from "@/components/ui/button"
 import { useAdminData } from "@/hooks/adminData"
 import AuditLogsAdmin from "./components/AuditLogsAdmin"
+import RequestsPage from "../humanresources/hr-components/employeRequirements"
 
 export default function AdminDashboard() {
   const [open, setOpen] = useState(false)
@@ -34,9 +35,13 @@ export default function AdminDashboard() {
             Admin Dashboard
           </h1>
         </div>
-
-
-         <AuditLogsAdmin/>
+      
+       <div className="relative overflow-hidden rounded-2xl bg-white border border-[#F1E9E4]/40 shadow-sm p-5">
+        <RequestsPage/>
+</div>
+              <div className="relative overflow-hidden rounded-2xl bg-white border border-[#F1E9E4]/40 shadow-sm p-5">
+        < AuditLogsAdmin />
+</div>
         <AnnouncementsPanel />
 
         <Card >

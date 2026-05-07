@@ -69,7 +69,7 @@ export default function EmployeeTasksPage() {
   }
 
   return (
-    <RoleGuard allowedRoles={["employee"]}>
+    <RoleGuard allowedRoles={["employee","intern"]}>
       <div className="bg-[#f0e5df] rounded-2xl p-6 shadow-lg space-y-6 min-h-screen">
         
         {/* Header */}

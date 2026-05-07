@@ -72,7 +72,7 @@ export default function PostActivity() {
     errors[name] ? "border-red-500 focus-visible:ring-red-500" : "border-gray-200"
 
   return (
-      <RoleGuard allowedRoles={['employee']}>
+      <RoleGuard allowedRoles={["employee", "intern"]}>
           <div className="bg-[#f0e5df] rounded-2xl p-6 overflow-x-auto shadow-2xl p-6 space-y-6 min-h-screen flex flex-col">
     <Card className="border-none shadow-xl bg-white/90 backdrop-blur-md rounded-2xl overflow-hidden no-scrollbar">
       <CardHeader className="bg-[#5A0F2E] text-white p-6">
