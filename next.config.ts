@@ -3,7 +3,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-       destination: "http://192.168.29.233:7000/api/:path*",
+       destination: "https://api.bheemainfotech.in/api/:path*",
       },
     ];
   },
