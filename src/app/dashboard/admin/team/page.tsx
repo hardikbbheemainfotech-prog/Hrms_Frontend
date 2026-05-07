@@ -36,7 +36,9 @@ export default function AddTeamForm() {
       try {
         const res = await api.get("/core/employees") 
         setEmployees(res.data?.data || [])
-      } catch (err) { console.error(err) }
+      } catch (err) { 
+        
+       }
     }
     fetchStaff()
   }, [])

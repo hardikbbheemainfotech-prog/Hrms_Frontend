@@ -14,7 +14,6 @@ export default function AuthInitializer({ children }: { children: React.ReactNod
         const res = await api.get("/auth/refresh"); 
         dispatch(setCredentials({ user: res.data.data.user }));
       } catch (error) {
-        console.log("No valid session found during initialization");
       } finally {
         dispatch(setInitialized());
       }

@@ -50,7 +50,6 @@ export default function Navbar({ role }: Props) {
       setIsLoggingOut(true)
       await logoutAction()
     } catch (error) {
-      console.log(error)
       setIsLoggingOut(false)
     }
   }
@@ -151,7 +150,6 @@ export default function Navbar({ role }: Props) {
 
   const { date, time } = formatCurrentDateTime()
 
-  // FULL SCREEN LOGOUT SPINNER
   if (isLoggingOut) {
     return (
       <div className="fixed inset-0 z-[9999] bg-white flex items-center justify-center">

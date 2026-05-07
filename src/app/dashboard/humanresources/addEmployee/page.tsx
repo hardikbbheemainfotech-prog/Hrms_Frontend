@@ -102,9 +102,6 @@ export default function AddEmployeeModal({ open, setOpen, onSuccess }: any) {
       }
 
     } catch (err: any) {
-
-      console.error("Cloudinary Upload Error:", err.message)
-
       toast({
         variant: "destructive",
         title: "Upload Failed",

@@ -1,4 +1,3 @@
-// InterviewReschedulePanel.tsx
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -46,7 +45,6 @@ export function InterviewReschedulePanel({
     confirmation_deadline: '',
   })
 
-  // AUTO FILL WHEN INTERVIEW SELECTED
   useEffect(() => {
     if (!selectedInterviewId) return
 
@@ -66,7 +64,6 @@ export function InterviewReschedulePanel({
     }))
   }, [selectedInterviewId, interviews])
 
-  // SEND LIVE DATA TO MAIL COMPOSER
   useEffect(() => {
     onFormChange({
       ...form,

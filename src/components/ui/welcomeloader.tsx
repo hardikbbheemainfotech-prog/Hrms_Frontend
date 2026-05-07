@@ -81,7 +81,6 @@ const checkAuthAndFinish = async () => {
       return
     }
   } catch (err) {
-    console.log("Session dead, stay on login")
 
     dispatch(setInitialized())
 

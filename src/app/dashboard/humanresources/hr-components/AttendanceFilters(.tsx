@@ -22,11 +22,9 @@ export function AttendanceFilters({
   const handleFilterSelect = (v: string) => {
     if (v === "range") {
       setShowRange(true)
-      // clear preset filter
       onFilterChange("filter", "")
     } else {
       setShowRange(false)
-      // clear date range
       onFilterChange("start_date", "")
       onFilterChange("end_date", "")
       onFilterChange("filter", v)

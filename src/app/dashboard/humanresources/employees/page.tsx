@@ -15,6 +15,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import UploadEmployeeDocument from "../hr-components/Uploaddocs"
+import EmployeeDetailsModal from "../hr-components/EmployeeDetailsModal"
+
 
 export default function EmployeePage() {
 
@@ -24,7 +26,8 @@ export default function EmployeePage() {
   const [search, setSearch] = useState("")
   const [deptFilter, setDeptFilter] = useState("")
   const [typeFilter, setTypeFilter] = useState("")
-  const [docOpen, setDocOpen] = useState(false)
+ const [docOpen, setDocOpen] = useState(false)
+const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null)
 
   const fetchEmployees = async () => {
     setLoading(true)
@@ -179,9 +182,15 @@ export default function EmployeePage() {
       </div>
     ) : (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
-        {filtered.map((emp) => (
-          <IDCard key={emp.employee_id} emp={emp} />
-        ))}
+      {filtered.map((emp) => (
+  <IDCard
+    key={emp.employee_id}
+    emp={emp}
+    onClick={(employee) => {
+      setSelectedEmployee(employee)
+    }}
+  />
+))}
       </div>
     )}
 
@@ -196,6 +205,15 @@ export default function EmployeePage() {
       open={docOpen}
       setOpen={setDocOpen}
     />
+    {selectedEmployee && (
+  <EmployeeDetailsModal
+    employee={selectedEmployee}
+    open={!!selectedEmployee}
+    onClose={() =>
+      setSelectedEmployee(null)
+    }
+  />
+)}
   </div>
 )
 }

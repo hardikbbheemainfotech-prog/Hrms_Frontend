@@ -3,7 +3,7 @@
 import React from 'react'
 import { Employee, Interview } from '@/types/mailTypes'
 
-// ── Field ──────────────────────────────────────────────────────────────────────
+
 export function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1">
@@ -16,7 +16,6 @@ export function Field({ label, hint, children }: { label: string; hint?: string;
   )
 }
 
-// ── Input ──────────────────────────────────────────────────────────────────────
 export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
@@ -26,7 +25,7 @@ export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   )
 }
 
-// ── Textarea ───────────────────────────────────────────────────────────────────
+
 export function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
@@ -36,7 +35,7 @@ export function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement
   )
 }
 
-// ── Select ─────────────────────────────────────────────────────────────────────
+
 export function Select({ children, ...props }: React.SelectHTMLAttributes<HTMLSelectElement> & { children: React.ReactNode }) {
   return (
     <select
@@ -48,7 +47,6 @@ export function Select({ children, ...props }: React.SelectHTMLAttributes<HTMLSe
   )
 }
 
-// ── EmployeeSelect ─────────────────────────────────────────────────────────────
 export function EmployeeSelect({
   employees,
   loading,
@@ -75,7 +73,7 @@ export function EmployeeSelect({
   )
 }
 
-// ── InterviewSelect ────────────────────────────────────────────────────────────
+
 export function InterviewSelect({
   interviews,
   loading,
@@ -102,7 +100,6 @@ export function InterviewSelect({
   )
 }
 
-// ── Card ───────────────────────────────────────────────────────────────────────
 export function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="rounded-xl border border-border/40 bg-card p-5 mb-3">
@@ -112,7 +109,7 @@ export function Card({ title, children }: { title: string; children: React.React
   )
 }
 
-// ── StaticBadge ────────────────────────────────────────────────────────────────
+
 export function StaticBadge({ label }: { label: string }) {
   return (
     <span className="inline-flex items-center gap-1.5 rounded-md border border-border/40 bg-muted/30 px-2.5 py-1 text-xs text-muted-foreground">
@@ -126,7 +123,7 @@ export function Divider() {
   return <hr className="border-border/30" />
 }
 
-// ── Grid helpers ───────────────────────────────────────────────────────────────
+
 export function Grid2({ children }: { children: React.ReactNode }) {
   return <div className="grid grid-cols-2 gap-3">{children}</div>
 }

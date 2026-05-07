@@ -1,4 +1,3 @@
-// src/app/dashboard/systemadmin/projects/page.tsx
 
 "use client"
 

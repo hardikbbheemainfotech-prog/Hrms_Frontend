@@ -51,11 +51,8 @@ export default function Page() {
   const fetchLeaveStatus = async () => {
     try {
       const res = await api.get("/employee/leave_status")
-      console.log("leave status:", res.data)
-
       setLeaveStatus(res.data?.data?.data || [])
     } catch (e) {
-      console.error("leave status error", e)
     }
   }
 

@@ -60,7 +60,6 @@ export default function AddPolicyPage() {
         setStatus('error');
       }
     } catch (error) {
-      console.error('Submission error:', error);
       setStatus('error');
     }
   };

@@ -28,7 +28,6 @@ export const useLogout = () => {
         }
       }
     } catch (error) {
-      console.warn("Failed to parse persisted session.")
     }
 
     const today = new Date().toDateString()
@@ -63,7 +62,6 @@ export const useLogout = () => {
         total_hours,
       })
     } catch (error) {
-      console.warn("Backend already invalidated the session.")
     } finally {
       dispatch(logoutSession())
 

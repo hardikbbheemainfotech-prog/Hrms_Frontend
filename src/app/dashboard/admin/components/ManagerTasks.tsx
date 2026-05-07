@@ -48,7 +48,6 @@ export default function AllEmployeeTasks() {
         setTasks([])
       }
     } catch (error) {
-      console.error("Failed to fetch tasks:", error)
       setTasks([])
     } finally {
       setLoading(false)

@@ -11,7 +11,7 @@ interface Props {
   loadingInterviews: boolean
   getInterviewById: (id: number) => Interview | undefined
   getEmployeeById: (id: number) => Employee | undefined
-  onFormChange: (data: Record<string, unknown>) => void  // ← new
+  onFormChange: (data: Record<string, unknown>) => void 
 }
 
 const INITIAL_FORM = {
@@ -26,7 +26,6 @@ export function InterviewInvitationPanel({ interviews, loadingInterviews, onForm
   const [selectedInterviewId, setSelectedInterviewId] = useState('')
   const [form, setForm] = useState(INITIAL_FORM)
 
-  // notify parent whenever form changes
   useEffect(() => {
     onFormChange(form)
   }, [form])
