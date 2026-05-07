@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import BheemaLoader from "@/components/shared/loader/loader"
 
 export default function AuditLogsAdmin() {
 
@@ -48,7 +49,7 @@ export default function AuditLogsAdmin() {
   }, [filter])
 
   return (
-    <div className="p-6">
+     <div className="relative overflow-hidden p-5">
 
       <h2 className="text-xl font-bold mb-4">Audit Logs</h2>
 
@@ -56,7 +57,7 @@ export default function AuditLogsAdmin() {
       <div className="flex gap-3 mb-4 items-center flex-wrap">
 
         <Select value={filter} onValueChange={setFilter}>
-          <SelectTrigger className="w-[150px]">
+          <SelectTrigger className="w-[150px] bg-white">
             <SelectValue placeholder="Filter" />
           </SelectTrigger>
           <SelectContent>
@@ -88,10 +89,10 @@ export default function AuditLogsAdmin() {
       </div>
 
       {/* 🔹 Table */}
-      <div className="overflow-auto border rounded-lg">
+      <div className="relative overflow-hidden rounded-2xl bg-white border border-[#F1E9E4]/40 shadow-sm p-5">
         <table className="w-full text-sm">
 
-          <thead className="bg-gray-100 text-left">
+          <thead className="bg-white/50 text-left">
             <tr>
               <th className="p-2">Name</th>
               <th className="p-2">Email</th>
@@ -102,16 +103,18 @@ export default function AuditLogsAdmin() {
             </tr>
           </thead>
 
-          <tbody>
+          <tbody className="bg-white">
             {loading ? (
+  <tr>
+    <td colSpan={6} className="p-4">
+      <div className="flex justify-center items-center">
+        <BheemaLoader />
+      </div>
+    </td>
+  </tr>
+     ) : logs.length === 0 ? (
               <tr>
-                <td colSpan={6} className="p-4 text-center">
-                  Loading...
-                </td>
-              </tr>
-            ) : logs.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="p-4 text-center">
+                <td colSpan={6} className="p-4 text-[#5A0F2E] font-black  text-center">
                   No logs found
                 </td>
               </tr>

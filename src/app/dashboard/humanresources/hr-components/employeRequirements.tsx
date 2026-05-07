@@ -48,7 +48,7 @@ export default function RequestsPage() {
         <div className="p-5 space-y-5">
 
             {/* Header */}
-            <h2 className="text-xl font-bold text-[#5A0F2E]">
+            <h2 className="text-xl font-bold ">
                 Employee Requests
             </h2>
 

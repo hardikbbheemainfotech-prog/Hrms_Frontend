@@ -1,5 +1,7 @@
 "use client"
 
+import { Select } from "@/components/mail/shared";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import api from "@/lib/axios";
 import { useEffect, useState } from "react";
@@ -230,7 +232,7 @@ export default function SendMail() {
               Recipient Type
             </label>
 
-            <select
+            <Select
               value={recipientType}
               onChange={(e) =>
                 setRecipientType(
@@ -250,7 +252,7 @@ export default function SendMail() {
                 Employee
               </option>
 
-            </select>
+            </Select>
 
           </div>
 
@@ -266,7 +268,7 @@ export default function SendMail() {
                 Select Employee
               </label>
 
-              <select
+              <Select
                 name="employee_id"
                 value={form.employee_id}
                 onChange={handleChange}
@@ -288,7 +290,7 @@ export default function SendMail() {
                     {emp.last_name}
                   </option>
                 ))}
-              </select>
+              </Select>
 
             </div>
           )}
@@ -305,7 +307,7 @@ export default function SendMail() {
                 Select Interview
               </label>
 
-              <select
+              <Select
                 name="interview_id"
                 value={form.interview_id}
                 onChange={handleChange}
@@ -330,7 +332,7 @@ export default function SendMail() {
                     {item.job_title}
                   </option>
                 ))}
-              </select>
+              </Select>
 
             </div>
           )}
@@ -345,7 +347,7 @@ export default function SendMail() {
               Template
             </label>
 
-            <select
+            <Select
               name="template_key"
               value={form.template_key}
               onChange={handleChange}
@@ -397,7 +399,7 @@ export default function SendMail() {
                 </option>
               )}
 
-            </select>
+            </Select>
 
           </div>
 
@@ -452,7 +454,7 @@ export default function SendMail() {
               Attachments
             </label>
 
-            <input
+            <Input
               type="file"
               multiple
               onChange={(e) => {

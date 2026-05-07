@@ -5,15 +5,21 @@ import { Employee } from '@/types/mailTypes'
 import {
   Card,
   Field,
-  Input,
   Textarea,
-  Select,
   EmployeeSelect,
   Grid2,
+  Input,
 } from '@/components/mail/shared'
 import { Paperclip } from 'lucide-react'
 import api from '@/lib/axios'
 import { useToast } from '@/hooks/use-toast'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface Department {
   department_id: number
@@ -36,7 +42,6 @@ export function Mail({
   onFormChange,
 }: Props) {
   const { toast } = useToast()
-
   const [recipientMode, setRecipientMode] = useState<'individual' | 'group'>(
     'individual'
   )
@@ -48,7 +53,7 @@ export function Mail({
   const [attachedFiles, setAttachedFiles] = useState<File[]>([])
   const [loading, setLoading] = useState(false)
 
-  const fileRef = useRef<HTMLInputElement>(null)
+  const fileRef = useRef<HTMLInputElement | null>(null)
 
   const [form, setForm] = useState({
     employee_id_display: '',
@@ -88,16 +93,16 @@ export function Mail({
 
   const setField =
     (key: keyof typeof form) =>
-    (
-      e: React.ChangeEvent<
-        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-      >
-    ) => {
-      setForm((prev) => ({
-        ...prev,
-        [key]: e.target.value,
-      }))
-    }
+      (
+        e: React.ChangeEvent<
+          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+      ) => {
+        setForm((prev) => ({
+          ...prev,
+          [key]: e.target.value,
+        }))
+      }
 
   const handleEmployeeSelect = (
     e: React.ChangeEvent<HTMLSelectElement>
@@ -184,96 +189,96 @@ export function Mail({
     return true
   }
 
-const handleSend = async (
-  e: React.MouseEvent<HTMLButtonElement>
-) => {
-  e.preventDefault()
+  const handleSend = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault()
 
-  if (!validateForm()) return
+    if (!validateForm()) return
 
-  try {
-    setLoading(true)
+    try {
+      setLoading(true)
 
-    let attachment_base64_files: any[] = []
+      let attachment_base64_files: any[] = []
 
-    for (const file of attachedFiles) {
-      const base64 = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader()
+      for (const file of attachedFiles) {
+        const base64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
 
-        reader.onload = () => {
-          const result = reader.result as string
-          resolve(result.split(',')[1])
-        }
+          reader.onload = () => {
+            const result = reader.result as string
+            resolve(result.split(',')[1])
+          }
 
-        reader.onerror = reject
-        reader.readAsDataURL(file)
-      })
+          reader.onerror = reject
+          reader.readAsDataURL(file)
+        })
 
-      attachment_base64_files.push({
-        filename: file.name,
-        mimetype: file.type,
-        content: base64,
-      })
-    }
+        attachment_base64_files.push({
+          filename: file.name,
+          mimetype: file.type,
+          content: base64,
+        })
+      }
 
-    await api.post('/admin/mail/send', {
-      mail_type: 'GENERAL_EMPLOYEE_NOTIFICATION',
+      await api.post('/admin/mail/send', {
+        mail_type: 'GENERAL_EMPLOYEE_NOTIFICATION',
 
-      to_email:
-        recipientMode === 'individual'
-          ? form.employee_email
-          : null,
-
-      data: {
-        recipient_type: 'EMPLOYEE',
-        recipient_mode: recipientMode,
-
-        employee_id:
+        to_email:
           recipientMode === 'individual'
-            ? selectedEmployeeId
+            ? form.employee_email
             : null,
 
-        recipient_group:
-          recipientMode === 'group'
-            ? selectedGroup
-            : null,
+        data: {
+          recipient_type: 'EMPLOYEE',
+          recipient_mode: recipientMode,
 
-        department_id:
-          recipientMode === 'group' &&
-          selectedGroup === 'Department-wise'
-            ? selectedDepartmentId
-            : null,
+          employee_id:
+            recipientMode === 'individual'
+              ? selectedEmployeeId
+              : null,
 
-        subject: form.subject,
-        body: form.body,
-        attachment_note: form.attachment_note,
-        action_required: form.action_required,
-        closing_remarks: form.closing_remarks,
+          recipient_group:
+            recipientMode === 'group'
+              ? selectedGroup
+              : null,
 
-        attachments: attachment_base64_files,
-      },
-    })
+          department_id:
+            recipientMode === 'group' &&
+              selectedGroup === 'Department-wise'
+              ? selectedDepartmentId
+              : null,
 
-    toast({
-      variant: 'default',
-      title: 'Mail sent successfully',
-    })
+          subject: form.subject,
+          body: form.body,
+          attachment_note: form.attachment_note,
+          action_required: form.action_required,
+          closing_remarks: form.closing_remarks,
 
-    resetForm()
-  } catch (error: any) {
-    console.error(error)
+          attachments: attachment_base64_files,
+        },
+      })
 
-    toast({
-      variant: 'destructive',
-      title: 'Failed to send mail',
-      description:
-        error?.response?.data?.message ||
-        'Something went wrong while sending the mail.',
-    })
-  } finally {
-    setLoading(false)
+      toast({
+        variant: 'default',
+        title: 'Mail sent successfully',
+      })
+
+      resetForm()
+    } catch (error: any) {
+      console.error(error)
+
+      toast({
+        variant: 'destructive',
+        title: 'Failed to send mail',
+        description:
+          error?.response?.data?.message ||
+          'Something went wrong while sending the mail.',
+      })
+    } finally {
+      setLoading(false)
+    }
   }
-}
 
   return (
     <div className="w-full overflow-auto no-scrollbar">
@@ -289,11 +294,10 @@ const handleSend = async (
                 setSelectedGroup('')
                 setSelectedDepartmentId('')
               }}
-              className={`px-3 py-1.5 rounded-lg text-xs capitalize border ${
-                recipientMode === mode
+              className={`px-3 py-1.5 rounded-lg text-xs capitalize border ${recipientMode === mode
                   ? 'bg-[#5A0F2E] text-white'
                   : 'bg-white text-gray-600'
-              }`}
+                }`}
             >
               {mode}
             </button>
@@ -324,39 +328,58 @@ const handleSend = async (
             <Field label="Recipient group">
               <Select
                 value={selectedGroup}
-                onChange={(e) => {
-                  setSelectedGroup(e.target.value)
-                  setSelectedDepartmentId('')
+                onValueChange={(value) => {
+                  setSelectedGroup(value)
+                  setSelectedDepartmentId("")
                 }}
               >
-                <option value="">Select group</option>
-                <option value="All employees">All employees</option>
-                <option value="Department-wise">Department-wise</option>
-                <option value="Management">Management</option>
-                <option value="New joiners">New joiners</option>
+                <SelectTrigger className="w-full border rounded-md">
+                  <SelectValue placeholder="Select group" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectItem value="All employees">
+                    All employees
+                  </SelectItem>
+
+                  <SelectItem value="Department-wise">
+                    Department-wise
+                  </SelectItem>
+
+                  <SelectItem value="Management">
+                    Management
+                  </SelectItem>
+
+                  <SelectItem value="New joiners">
+                    New joiners
+                  </SelectItem>
+                </SelectContent>
               </Select>
             </Field>
 
             {selectedGroup === 'Department-wise' && (
               <Field label="Department">
-                <select
+                <Select
                   value={selectedDepartmentId}
-                  onChange={(e) =>
-                    setSelectedDepartmentId(e.target.value)
-                  }
-                  className="border p-2 rounded-md w-full"
+                  onValueChange={(value: string) => {
+                    setSelectedDepartmentId(value)
+                  }}
                 >
-                  <option value="">Select department</option>
+                  <SelectTrigger className="w-full border rounded-md">
+                    <SelectValue placeholder="Select department" />
+                  </SelectTrigger>
 
-                  {departments.map((dept) => (
-                    <option
-                      key={dept.department_id}
-                      value={dept.department_id}
-                    >
-                      {dept.name}
-                    </option>
-                  ))}
-                </select>
+                  <SelectContent>
+                    {departments.map((dept) => (
+                      <SelectItem
+                        key={dept.department_id}
+                        value={String(dept.department_id)}
+                      >
+                        {dept.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </Field>
             )}
           </div>

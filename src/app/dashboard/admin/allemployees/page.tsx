@@ -24,9 +24,10 @@ const fetchStaff = async () => {
       (emp: any) =>
         emp.role_name?.toLowerCase() !== "admin" &&
         emp.role_name?.toLowerCase() !== "super_admin"
-    )
+         )
 
     setEmployees(filteredStaff)
+  
   } catch (err) {
     toast({
       variant: "destructive",
@@ -34,11 +35,13 @@ const fetchStaff = async () => {
       description: "Fetch fail",
     })
   } finally {
+    
     setLoading(false)
   }
 }
 
   useEffect(() => {
+    
     fetchStaff()
   }, [])
 
@@ -112,8 +115,8 @@ const fetchStaff = async () => {
                             <p className="font-bold text-gray-900">
                               {emp.first_name} {emp.last_name}
                             </p>
-                            <p className="text-xs font-mono">
-                              Employee ID: {emp.employee_id}
+                            <p className="text-xs font-mono uppercase">
+                             {emp.role_name}
                             </p>
                           </div>
                         </div>
@@ -152,9 +155,17 @@ const fetchStaff = async () => {
                       </td>
 
                       {/* Salary */}
-                      <td className="px-6 py-4 font-semibold text-green-700">
-                        ₹{parseFloat(emp.salary).toLocaleString()}
-                      </td>
+                    <td className="px-6 py-4 font-semibold">
+  {emp.salary ? (
+    <span className="text-green-700">
+      ₹{parseFloat(emp.salary).toLocaleString()}
+    </span>
+  ) : (
+    <span className="text-orange-600 font-bold">
+      Unpaid
+    </span>
+  )}
+</td>
 
                       {/* Dates */}
                       <td className="px-6 py-4 text-xs text-gray-500">

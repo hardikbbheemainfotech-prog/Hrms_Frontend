@@ -16,20 +16,14 @@ export default function AttendanceCharts({
   trend: TrendPoint[]
   loading?: boolean
 }) {
-
-  // 🔥 FIX: derive absent from total
   const chartData = trend.map((t) => ({
     ...t,
     absent: t.total - t.present,
   }))
-
-  // check if there's any real data
   const hasData = chartData.some((t) => t.present > 0 || t.absent > 0)
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-6 h-[350px] border border-[#F1E9E4]/40">
-
-      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-sm font-black text-[#5A0F2E]">Attendance Overview</h2>
@@ -51,15 +45,12 @@ export default function AttendanceCharts({
           </div>
         )}
       </div>
-
-      {/* Loader */}
       {loading ? (
         <div className="h-[260px] flex justify-center items-center">
           <div className="scale-90"><BheemaLoader /></div>
         </div>
 
       ) : !hasData ? (
-        /* Empty State */
         <div className="h-[260px] flex flex-col justify-center items-center text-center gap-2">
           <span className="text-red-400"><ChartNoAxesCombined size={35}/></span>
           <p className="text-sm text-gray-600 font-medium">No attendance data this month</p>
@@ -69,7 +60,6 @@ export default function AttendanceCharts({
         </div>
 
       ) : (
-        /* Chart */
         <ResponsiveContainer width="100%" height="85%">
           <AreaChart data={chartData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
             <defs>
@@ -92,8 +82,6 @@ export default function AttendanceCharts({
               axisLine={false}
               tickLine={false}
             />
-
-            {/* ✅ Add YAxis with integer ticks and domain */}
             <YAxis
               allowDecimals={false}
               domain={[0, (dataMax: number) => Math.max(dataMax + 1, 5)]}
@@ -111,8 +99,6 @@ export default function AttendanceCharts({
               }}
               labelFormatter={(label) => dayjs(label).format("DD MMM YYYY")}
             />
-
-            {/* ✅ Absent FIRST (renders below) */}
             <Area
               type="monotone"
               dataKey="absent"
@@ -123,8 +109,6 @@ export default function AttendanceCharts({
               activeDot={{ r: 4, fill: "#549beb" }}
               name="Absent"
             />
-
-            {/* ✅ Present LAST (renders on top) */}
             <Area
               type="monotone"
               dataKey="present"
