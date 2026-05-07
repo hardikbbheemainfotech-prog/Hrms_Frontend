@@ -8,6 +8,7 @@ import AnnouncementsPanel from "../humanresources/hr-components/AnnouncementsPan
 import { Mail } from "./components/mailSection/Mail"
 import { Button } from "@/components/ui/button"
 import { useAdminData } from "@/hooks/adminData"
+import AuditLogsAdmin from "./components/AuditLogsAdmin"
 
 export default function AdminDashboard() {
   const [open, setOpen] = useState(false)
@@ -34,8 +35,8 @@ export default function AdminDashboard() {
           </h1>
         </div>
 
-      
 
+         <AuditLogsAdmin/>
         <AnnouncementsPanel />
 
         <Card >
