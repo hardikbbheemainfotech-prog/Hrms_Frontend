@@ -1,9 +1,6 @@
 
 "use client"
 
-import React from "react"
-import Navbar from "@/components/shared/navbar"
-import RoleGuard from "@/components/shared/RoleGuard"
 import {
   FolderKanban,
   CheckCircle2,

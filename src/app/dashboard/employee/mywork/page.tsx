@@ -124,6 +124,6 @@ export default function PostActivity() {
     </Card>
      <EmployeeTasks/>
     </div>
-    </RoleGuard>
+     </RoleGuard>
   )
 }
