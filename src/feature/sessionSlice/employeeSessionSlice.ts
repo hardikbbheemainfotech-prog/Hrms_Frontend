@@ -1,3 +1,5 @@
+// employeeSessionSlice.ts
+
 import { createSlice } from "@reduxjs/toolkit"
 
 interface SessionState {
@@ -18,23 +20,36 @@ const employeeSessionSlice = createSlice({
   name: "employeeSession",
   initialState,
   reducers: {
-  initializeSession(state) {
-  const today = new Date().toDateString()
+    initializeSession(state) {
+      const today = new Date().toDateString()
 
-  if (state.loginDate === today) {
-    if (!state.loginTime) {
+      // Same day session
+      if (state.loginDate === today) {
+        // Preserve original loginTime if already exists
+        if (state.loginTime !== null) {
+          return
+        }
+
+        // User logged out earlier today, continue from previous work
+        if (state.dailyWorkedMs > 0) {
+          state.loginTime = Date.now()
+          return
+        }
+
+        // First login today
+        state.loginTime = Date.now()
+        return
+      }
+
+      // New day reset
+      state.dailyWorkedMs = 0
+      state.loginDate = today
       state.loginTime = Date.now()
-    }
-  } else {
-    state.dailyWorkedMs = 0
-    state.loginDate = today
-    state.loginTime = Date.now()
-    state.duration = 0
-  }
-},
+      state.duration = 0
+    },
 
     updateDuration(state) {
-      if (state.loginTime) {
+      if (state.loginTime !== null) {
         state.duration =
           state.dailyWorkedMs + (Date.now() - state.loginTime)
       } else {
@@ -42,13 +57,14 @@ const employeeSessionSlice = createSlice({
       }
     },
 
- logoutSession(state) {
-  if (state.loginTime) {
-    state.dailyWorkedMs += Date.now() - state.loginTime
-  }
-  state.loginTime = null
-  state.duration = state.dailyWorkedMs
-},
+    logoutSession(state) {
+      if (state.loginTime !== null) {
+        state.dailyWorkedMs += Date.now() - state.loginTime
+      }
+
+      state.loginTime = null
+      state.duration = state.dailyWorkedMs
+    },
 
     resetSession(state) {
       state.loginTime = null

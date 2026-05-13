@@ -1,25 +1,27 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+// authSlice.ts
 
-export type UserRole = 'admin' | 'hr' | 'employee' | 'founder';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+
+export type UserRole = "admin" | "hr" | "employee" | "founder"
 
 interface UserProfile {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  avatar?: string;
-  profile_url?: string;
-  profile_image?: string; 
-  department?: string;
-  loginTime?: number;
-  loginDate?: string;
+  id: string
+  name: string
+  email: string
+  role: UserRole
+  avatar?: string
+  profile_url?: string
+  profile_image?: string
+  department?: string
+  loginTime?: number
+  loginDate?: string
 }
 
 interface AuthState {
-  user: UserProfile | null;
-  isAuthenticated: boolean;
-  isInitialized: boolean;
-  loading: boolean;
+  user: UserProfile | null
+  isAuthenticated: boolean
+  isInitialized: boolean
+  loading: boolean
 }
 
 const initialState: AuthState = {
@@ -27,49 +29,72 @@ const initialState: AuthState = {
   isAuthenticated: false,
   isInitialized: false,
   loading: false,
-};
+}
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
- setCredentials: (state, action: PayloadAction<{ user: any }>) => {
-  const newUser = action.payload.user;
+    setCredentials: (state, action: PayloadAction<{ user: any }>) => {
+      const newUser = action.payload.user
 
-  state.user = {
-    ...state.user,
-    ...newUser,
+      // Parse backend login timestamp once
+      const parsedLoginTime = newUser.login_time
+        ? new Date(newUser.login_time).getTime()
+        : null
 
-    id: newUser.id || newUser.user_id,
-    profile_image: newUser.profile_image || state.user?.profile_image,
+      state.user = {
+        ...state.user,
+        ...newUser,
 
-    loginTime: newUser.login_time
-      ? new Date(newUser.login_time).getTime()
-      : state.user?.loginTime || Date.now(),
+        id: newUser.id || newUser.user_id,
 
-    loginDate: newUser.login_time
-      ? new Date(newUser.login_time).toDateString()
-      : state.user?.loginDate || new Date().toDateString(),
-  };
+        profile_image:
+          newUser.profile_image ||
+          newUser.profile_url ||
+          state.user?.profile_image,
 
-  state.isAuthenticated = true;
-  state.isInitialized = true;
-  state.loading = false;
-},
+        // Preserve original login time across refreshes
+        loginTime:
+          state.user?.loginTime ||
+          parsedLoginTime ||
+          Date.now(),
+
+        // Preserve original login date
+        loginDate:
+          state.user?.loginDate ||
+          (parsedLoginTime
+            ? new Date(parsedLoginTime).toDateString()
+            : new Date().toDateString()),
+      }
+
+      state.isAuthenticated = true
+      state.isInitialized = true
+      state.loading = false
+    },
+
     logout: (state) => {
-      state.user = null;
-      state.isAuthenticated = false;
-      state.isInitialized = true;
-      state.loading = false;
+      state.user = null
+      state.isAuthenticated = false
+      state.isInitialized = true
+      state.loading = false
     },
+
     setInitialized: (state) => {
-      state.isInitialized = true;
+      state.isInitialized = true
     },
+
     setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
+      state.loading = action.payload
     },
   },
-});
+})
 
-export const { setCredentials, logout, setInitialized, setLoading } = authSlice.actions;
-export default authSlice.reducer;
+export const {
+  setCredentials,
+  logout,
+  setInitialized,
+  setLoading,
+} = authSlice.actions
+
+export default authSlice.reducer
