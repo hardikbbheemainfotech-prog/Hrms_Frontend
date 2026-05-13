@@ -174,7 +174,7 @@ export default function Navbar({ role }: Props) {
           className="text-sm font-bold text-[#5A0F2E] cursor-pointer tracking-wide"
           onClick={() => router.push("/")}
         >
-          Bheema InfoTech
+          Bheema InfoTech 
         </div>
 
         <div className="flex items-center justify-center flex-1">

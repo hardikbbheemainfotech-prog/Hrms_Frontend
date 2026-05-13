@@ -50,3 +50,7 @@ export interface Interview {
   first_name: string | null
   last_name: string | null
 }
+
+export type nothing={
+deploy:string;
+}
