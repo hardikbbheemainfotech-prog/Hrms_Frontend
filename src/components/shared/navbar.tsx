@@ -116,64 +116,22 @@ export default function Navbar({ role }: Props) {
     return () => clearTimeout(midnightTimer)
   }, [user?.loginDate])
 
-  // FULL DEBUG VERSION — paste this exact block
+
+const loginTime = user?.login_time
+  ? new Date(user.login_time).getTime() - (5.5 * 60 * 60 * 1000)
+  : user?.loginTime ?? null
+
+const elapsed =
+  loginTime !== null
+    ? Date.now() - loginTime
+    : 0
 
 const TOTAL_SHIFT_MS = 8 * 60 * 60 * 1000
 
-let sessionLoginTime: number = Date.now()
-
-if (typeof window !== "undefined") {
-  try {
-    // RAW localStorage check
-    const rawPersist = localStorage.getItem("persist:root")
-    console.log("RAW persist:root =>", rawPersist)
-
-    if (rawPersist) {
-      const persistRoot = JSON.parse(rawPersist)
-      console.log("Parsed persistRoot =>", persistRoot)
-
-      // employee session
-      if (persistRoot.employeeSession) {
-        const employeeSession = JSON.parse(persistRoot.employeeSession)
-
-        console.log("Employee Session =>", employeeSession)
-
-        if (
-          employeeSession?.loginTime &&
-          !isNaN(Number(employeeSession.loginTime))
-        ) {
-          sessionLoginTime = Number(employeeSession.loginTime)
-          console.log("Using employeeSession.loginTime =>", sessionLoginTime)
-        }
-      }
-
-      // fallback auth loginTime
-      else if (user?.loginTime) {
-        sessionLoginTime = Number(user.loginTime)
-        console.log("Using user.loginTime =>", sessionLoginTime)
-      }
-
-      else {
-        console.log("No valid loginTime found, fallback Date.now()")
-      }
-    }
-  } catch (err) {
-    console.error("Login time parse failed:", err)
-  }
-}
-
-// Safety
-if (sessionLoginTime > Date.now()) {
-  console.log("Future loginTime detected, resetting")
-  sessionLoginTime = Date.now()
-}
-
-const elapsed = Date.now() - sessionLoginTime
-const remainingTime = Math.max(0, TOTAL_SHIFT_MS - elapsed)
-
-console.log("Final sessionLoginTime =>", sessionLoginTime)
-console.log("Elapsed Hours =>", elapsed / 3600000)
-console.log("Remaining =>", remainingTime / 3600000)
+const remainingTime = Math.max(
+  0,
+  TOTAL_SHIFT_MS - elapsed
+)
 
   const now = new Date()
 

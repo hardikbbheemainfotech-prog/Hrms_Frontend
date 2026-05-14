@@ -30,8 +30,8 @@ export default function ResetPasswordPage() {
   const currentUser = useSelector((state: RootState) => state.auth.user)
 
   const [formData, setFormData] = useState({
-    oldPassword: "",
-    newPassword: "",
+    old_password: "",
+    new_password: "",
     confirmPassword: "",
   })
 
@@ -74,8 +74,8 @@ export default function ResetPasswordPage() {
     }
 
     if (
-      !formData.oldPassword ||
-      !formData.newPassword ||
+      !formData.old_password ||
+      !formData.new_password ||
       !formData.confirmPassword
     ) {
       toast({
@@ -86,7 +86,7 @@ export default function ResetPasswordPage() {
       return
     }
 
-    if (formData.newPassword.length < 8) {
+    if (formData.new_password.length < 8) {
       toast({
         title: "Weak password",
         description: "New password must be at least 8 characters long.",
@@ -95,7 +95,7 @@ export default function ResetPasswordPage() {
       return
     }
 
-    if (formData.newPassword !== formData.confirmPassword) {
+    if (formData.new_password !== formData.confirmPassword) {
       toast({
         title: "Password mismatch",
         description: "New password and confirm password do not match.",
@@ -107,10 +107,10 @@ export default function ResetPasswordPage() {
     try {
       setLoading(true)
 
-      await api.put("/auth/change-password", {
+      await api.post("/employee/change_password", {
         email: currentUser.email,
-        oldPassword: formData.oldPassword,
-        newPassword: formData.newPassword,
+        old_password: formData.old_password,
+        new_password: formData.new_password,
       })
 
       toast({
@@ -119,8 +119,8 @@ export default function ResetPasswordPage() {
       })
 
       setFormData({
-        oldPassword: "",
-        newPassword: "",
+        old_password: "",
+        new_password: "",
         confirmPassword: "",
       })
     } catch (error: any) {
@@ -166,8 +166,8 @@ export default function ResetPasswordPage() {
               <div className="relative">
                 <Input
                   type={showPasswords.old ? "text" : "password"}
-                  name="oldPassword"
-                  value={formData.oldPassword}
+                  name="old_password"
+                  value={formData.old_password}
                   onChange={handleChange}
                   placeholder="Enter old password"
                   className="pr-12"
@@ -198,8 +198,8 @@ export default function ResetPasswordPage() {
               <div className="relative">
                 <Input
                   type={showPasswords.new ? "text" : "password"}
-                  name="newPassword"
-                  value={formData.newPassword}
+                  name="new_password"
+                  value={formData.new_password}
                   onChange={handleChange}
                   placeholder="Enter new password"
                   className="pr-12"
@@ -258,8 +258,8 @@ export default function ResetPasswordPage() {
               type="submit"
               disabled={
                 loading ||
-                !formData.oldPassword ||
-                !formData.newPassword ||
+                !formData.old_password ||
+                !formData.new_password ||
                 !formData.confirmPassword
               }
               className="w-full bg-[#5A0F2E] hover:bg-[#4A0D26]"

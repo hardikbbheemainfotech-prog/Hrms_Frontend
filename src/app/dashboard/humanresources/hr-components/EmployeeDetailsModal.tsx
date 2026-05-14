@@ -3,8 +3,11 @@
 import { Button } from "@/components/ui/button"
 import api from "@/lib/axios"
 import dayjs from "dayjs"
-import { X, Loader2, FileText, ExternalLink } from "lucide-react"
+import { X, Loader2, FileText, ExternalLink, Pencil } from "lucide-react"
 import { useEffect, useState } from "react"
+import UpdateEmployeeModal from "./UpdateEmployeeModal"
+
+// STEP 1: Update Employee interface
 
 interface Employee {
   employee_id: number | string
@@ -13,9 +16,12 @@ interface Employee {
   email: string
   job_title: string
   department_name: string
-  salary: number
+  salary: number | string | null
   hire_date: string
   profile_image?: string
+  role_name?: string
+  stipend?: number | string | null
+  internship_type?: string | null
 }
 
 interface EmployeeDocument {
@@ -29,13 +35,16 @@ export default function EmployeeDetailsModal({
   employee,
   open,
   onClose,
+  onEdit,
 }: {
   employee: Employee
   open: boolean
   onClose: () => void
+   onEdit?: (employee: Employee) => void 
 }) {
   const [documents, setDocuments] = useState<EmployeeDocument[]>([])
   const [loading, setLoading] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
 
   const fullName = `${employee.first_name} ${employee.last_name}`
 
@@ -93,36 +102,50 @@ export default function EmployeeDetailsModal({
         <div className="p-6">
 
           {/* Profile */}
-          <div className="flex flex-col md:flex-row items-center gap-6 border-b pb-6">
+       <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-b pb-6">
+  
+  {/* Left Side */}
+  <div className="flex flex-col md:flex-row items-center gap-6">
+    {employee.profile_image ? (
+      <img
+        src={employee.profile_image}
+        alt={fullName}
+        className="w-28 h-28 rounded-full object-cover border-4 border-[#5A0F2E]"
+      />
+    ) : (
+      <div className="w-28 h-28 rounded-full bg-[#5A0F2E] text-white flex items-center justify-center text-3xl font-bold">
+        {employee.first_name?.[0]}
+        {employee.last_name?.[0]}
+      </div>
+    )}
 
-            {employee.profile_image ? (
-              <img
-                src={employee.profile_image}
-                alt={fullName}
-                className="w-28 h-28 rounded-full object-cover border-4 border-[#5A0F2E]"
-              />
-            ) : (
-              <div className="w-28 h-28 rounded-full bg-[#5A0F2E] text-white flex items-center justify-center text-3xl font-bold">
-                {employee.first_name?.[0]}
-                {employee.last_name?.[0]}
-              </div>
-            )}
+    <div className="text-center md:text-left">
+      <h3 className="text-3xl font-bold text-[#5A0F2E]">
+        {fullName}
+      </h3>
 
-            <div className="text-center md:text-left">
-              <h3 className="text-3xl font-bold text-[#5A0F2E]">
-                {fullName}
-              </h3>
+      <p className="text-gray-500 mt-1">
+        {employee.job_title || "No job title"}
+      </p>
 
-              <p className="text-gray-500 mt-1">
-                {employee.job_title || "No job title"}
-              </p>
+      <span className="inline-block mt-2 px-3 py-1 rounded-full bg-[#e8f3e8] text-[#4e7740] text-sm font-medium">
+        {employee.department_name || "No department"}
+      </span>
+    </div>
+  </div>
 
-              <span className="inline-block mt-2 px-3 py-1 rounded-full bg-[#e8f3e8] text-[#4e7740] text-sm font-medium">
-                {employee.department_name || "No department"}
-              </span>
-            </div>
-          </div>
-
+  {/* Right Side Edit Button */}
+  <div className="self-start md:self-center">
+    <Button
+  type="button"
+  onClick={() => setEditOpen(true)}
+  className="w-12 h-12 rounded-full bg-[#5A0F2E] hover:bg-[#4a0c26] text-white 
+  shadow-md flex items-center justify-center"
+>
+  <Pencil size={20} />
+</Button>
+  </div>
+</div>
           {/* Employee Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
 
@@ -136,14 +159,24 @@ export default function EmployeeDetailsModal({
               value={employee.email || "—"}
             />
 
-            <DetailCard
-              label="Salary"
-              value={
-                employee.salary
-                  ? `₹${Number(employee.salary).toLocaleString("en-IN")}`
-                  : "—"
-              }
-            />
+<DetailCard
+  label={
+    employee.role_name === "intern"
+      ? "Stipend"
+      : "Salary"
+  }
+  value={
+    employee.role_name === "intern"
+      ? employee.stipend
+        ? `₹${Number(employee.stipend).toLocaleString("en-IN")}`
+        : employee.internship_type === "UNPAID"
+        ? "Unpaid"
+        : "—"
+      : employee.salary
+      ? `₹${Number(employee.salary).toLocaleString("en-IN")}`
+      : "—"
+  }
+/>
 
             <DetailCard
               label="Hire Date"
@@ -216,9 +249,18 @@ export default function EmployeeDetailsModal({
 
         </div>
       </div>
+       <UpdateEmployeeModal
+      open={editOpen}
+      onClose={() => setEditOpen(false)}
+      employee={employee}
+    />
     </div>
+    
   )
+
+  
 }
+
 
 function DetailCard({
   label,
@@ -238,4 +280,5 @@ function DetailCard({
       </p>
     </div>
   )
+  
 }
