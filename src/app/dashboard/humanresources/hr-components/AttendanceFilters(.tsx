@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/select"
 import { CalendarDays, X } from "lucide-react"
 import { Employee, Filters } from "@/hooks/Useattendancedashboard"
+import { Input } from "@/components/ui/input"
 
 export function AttendanceFilters({
   filters, employees, onFilterChange,
@@ -79,7 +80,7 @@ export function AttendanceFilters({
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5">
             <span className="text-xs text-gray-400 font-medium">From</span>
-            <input
+            <Input
               type="date"
               value={filters.start_date || ""}
               max={filters.end_date || dayjs().format("YYYY-MM-DD")}
@@ -90,7 +91,7 @@ export function AttendanceFilters({
 
           <div className="flex items-center gap-1.5">
             <span className="text-xs text-gray-400 font-medium">To</span>
-            <input
+            <Input
               type="date"
               value={filters.end_date || ""}
               min={filters.start_date || undefined}

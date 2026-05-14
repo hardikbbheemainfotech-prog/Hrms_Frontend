@@ -104,14 +104,16 @@ export default function EmployeeIDCard({
             <span className="font-medium text-gray-400 whitespace-nowrap">
               Shift Started
             </span>
-            <span className="text-[#1a3112] font-semibold">
-              {user?.loginTime
-                ? new Date(user.loginTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
-                : "N/A"}
-            </span>
+          <span className="text-[#1a3112] font-semibold">
+  {user?.login_time
+    ? new Date(user.login_time).toLocaleString("en-GB", {
+        timeZone: "UTC",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      })
+    : "N/A"}
+</span>
           </div>
         </div>
 
