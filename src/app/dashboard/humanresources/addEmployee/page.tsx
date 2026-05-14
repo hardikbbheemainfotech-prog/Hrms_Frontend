@@ -359,7 +359,7 @@ export default function AddEmployeeModal({ open, setOpen, onSuccess }: any) {
               </div>
 
               <div className="mt-4">
-                <input
+                <Input
                   type="range"
                   min={1}
                   max={3}

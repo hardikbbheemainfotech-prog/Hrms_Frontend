@@ -2,7 +2,7 @@
 
 import React from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { Home, ClipboardList, Clock, ShieldCheck, FolderInput, HandHelping, Cog } from "lucide-react"
+import { Home, ClipboardList, Clock, FolderInput, Cog } from "lucide-react"
 import IconTooltip from "@/components/ui/IconTooltip"
 
 const navItems = [
