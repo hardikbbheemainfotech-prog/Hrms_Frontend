@@ -116,10 +116,22 @@ export default function Navbar({ role }: Props) {
     return () => clearTimeout(midnightTimer)
   }, [user?.loginDate])
 
-  const loginTime = user?.loginTime
-  const elapsed = loginTime ? Date.now() - loginTime : 0
-  const TOTAL_SHIFT_MS = 8 * 60 * 60 * 1000
-  const remainingTime = Math.max(0, TOTAL_SHIFT_MS - elapsed)
+
+const loginTime = user?.login_time
+  ? new Date(user.login_time).getTime() - (5.5 * 60 * 60 * 1000)
+  : user?.loginTime ?? null
+
+const elapsed =
+  loginTime !== null
+    ? Date.now() - loginTime
+    : 0
+
+const TOTAL_SHIFT_MS = 8 * 60 * 60 * 1000
+
+const remainingTime = Math.max(
+  0,
+  TOTAL_SHIFT_MS - elapsed
+)
 
   const now = new Date()
 

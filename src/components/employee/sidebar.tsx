@@ -2,7 +2,7 @@
 
 import React from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { Home, ClipboardList, Clock, ShieldCheck, FolderInput, HandHelping } from "lucide-react"
+import { Home, ClipboardList, Clock, FolderInput, Cog } from "lucide-react"
 import IconTooltip from "@/components/ui/IconTooltip"
 
 const navItems = [
@@ -10,7 +10,9 @@ const navItems = [
   { href: "/dashboard/employee/mywork", icon:FolderInput, label: "Your Work" },
   { href: "/dashboard/employee/myteam", icon: ClipboardList, label: "Your Team" },
   { href: "/dashboard/employee/attendance", icon: Clock, label: "Attendance" },
+  { href: "/dashboard/employee/reset-password", icon: Cog, label: "Reset Password" },
 ]
+
 
 export default function Sidebar() {
   const router = useRouter()

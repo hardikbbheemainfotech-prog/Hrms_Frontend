@@ -1,6 +1,4 @@
-
 import dayjs from "dayjs"
-import { useState } from "react"
 
 interface Employee {
   employee_id: number | string
@@ -9,7 +7,10 @@ interface Employee {
   email: string
   job_title: string
   department_name: string
-  salary: number
+  salary: number | null
+  stipend?: number | string | null
+  role_name?: string
+  internship_type?: string | null
   hire_date: string
   profile_image?: string
 }
@@ -22,6 +23,22 @@ function padId(id: number | string) {
   return String(id).padStart(3, "0")
 }
 
+function getCompensation(emp: Employee) {
+  const isIntern = emp.role_name?.toLowerCase() === "intern"
+
+  if (isIntern) {
+    if (!emp.stipend || Number(emp.stipend) === 0) {
+      return "UNPAID"
+    }
+
+    return `₹${Number(emp.stipend).toLocaleString("en-IN")}`
+  }
+
+  return emp.salary
+    ? `₹${Number(emp.salary).toLocaleString("en-IN")}`
+    : "—"
+}
+
 export default function IDCard({
   emp,
   onClick,
@@ -31,101 +48,111 @@ export default function IDCard({
 }) {
   const name = `${emp.first_name} ${emp.last_name}`.trim()
   const initials = getInitials(emp.first_name, emp.last_name)
-   
-  
 
+  const isIntern = emp.role_name?.toLowerCase() === "intern"
 
   return (
-<div
-  className="flex flex-col space-x-2 items-center group cursor-pointer"
-  onClick={() => onClick?.(emp)}
->
-  {/* Lanyard */}
-  <div className="w-6 h-12 bg-[#5A0F2E] rounded-t-md relative z-10">
-    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-4 h-3 bg-gray-300 rounded-b-md" />
-  </div>
-
-  {/* Card */}
-  <div className="bg-white rounded-2xl w-[260px] overflow-hidden relative z-20 
-    shadow-lg transition-all duration-300 
-    group-hover:-translate-y-2 group-hover:shadow-2xl">
-
-    {/* Header */}
-    <div className="bg-[#5A0F2E] px-3 py-2 text-center">
-      <p className="text-[#F1E9E4] font-semibold text-xs tracking-widest uppercase">
-        Bheema Infotech
-      </p>
-      <p className="text-[#a8c89e] text-[9px] tracking-wider uppercase">
-        Pvt. Ltd.
-      </p>
-    </div>
-
-    {/* Profile */}
-    <div className="flex flex-col items-center pt-5 px-3">
-      <div className="relative w-20 h-[90px] bg-[#ac4e75] rounded-b-[40px] flex items-end justify-center pb-1 shadow-inner">
-
-        {/* Avatar */}
-        {emp.profile_image ? (
-          <img
-            src={emp.profile_image}
-            alt={name}
-            className="w-[62px] h-[62px] rounded-full border-2 border-white object-cover shadow-md"
-          />
-        ) : (
-          <div className="w-[62px] h-[62px] rounded-full border-2 border-white bg-[#4e7740] flex items-center justify-center text-white font-bold text-lg shadow-md">
-            {initials}
-          </div>
-        )}
+    <div
+      className="flex flex-col space-x-2 items-center group cursor-pointer"
+      onClick={() => onClick?.(emp)}
+    >
+      {/* Lanyard */}
+      <div className="w-6 h-12 bg-[#5A0F2E] rounded-t-md relative z-10">
+        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-4 h-3 bg-gray-300 rounded-b-md" />
       </div>
 
-      {/* Name */}
-      <p className="mt-3 text-[#5A0F2E] font-semibold text-[15px] text-center leading-tight">
-        {name}
-      </p>
-
-      {/* Role */}
-      <p className="text-[10px] text-[#4e7740] tracking-widest uppercase mt-1 mb-2 text-center">
-        {emp.job_title || "Position"}
-      </p>
-
-      {/* Department */}
-      {emp.department_name && (
-        <span className="text-[11px] font-medium text-[#5A0F2E] bg-[#e6f2e6] px-3 py-0.5 rounded-full mb-3">
-          {emp.department_name}
-        </span>
-      )}
-    </div>
-
-    {/* Divider */}
-    <div className="w-full h-px bg-gray-200 my-2" />
-
-    {/* Details */}
-    <div className="px-4 pb-2 space-y-1.5 text-[11.5px]">
-      {[
-        { label: "ID", value: padId(emp.employee_id) },
-        { label: "Joined", value: dayjs(emp.hire_date).format("DD MMM YYYY") },
-        { label: "Email", value: emp.email },
-        { label: "Salary", value: emp.salary ? `₹${Number(emp.salary).toLocaleString("en-IN")}` : "—" },
-      ].map(({ label, value }) => (
-        <div key={label} className="flex justify-between gap-2">
-          <span className="font-medium text-gray-700">{label}</span>
-          <span className="text-[#5A0F2E] text-right truncate max-w-[130px]" title={value}>
-            {value}
-          </span>
+      {/* Card */}
+      <div
+        className="bg-white rounded-2xl w-[260px] overflow-hidden relative z-20 
+        shadow-lg transition-all duration-300 
+        group-hover:-translate-y-2 group-hover:shadow-2xl"
+      >
+        {/* Header */}
+        <div className="bg-[#5A0F2E] px-3 py-2 text-center">
+          <p className="text-[#F1E9E4] font-semibold text-xs tracking-widest uppercase">
+            Bheema Infotech
+          </p>
+          <p className="text-[#a8c89e] text-[9px] tracking-wider uppercase">
+            Pvt. Ltd.
+          </p>
         </div>
-      ))}
-    </div>
 
-    {/* Bottom accent */}
-    <div className="flex justify-center mt-3">
-      <div className="w-10 h-1.5 bg-[#5A0F2E] rounded-full opacity-80" />
-    </div>
+        {/* Profile */}
+        <div className="flex flex-col items-center pt-5 px-3">
+          <div className="relative w-20 h-[90px] bg-[#ac4e75] rounded-b-[40px] flex items-end justify-center pb-1 shadow-inner">
+            {emp.profile_image ? (
+              <img
+                src={emp.profile_image}
+                alt={name}
+                className="w-[62px] h-[62px] rounded-full border-2 border-white object-cover shadow-md"
+              />
+            ) : (
+              <div className="w-[62px] h-[62px] rounded-full border-2 border-white bg-[#4e7740] flex items-center justify-center text-white font-bold text-lg shadow-md">
+                {initials}
+              </div>
+            )}
+          </div>
 
-    {/* Footer */}
-    <p className="text-center text-[9px] text-[#5A0F2E] tracking-wide py-2">
-      bheemainfotech.in
-    </p>
-  </div>
-</div>
+          {/* Name */}
+          <p className="mt-3 text-[#5A0F2E] font-semibold text-[15px] text-center leading-tight">
+            {name}
+          </p>
+
+          {/* Role */}
+          <p className="text-[10px] text-[#4e7740] tracking-widest uppercase mt-1 mb-2 text-center">
+            {emp.job_title || "Position"}
+          </p>
+
+          {/* Department */}
+          {emp.department_name && (
+            <span className="text-[11px] font-medium text-[#5A0F2E] bg-[#e6f2e6] px-3 py-0.5 rounded-full mb-3">
+              {emp.department_name}
+            </span>
+          )}
+        </div>
+
+        {/* Divider */}
+        <div className="w-full h-px bg-gray-200 my-2" />
+
+        {/* Details */}
+        <div className="px-4 pb-2 space-y-1.5 text-[11.5px]">
+          {[
+            { label: "ID", value: padId(emp.employee_id) },
+            {
+              label: "Joined",
+              value: dayjs(emp.hire_date).format("DD MMM YYYY"),
+            },
+            { label: "Email", value: emp.email },
+            {
+              label: isIntern ? "Stipend" : "Salary",
+              value: getCompensation(emp),
+            },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex justify-between gap-2">
+              <span className="font-medium text-gray-700">
+                {label}
+              </span>
+
+              <span
+                className="text-[#5A0F2E] text-right truncate max-w-[130px]"
+                title={value}
+              >
+                {value}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom accent */}
+        <div className="flex justify-center mt-3">
+          <div className="w-10 h-1.5 bg-[#5A0F2E] rounded-full opacity-80" />
+        </div>
+
+        {/* Footer */}
+        <p className="text-center text-[9px] text-[#5A0F2E] tracking-wide py-2">
+          bheemainfotech.in
+        </p>
+      </div>
+    </div>
   )
 }
