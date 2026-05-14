@@ -2,7 +2,7 @@
 import { useRouter, usePathname } from "next/navigation";
 import {
   Home,
-  Settings,
+  Cog ,
   CalendarCheck,
   ClipboardList,
   UserPlus,
@@ -18,6 +18,7 @@ const navItems = [
   { href: "/dashboard/humanresources/employees", icon: UserPlus, label: "Employees" },
   { href: "/dashboard/humanresources/desk", icon: Book, label: "Desk" },
   { href: "/dashboard/humanresources/Jobs", icon: BriefcaseBusiness, label: "Jobs" },
+    { href: "/dashboard/humanresources/reset-password", icon: Cog, label: "Reset Password" },
 ];
 
 export default function Sidebar() {
