@@ -13,11 +13,13 @@ function padId(id: number | string) {
 
 type EmployeeIDCardProps = {
   user: any
+  checkInTime?: number | null
   compact?: boolean
 }
 
 export default function EmployeeIDCard({
   user,
+  checkInTime = null,
   compact = false,
 }: EmployeeIDCardProps) {
   if (!user) return null
@@ -100,21 +102,21 @@ export default function EmployeeIDCard({
               {padId(user.user_id)}
             </span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="font-medium text-gray-400 whitespace-nowrap">
-              Shift Started
-            </span>
-          <span className="text-[#1a3112] font-semibold">
-  {user?.login_time
-    ? new Date(user.login_time).toLocaleString("en-GB", {
-        timeZone: "UTC",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      })
-    : "N/A"}
-</span>
-          </div>
+       <div className="flex justify-between items-center">
+  <span className="font-medium text-gray-400 whitespace-nowrap">
+    Shift Started
+  </span>
+
+  <span className="text-[#1a3112] font-semibold">
+    {checkInTime
+      ? new Date(checkInTime).toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        })
+      : "N/A"}
+  </span>
+</div>
         </div>
 
         {/* Footer */}

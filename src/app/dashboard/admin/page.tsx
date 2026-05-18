@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { useAdminData } from "@/hooks/adminData"
 import AuditLogsAdmin from "./components/AuditLogsAdmin"
 import RequestsPage from "../humanresources/hr-components/employeRequirements"
+import RoleGuard from "@/components/shared/RoleGuard"
 
 export default function AdminDashboard() {
   const [open, setOpen] = useState(false)
@@ -25,6 +26,7 @@ export default function AdminDashboard() {
  
 
   return (
+        <RoleGuard allowedRoles={["admin"]}>
     <div className="flex flex-col min-h-screen bg-[#F1E9E4]/60">
 
       <div className="p-6 space-y-8">
@@ -94,5 +96,6 @@ export default function AdminDashboard() {
       )}
 
     </div>
+    </RoleGuard>
   )
 }
