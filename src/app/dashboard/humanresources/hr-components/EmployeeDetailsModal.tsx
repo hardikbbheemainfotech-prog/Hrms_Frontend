@@ -6,8 +6,7 @@ import dayjs from "dayjs"
 import { X, Loader2, FileText, ExternalLink, Pencil } from "lucide-react"
 import { useEffect, useState } from "react"
 import UpdateEmployeeModal from "./UpdateEmployeeModal"
-
-// STEP 1: Update Employee interface
+import { useToast } from "@/hooks/use-toast"
 
 interface Employee {
   employee_id: number | string
@@ -31,6 +30,7 @@ interface EmployeeDocument {
   uploaded_at?: string
 }
 
+
 export default function EmployeeDetailsModal({
   employee,
   open,
@@ -45,6 +45,7 @@ export default function EmployeeDetailsModal({
   const [documents, setDocuments] = useState<EmployeeDocument[]>([])
   const [loading, setLoading] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
+  const {toast} = useToast();
 
   const fullName = `${employee.first_name} ${employee.last_name}`
 
@@ -65,7 +66,41 @@ export default function EmployeeDetailsModal({
       setLoading(false)
     }
   }
+ const handleResetPassword = async () => {
+  try {
+    setLoading(true)
 
+    const res = await api.post("/auth/reset_password", {
+      email: employee.email,
+    })
+
+    const result = res.data
+
+    if (!result.success) {
+      throw new Error(result.message || "Password reset failed")
+    }
+
+    toast({
+      title: "Password Reset Successful",
+      description: `New password: "${result.data?.default_password}"`,
+    })
+
+    return result
+  } catch (err: any) {
+    toast({
+      variant: "destructive",
+      title: "Password Reset Failed",
+      description:
+        err.response?.data?.message ||
+        err.message ||
+        "Something went wrong",
+    })
+
+    return null
+  } finally {
+    setLoading(false)
+  }
+}
   useEffect(() => {
     if (open && employee?.employee_id) {
       fetchDocuments()
@@ -99,7 +134,7 @@ export default function EmployeeDetailsModal({
         </div>
 
         {/* Body */}
-        <div className="p-6">
+       <div className="p-6 overflow-y-auto no-scrollbar flex-1">
 
           {/* Profile */}
        <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-b pb-6">
@@ -135,7 +170,18 @@ export default function EmployeeDetailsModal({
   </div>
 
   {/* Right Side Edit Button */}
-  <div className="self-start md:self-center">
+  <div className="self-start md:self-center flex items-center gap-3">
+ <Button
+  type="button"
+  onClick={async () => {
+    await handleResetPassword()
+    onClose()
+  }}
+  className="bg-[#5A0F2E] hover:bg-[#4a0c26] text-white 
+  shadow-md flex items-center justify-center"
+>
+  Reset {employee.first_name}'s Password
+</Button>
     <Button
   type="button"
   onClick={() => setEditOpen(true)}
@@ -249,11 +295,15 @@ export default function EmployeeDetailsModal({
 
         </div>
       </div>
-       <UpdateEmployeeModal
-      open={editOpen}
-      onClose={() => setEditOpen(false)}
-      employee={employee}
-    />
+      <UpdateEmployeeModal
+  open={editOpen}
+  setEditOpen={setEditOpen}
+  employee={employee}
+  onSuccess={() => {
+    fetchDocuments()
+    setEditOpen(false)
+  }}
+/>
     </div>
     
   )

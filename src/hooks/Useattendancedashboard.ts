@@ -74,9 +74,6 @@ function buildTrendFromAttendance(
     end   = dayjs().endOf("month")
   }
 
-  // ── 2. Group ALL rows (present + absent) by date ──────────────────────────
-  // For present rows  → use check_in date
-  // For absent rows   → we don't have a date on the row itself,
  
   const grouped: Record<string, { present: number; absent: number; total: number }> = {}
 
@@ -149,7 +146,7 @@ const fetchAttendance = async () => {
     if (debouncedFilters.start_date)  params.start_date  = debouncedFilters.start_date
     if (debouncedFilters.end_date)    params.end_date    = debouncedFilters.end_date
 
-    const res  = await api.get("/core/attendance", { params })
+    const res  = await api.get("/attendance", { params })
     const data = res.data?.data || {}
     const rows: AttendanceRow[] = data.attendance || []
 

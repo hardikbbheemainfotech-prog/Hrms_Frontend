@@ -6,26 +6,12 @@ import Navbar from "@/components/shared/navbar"
 import Sidebar from "./Sidebar"
 import RoleGuard from "@/components/shared/RoleGuard"
 
-import {
-  initializeSession,
-  updateDuration,
-} from "../../../feature/sessionSlice/employeeSessionSlice"
-
 export default function EmployeeLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(initializeSession())
-    const interval = setInterval(() => {
-      dispatch(updateDuration())
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [dispatch])
 
   return (
     <RoleGuard allowedRoles={["hr"]}>

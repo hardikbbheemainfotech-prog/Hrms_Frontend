@@ -11,18 +11,18 @@ import {
 } from "redux-persist"
 import storage from "redux-persist/lib/storage" 
 import authReducer from "../feature/auth/authslice"
-import employeeSessionReducer from "../feature/sessionSlice/employeeSessionSlice"
+import attendanceReducer from "../feature/attendance/attendanceSlice"
 
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "employeeSession"],
+  whitelist: ["auth",'attendance'],
 }
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  employeeSession: employeeSessionReducer,
+  attendance: attendanceReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

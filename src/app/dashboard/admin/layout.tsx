@@ -5,28 +5,17 @@ import { useDispatch } from "react-redux"
 import Navbar from "@/components/shared/navbar"
 import Sidebar from "./sidebar"
 
-import {
-  initializeSession,
-  updateDuration,
-} from "../../../feature/sessionSlice/employeeSessionSlice"
+import RoleGuard from "@/components/shared/RoleGuard"
 
 export default function EmployeeLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(initializeSession())
-    const interval = setInterval(() => {
-      dispatch(updateDuration())
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [dispatch])
 
   return (
+        <RoleGuard allowedRoles={["admin"]}>
     <div className="flex flex-col h-screen overflow-x-auto no-scrollbar bg-[#F1E9E4]/20">
       {/* Navbar always on top */}
       <div className="z-50">
@@ -41,5 +30,6 @@ export default function EmployeeLayout({
         </main>
       </div>
     </div>
+    </RoleGuard>
   )
 }

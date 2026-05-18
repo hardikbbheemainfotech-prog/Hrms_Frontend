@@ -2,7 +2,6 @@
 
 import api from "@/lib/axios"
 import { logout } from "@/feature/auth/authslice"
-import { logoutSession } from "@/feature/sessionSlice/employeeSessionSlice"
 import { useAppDispatch } from "@/lib/hooks"
 
 export const useLogout = () => {
@@ -63,7 +62,6 @@ export const useLogout = () => {
       })
     } catch (error) {
     } finally {
-      dispatch(logoutSession())
 
       dispatch(logout())
     }
